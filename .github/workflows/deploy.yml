@@ -17,30 +17,28 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./Astro-Resume
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Node
-      # use Node 20, which is recommended for Astro currently
         uses: actions/setup-node@v4
         with:
           node-version: "20"
 
       - name: Install dependencies
+        working-directory: ./Astro-Resume        # 👈 subfolder
         run: npm ci
 
       - name: Build
+        working-directory: ./Astro-Resume        # 👈 subfolder
         run: npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: Astro-Resume/dist                # 👈 note the `site/` here
 
   deploy:
     needs: build
