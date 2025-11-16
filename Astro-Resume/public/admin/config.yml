@@ -2,7 +2,33 @@ backend:
   name: git-gateway
   branch: main
 
-media_folder: "public/uploads"
-public_folder: "/uploads"
+media_folder: "public/uploads"   # where uploaded files go in the repo
+public_folder: "/uploads"        # how they are referenced in the site
 
 site_url: "https://danthelion-resume.netlify.app"
+
+collections:
+  - name: "blog"
+    label: "Blog posts"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    fields:
+      - { name: "title", label: "Title", widget: "string" }
+      - { name: "date", label: "Date", widget: "datetime" }
+      - { name: "description", label: "Description", widget: "text", required: false }
+      - { name: "heroImage", label: "Hero image", widget: "image", required: false }
+
+      - label: "Sections"
+        name: "sections"
+        widget: "list"
+        required: false
+        fields:
+          - { name: "title", label: "Title", widget: "string" }
+          - { name: "image", label: "Image", widget: "image" }
+          - { name: "caption", label: "Caption", widget: "string", required: false }
+          - { name: "body", label: "Body", widget: "markdown", required: false }
+
+      - { name: "body", label: "Main body", widget: "markdown" }
