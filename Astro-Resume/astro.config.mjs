@@ -1,8 +1,7 @@
-// @ts-check
 import { defineConfig } from 'astro/config';
 
-// https://astro.build/config
 export default defineConfig({
-    site: 'https://danthelion-git.github.io',
-    base: '/DanTheLion-Resume',
+  // You can fill this in after first deploy if you don't know it yet
+  site: 'https://danthelion-resume.netlify.app',
+  base: '/', // or just remove `base` entirely
 });
