@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import {
+  getCollection,
+  type CollectionEntry,
+} from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+
+// Type alias for entries in the "blog" collection
+type BlogEntry = CollectionEntry<'blog'>;
+
+// Typed getStaticPaths
+export const getStaticPaths = (async () => {
+  const posts = await getCollection('blog');
+
+  // Explicitly tell TS that each post is a BlogEntry
+  return (posts as BlogEntry[]).map((post: BlogEntry) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}) satisfies GetStaticPaths;
+
+// Typed props coming into the page
+const { post } = Astro.props as { post: BlogEntry };
+
+// Destructure with a concrete shape
+const {
+  title,
+  date,
+  heroImage,
+  // remove `sections` here if you don't use them yet in your schema
+  sections = [],
+} = post.data as {
+  title: string;
+  date: Date;
+  heroImage?: string;
+  sections?: {
+    title: string;
+    image: string;
+    caption?: string;
+    body?: string;
+  }[];
+};
+---
+
+<BaseLayout title={title}>
+  <article class="blog-post">
+    <header>
+      <h1>{title}</h1>
+      <p class="date">
+        {date.toLocaleDateString('nl-NL')}
+      </p>
+      {heroImage && <img src={heroImage} alt={title} />}
+    </header>
+
+<!--     <section class="content">
+      {/* This renders the Markdown/MDX body of the post */}
+      <post.Content />
+    </section> -->
+
+    {sections && sections.length > 0 && (
+      <section class="sections">
+        {sections.map((s) => (
+          <section class="screenshot-section">
+            <h2>{s.title}</h2>
+            <img src={s.image} alt={s.caption || s.title} />
+            {s.caption && <p class="caption">{s.caption}</p>}
+            {s.body && (
+              <div class="section-body" set:html={s.body} />
+            )}
+          </section>
+        ))}
+      </section>
+    )}
+  </article>
+</BaseLayout>
