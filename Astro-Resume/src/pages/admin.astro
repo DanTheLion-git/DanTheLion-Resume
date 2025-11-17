@@ -1,34 +1,34 @@
 ---
 ---
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Content Manager</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-  </head>
-  <body>
-    <!-- 1) Load Netlify Identity widget -->
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<head>
+  <meta charset="UTF-8" />
+  <title>CMS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+  <!-- Netlify Identity widget (inline so no CORS issues) -->
+  <script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script is:inline>
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.init();
 
-    <!-- 2) Safely use it -->
-    <script>
-      // This code runs in the browser only
-      if (typeof window !== "undefined" && window.netlifyIdentity) {
-        window.netlifyIdentity.on("init", (user) => {
-          if (!user) {
-            window.netlifyIdentity.on("login", () => {
-              document.location.href = "/admin/";
-            });
-          }
-        });
+      // If user is not logged in when opening /admin, open login modal
+      window.netlifyIdentity.on("init", (user) => {
+        if (!user) {
+          window.netlifyIdentity.open();
+        }
+      });
 
-        // Important: initialize the widget
-        window.netlifyIdentity.init();
-      }
-    </script>
+      // After login, reload CMS (Decap will use the token)
+      window.netlifyIdentity.on("login", () => {
+        window.location.reload();
+      });
+    }
+  </script>
 
-    <!-- 3) Load Decap CMS -->
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-  </body>
+  <!-- Decap CMS (Netlify CMS) -->
+  <script is:inline src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+</body>
 </html>
