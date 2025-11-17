@@ -9,24 +9,30 @@
 </head>
 <body style="font-family: system-ui, sans-serif; padding: 2rem;">
   <h1>Test Homepage</h1>
-  <p>This page includes the Netlify Identity widget.</p>
+  <p>This page includes the Netlify Identity widget and handles invite links.</p>
 
   <div data-netlify-identity-button
        style="display:inline-block;padding:0.5rem 1rem;border:1px solid #333;border-radius:4px;cursor:pointer;">
     Login / Signup
   </div>
 
-  <!-- Load Netlify Identity widget as *inline* so Astro doesn't mess with it -->
+  <!-- Load Netlify Identity widget (inline so Astro doesn't re-bundle it) -->
   <script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
-  <!-- Init + redirect after login -->
   <script is:inline>
     if (window.netlifyIdentity) {
       window.netlifyIdentity.init();
 
-      // Optional: log in / sign up from button
-      // (data-netlify-identity-button already works automatically,
-      // but we can also redirect after login)
+      // If we land here with an invite token in the hash, show the signup modal
+      window.netlifyIdentity.on("init", (user) => {
+        const hash = window.location.hash || "";
+        if (!user && hash.includes("invite_token")) {
+          // Open the widget so the invite can be completed
+          window.netlifyIdentity.open("signup");
+        }
+      });
+
+      // After login, go to /admin
       window.netlifyIdentity.on("login", () => {
         document.location.href = "/admin/";
       });
