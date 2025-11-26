@@ -3,7 +3,7 @@ name: Deploy Astro site to GitHub Pages
 on:
   push:
     branches:
-      - main    # or your default branch
+      - main          # change if your default branch is different
   workflow_dispatch:
 
 permissions:
@@ -14,6 +14,11 @@ permissions:
 concurrency:
   group: "pages"
   cancel-in-progress: true
+
+# All commands will run from the Astro-Resume folder by default
+defaults:
+  run:
+    working-directory: ./Astro-Resume
 
 jobs:
   build:
@@ -30,18 +35,16 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
-        working-directory: ./astro-resume   # ⬅️ replace with your folder
         run: npm install
 
       - name: Build Astro site
-        working-directory: ./astro-resume   # ⬅️ same folder
         run: npm run build
 
       - name: Upload build output
         uses: actions/upload-pages-artifact@v3
         with:
-          # Astro outputs to dist/ INSIDE that folder
-          path: astro-resume/dist           # ⬅️ same folder again
+          # dist is inside Astro-Resume because of the working directory
+          path: Astro-Resume/dist
 
   deploy:
     needs: build
