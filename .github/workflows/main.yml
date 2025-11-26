@@ -1,0 +1,59 @@
+name: Deploy Astro site to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main          # change if your default branch is different
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+# All commands will run from the Astro-Resume folder by default
+defaults:
+  run:
+    working-directory: ./Astro-Resume
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Astro site
+        run: npm run build
+
+      - name: Upload build output
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # dist is inside Astro-Resume because of the working directory
+          path: Astro-Resume/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
