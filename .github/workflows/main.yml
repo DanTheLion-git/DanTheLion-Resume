@@ -3,7 +3,7 @@ name: Deploy Astro site to GitHub Pages
 on:
   push:
     branches:
-      - main  # change this if your default branch is different
+      - main    # or your default branch
   workflow_dispatch:
 
 permissions:
@@ -30,15 +30,18 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
+        working-directory: ./astro-resume   # ⬅️ replace with your folder
         run: npm install
 
       - name: Build Astro site
+        working-directory: ./astro-resume   # ⬅️ same folder
         run: npm run build
 
       - name: Upload build output
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          # Astro outputs to dist/ INSIDE that folder
+          path: astro-resume/dist           # ⬅️ same folder again
 
   deploy:
     needs: build
