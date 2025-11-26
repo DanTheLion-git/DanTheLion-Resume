@@ -1,5 +1,5 @@
 {
-  "name": "magenta-meridian",
+  "name": "astro-resume",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -9,6 +9,6 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.15.8"
+    "astro": "^5.15.9"
   }
 }
