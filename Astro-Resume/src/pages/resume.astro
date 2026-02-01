@@ -1,5 +1,5 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import Layout from "../layouts/ResumeLayout.astro";
 import { getPosts, type WPPost } from "../lib/wp";
 import { decodeHTML } from "../lib/html";
 
@@ -12,7 +12,7 @@ const posts: WPPost[] = await getPosts(3); // show 3 latest on the frontpage
       <div class="hero-main">
         <p class="hero-tagline">PORTFOLIO · WEB · 3D</p>
         <h1 class="hero-title">
-          Hi, I’m <span class="hero-highlight">Daniël</span>
+          Hi, I'm <span class="hero-highlight">Daniël</span>
         </h1>
         <p class="hero-text">
             I do a lot of really cool things with programming, 3D, storytelling, and electronics.
@@ -29,17 +29,19 @@ const posts: WPPost[] = await getPosts(3); // show 3 latest on the frontpage
         </div>
 
         <p class="hero-subnote">
-          Best experienced on desktop for 3D, but fully browsable on mobile. 🌱
+          Best experienced on desktop for 3D, but fully browsable on mobile.
         </p>
       </div>
 
       <aside class="hero-side">
         <div class="pill">Currently exploring</div>
-        <h2 class="hero-side-title">side title</h2>
+        <!-- <h2 class="hero-side-title">side title</h2> -->
         <ul class="hero-side-list">
-          <li>• side list</li>
-          <li>• side list</li>
-          <li>• side list</li>
+          <li>• Robotic Horse</li>
+          <li>• Brief aan Jan</li>
+          <li>• Old Radio</li>
+          <li>• Puzzle Lantern</li>
+          <li>• Home Streaming</li>
         </ul>
       </aside>
     </div>

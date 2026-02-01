@@ -1,0 +1,73 @@
+:root {
+  --bg: #ffffff;
+  --text: #222;
+  --accent: #d4a32f;
+  --max-width: 900px;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* -------------------------------
+   Top Bar
+---------------------------------- */
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo {
+  font-size: 1.4rem;
+}
+
+.title {
+  font-weight: 600;
+}
+
+.nav a {
+  text-decoration: none;
+  color: var(--text);
+  padding: 0.25rem 0.5rem;
+}
+
+.nav a:hover {
+  color: var(--accent);
+}
+
+/* -------------------------------
+   Content
+---------------------------------- */
+
+.content {
+  max-width: var(--max-width);
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+/* -------------------------------
+   Footer
+---------------------------------- */
+
+.footer {
+  text-align: center;
+  padding: 1.5rem 0;
+  margin-top: 3rem;
+  border-top: 1px solid #ddd;
+  color: #555;
+}
