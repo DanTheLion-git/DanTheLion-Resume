@@ -1,71 +1,238 @@
 ---
-import LionsLayout from "../layouts/LionsLayout.astro";
+const services = [
+  {
+    name: "Jellyfin",
+    description: "Movies & series",
+    href: "http://192.168.178.58:8096",
+    icon: "🎬",
+    color: "teal",
+  },
+  {
+    name: "Lions Alliance Streamer",
+    description: "Movies & series",
+    href: "http://192.168.178.58:5000",
+    icon: "🎬",
+    color: "purple",
+  },
+  {
+    name: "Audiobookshelf",
+    description: "Audiobooks",
+    href: "http://192.168.178.58:13378",
+    icon: "📚",
+    color: "orange",
+  },
+  {
+    name: "Finance",
+    description: "Financial overview",
+    href: "http://192.168.178.58:8085",
+    icon: "💰",
+    color: "blue",
+  },
+  // Add more:
+  // { name: "Pi-hole", description: "DNS / Ads", href: "http://192.168.178.58:8081", icon: "🛡️", color: "red" },
+];
+
+const pageTitle = "The Lions Alliance";
+const subtitle = "Home services (local network)";
 ---
-<LionsLayout title="The Lions Alliance">
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Lions Alliance</title>
-  <link rel="stylesheet" href="styles/lions.css" />
-</head>
-<body>
-  <main>
-    <!-- Introduction / Hero Block -->
-    <section id="intro" class="hero">
-      <div class="hero-content">
-        <h1>We make tactile, magical things.</h1>
-        <p>
-          The Lions Alliance is <strong>Daniël</strong> &amp; <strong>Thirza</strong> -
-          a tiny creative studio crafting handbound books, custom engravings,
-          and experimental digital projects that feel personal and alive.
-        </p>
-        <div class="hero-actions">
-          <a href="#projects" class="btn">Projects</a>
-          <a href="#bookbinding" class="btn">Bookbinding</a>
-        </div>
-      </div>
-    </section>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content="Local dashboard for Raspberry Pi services." />
+  </head>
 
-    <!-- Projects Block -->
-    <section id="projects" class="projects">
-      <header class="section-header">
-        <h2>Featured Projects</h2>
-        <p>
-          A quick overview of the things we've been creating together.
-        </p>
+  <body>
+    <main class="wrap">
+      <header class="header">
+        <h1>{pageTitle}</h1>
+        <p>{subtitle}</p>
       </header>
 
-      <div class="projects-grid">
-        <article class="project-card" id="bookbinding">
-          <h3>Handbound Books</h3>
-          <p>
-            Unique, handcrafted books made to order — perfect for gifts,
-            journals, sketchbooks, and special projects.
-          </p>
-          <a href="#" class="project-link">Read more (soon)</a>
-        </article>
+      <section class="grid" aria-label="Services">
+        {services.map((s) => (
+          <a class={`card ${s.color}`} href={s.href}>
+            <div class="cardTop">
+              <div class="icon" aria-hidden="true">{s.icon}</div>
+              <div class="titleBlock">
+                <div class="name">{s.name}</div>
+                <div class="desc">{s.description}</div>
+              </div>
+            </div>
 
-        <article class="project-card" id="engraving">
-          <h3>Custom Engraved Designs</h3>
-          <p>
-            Custom-engraved book covers, glasses, cuttingboards, and more.
-          </p>
-          <a href="#" class="project-link">Read more (soon)</a>
-        </article>
+            <div class="cta">
+              Open <span aria-hidden="true">→</span>
+            </div>
+          </a>
+        ))}
+      </section>
 
-        <article class="project-card">
-          <h3>Magic Bookcase</h3>
-          <p>
-            Where carpentry meets magic, a beautiful bookcase around a fireplace with a secret.
-          </p>
-          <a href="#" class="project-link">Read more (soon)</a>
-        </article>
-      </div>
-    </section>
-  </main>
-</body>
+      <footer class="footer">
+        <small>
+          Tip: these links only work on your home network (or later via VPN).
+        </small>
+      </footer>
+    </main>
+  </body>
 </html>
-</LionsLayout>
+
+<style>
+  :root {
+    /* Customize site-wide colors here */
+    --bg: #0b0f17;
+    --panel: rgba(255, 255, 255, 0.06);
+    --panelHover: rgba(255, 255, 255, 0.10);
+    --text: rgba(255, 255, 255, 0.92);
+    --muted: rgba(255, 255, 255, 0.62);
+    --outline: rgba(255, 255, 255, 0.14);
+
+    --radius: 18px;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+
+    --maxWidth: 1050px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+
+  body {
+    margin: 0;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    color: var(--text);
+    background:
+      radial-gradient(1200px 700px at 20% 0%, rgba(99, 102, 241, 0.25), transparent 55%),
+      radial-gradient(900px 700px at 80% 20%, rgba(20, 184, 166, 0.22), transparent 60%),
+      radial-gradient(900px 700px at 50% 100%, rgba(168, 85, 247, 0.18), transparent 55%),
+      var(--bg);
+  }
+
+  .wrap {
+    max-width: var(--maxWidth);
+    margin: 0 auto;
+    padding: 42px 18px 28px;
+  }
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 26px;
+  }
+
+  h1 {
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.1;
+    margin: 0;
+    letter-spacing: -0.02em;
+  }
+
+  .header p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 16px;
+  }
+
+  .grid {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 18px;
+
+    padding: 18px 18px;
+    border-radius: var(--radius);
+    background: var(--panel);
+    border: 1px solid var(--outline);
+    box-shadow: var(--shadow);
+    text-decoration: none;
+    color: inherit;
+
+    transition: transform 140ms ease, background 140ms ease, border-color 140ms ease;
+    position: relative;
+    overflow: hidden;
+    min-height: 122px;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    background: var(--panelHover);
+    border-color: rgba(255, 255, 255, 0.24);
+  }
+
+  .cardTop {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .name {
+    font-weight: 650;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+  }
+
+  .desc {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 2px;
+  }
+
+  .cta {
+    font-weight: 600;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.86);
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    opacity: 0.9;
+  }
+
+  .footer {
+    margin-top: 22px;
+    color: var(--muted);
+  }
+
+  /* Per-service accent “glow” — pick one of these in the services list via `color` */
+
+  .card.teal::before,
+  .card.purple::before,
+  .card.blue::before,
+  .card.red::before,
+  .card.orange::before,
+  .card.green::before {
+    content: "";
+    position: absolute;
+    inset: -30% -30% auto -30%;
+    height: 120%;
+    filter: blur(30px);
+    opacity: 0.35;
+    pointer-events: none;
+    transform: translateZ(0);
+  }
+
+  .card.teal::before   { background: radial-gradient(circle at 30% 30%, rgba(20, 184, 166, 0.9), transparent 60%); }
+  .card.purple::before { background: radial-gradient(circle at 30% 30%, rgba(168, 85, 247, 0.9), transparent 60%); }
+  .card.blue::before   { background: radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.9), transparent 60%); }
+  .card.red::before    { background: radial-gradient(circle at 30% 30%, rgba(239, 68, 68, 0.9), transparent 60%); }
+  .card.orange::before { background: radial-gradient(circle at 30% 30%, rgba(249, 115, 22, 0.9), transparent 60%); }
+  .card.green::before  { background: radial-gradient(circle at 30% 30%, rgba(34, 197, 94, 0.9), transparent 60%); }
+</style>
