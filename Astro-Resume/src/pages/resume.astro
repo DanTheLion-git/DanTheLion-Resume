@@ -15,9 +15,39 @@ const posts: WPPost[] = await getPosts(3); // show 3 latest on the frontpage
           Hi, I'm <span class="hero-highlight">Daniël</span>
         </h1>
         <p class="hero-text">
-            I do a lot of really cool things with programming, 3D, storytelling, and electronics.
-            This portfolio contains both my development blog where I write about my projects as I am working on them, as well as a showcase of the finished projects.
+          I do a lot of really cool things with programming, 3D, storytelling,
+          and electronics. This portfolio contains both my development blog
+          where I write about my projects as I am working on them, as well as a
+          showcase of the finished projects.
         </p>
+        <div class="hero-actions">
+          <a
+            href="https://www.youtube.com/@DanTheLionVFX"
+            class="button-primary"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            YouTube
+          </a>
+
+          <a
+            href="https://sketchfab.com/superwortel"
+            class="button-ghost"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Sketchfab
+          </a>
+
+          <a
+            href="https://daanvanleeuwen.itch.io"
+            class="button-ghost"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Itch.io
+          </a>
+        </div>
       </div>
 
       <aside class="hero-side">
@@ -35,67 +65,84 @@ const posts: WPPost[] = await getPosts(3); // show 3 latest on the frontpage
     </div>
   </section>
 
-<section id="experience" class="section">
-  <div class="section-header">
-    <h2 class="section-title">Work Experience</h2>
-    <p class="section-subtitle">A short overview of my professional background</p>
-  </div>
+  <section id="experience" class="section">
+    <div class="section-header">
+      <h2 class="section-title">Work Experience</h2>
+      <p class="section-subtitle">
+        A short overview of my professional background
+      </p>
+    </div>
 
-  <div class="contact-block">
-    <ul class="post-list">
-      <li class="post-card">
-        <h3 class="card-title">Software Developer</h3>
-        <p class="post-meta">Pebble · 2026-02 — present</p>
-        <p class="post-excerpt">
-          Worked with ASP.NET, C#, and Azure enable data access at ASML by developing a web application that streamlined setting up retention policies for data storage.
-        </p>
-      </li>
-
-      <li class="post-card">
-        <h3 class="card-title">3D Animation and Video Developer</h3>
-        <p class="post-meta">Enversed Studios · 2023-12 — 2026-02</p>
-        <p class="post-excerpt">
-          Created 3D animations and videos using Blender and After Effects. Used Xsens motion capture and Reallusion to create realistic character animations. Used Marvelous Designer for custom clothing. Performed on-site recordings with and without greenscreen.
-        </p>
-      </li>
-    </ul>
-
-    <details style="margin-top: 0.75rem;">
-      <summary class="section-link" style="cursor: pointer;">Show more experience</summary>
-
-      <ul class="post-list" style="margin-top: 0.9rem;">
+    <div class="contact-block">
+      <ul class="post-list">
         <li class="post-card">
-          <h3 class="card-title">Graduation Internship</h3>
-          <p class="post-meta">Het Nieuwe Kader · 2023-01 — 2023-07 </p>
+          <h3 class="card-title">Software Developer</h3>
+          <p class="post-meta">Pebble · 2026-02 — present</p>
           <p class="post-excerpt">
-            Created a custom web-based automatic rigging tool to enable clients to quickly rig their 3D characters in order to preview remotely directed motion capture sessions.
+            Worked with ASP.NET, C#, and Azure enable data access at ASML by
+            developing a web application that streamlined setting up retention
+            policies for data storage.
           </p>
         </li>
 
         <li class="post-card">
-          <h3 class="card-title">Intern Product Specialist</h3>
-          <p class="post-meta">Movella/Xsens · 2022-03 — 2022-08</p>
+          <h3 class="card-title">3D Animation and Video Developer</h3>
+          <p class="post-meta">Enversed Studios · 2023-12 — 2026-02</p>
           <p class="post-excerpt">
-            Worked on the documentation for the Xsens MVN Animate Pro software and hardware. Performed demo's for customers and provided technical support.
-          </p>
-        </li>
-
-        <li class="post-card">
-          <h3 class="card-title">Junior VR Developer</h3>
-          <p class="post-meta">Wired Workers · 2020-07 — 2021-08</p>
-          <p class="post-excerpt">
-            Worked part-time on developing a WebGL-based digital showroom for a range of collaborative robot arms. Created 3D models and animations for several applications.
+            Created 3D animations and videos using Blender and After Effects.
+            Used Xsens motion capture and Reallusion to create realistic
+            character animations. Used Marvelous Designer for custom clothing.
+            Performed on-site recordings with and without greenscreen.
           </p>
         </li>
       </ul>
-    </details>
-  </div>
-</section>
+
+      <details style="margin-top: 0.75rem;">
+        <summary class="section-link" style="cursor: pointer;"
+          >Show more experience</summary
+        >
+
+        <ul class="post-list" style="margin-top: 0.9rem;">
+          <li class="post-card">
+            <h3 class="card-title">Graduation Internship</h3>
+            <p class="post-meta">Het Nieuwe Kader · 2023-01 — 2023-07</p>
+            <p class="post-excerpt">
+              Created a custom web-based automatic rigging tool to enable
+              clients to quickly rig their 3D characters in order to preview
+              remotely directed motion capture sessions.
+            </p>
+          </li>
+
+          <li class="post-card">
+            <h3 class="card-title">Intern Product Specialist</h3>
+            <p class="post-meta">Movella/Xsens · 2022-03 — 2022-08</p>
+            <p class="post-excerpt">
+              Worked on the documentation for the Xsens MVN Animate Pro software
+              and hardware. Performed demo's for customers and provided
+              technical support.
+            </p>
+          </li>
+
+          <li class="post-card">
+            <h3 class="card-title">Junior VR Developer</h3>
+            <p class="post-meta">Wired Workers · 2020-07 — 2021-08</p>
+            <p class="post-excerpt">
+              Worked part-time on developing a WebGL-based digital showroom for
+              a range of collaborative robot arms. Created 3D models and
+              animations for several applications.
+            </p>
+          </li>
+        </ul>
+      </details>
+    </div>
+  </section>
 
   <section id="work" class="section">
     <div class="section-header">
       <h2 class="section-title">Finished Projects</h2>
-      <p class="section-subtitle">A quick overview of some of the projects I have finished</p>
+      <p class="section-subtitle">
+        A quick overview of some of the projects I have finished
+      </p>
     </div>
 
     <div class="cards-grid">
@@ -103,7 +150,9 @@ const posts: WPPost[] = await getPosts(3); // show 3 latest on the frontpage
         <h3 class="card-title">VR Voyage</h3>
         <p class="card-meta">VR Blender Experience</p>
         <p>
-          A VR experience created in Blender where the user can experience Amsterdam in the year 1600 while on board a boat. Meeting various historic characters along the way.
+          A VR experience created in Blender where the user can experience
+          Amsterdam in the year 1600 while on board a boat. Meeting various
+          historic characters along the way.
         </p>
       </article>
 
@@ -111,7 +160,8 @@ const posts: WPPost[] = await getPosts(3); // show 3 latest on the frontpage
         <h3 class="card-title">Martens Beton</h3>
         <p class="card-meta">Marketing Animation Video</p>
         <p>
-          A short video created in Blender and After Effects that showcases Martens Beton's new productline; the Qube system.
+          A short video created in Blender and After Effects that showcases
+          Martens Beton's new productline; the Qube system.
         </p>
       </article>
 
@@ -119,10 +169,12 @@ const posts: WPPost[] = await getPosts(3); // show 3 latest on the frontpage
         <h3 class="card-title">Python Autorigger</h3>
         <p class="card-meta">Animation Automation Tool</p>
         <p>
-          A web based automatic rigging tool for 3D characters built using Autodesk Maya's PyMel and Flask. It allows users to upload their 3D character models and automatically generates a rig for them, making the animation process much faster and more efficient.
+          A web based automatic rigging tool for 3D characters built using
+          Autodesk Maya's PyMel and Flask. It allows users to upload their 3D
+          character models and automatically generates a rig for them, making
+          the animation process much faster and more efficient.
         </p>
       </article>
-
     </div>
   </section>
 
@@ -132,33 +184,40 @@ const posts: WPPost[] = await getPosts(3); // show 3 latest on the frontpage
       <a href="/blog/" class="section-link">View all posts →</a>
     </div>
 
-    {posts.length === 0 && (
-      <p>No posts found yet. Once you publish on WordPress, they’ll show up here.</p>
-    )}
+    {
+      posts.length === 0 && (
+        <p>
+          No posts found yet. Once you publish on WordPress, they’ll show up
+          here.
+        </p>
+      )
+    }
 
-    {posts.length > 0 && (
-      <ul class="post-list">
-        {posts.map((post) => (
-          <li class="post-card">
-            <a href={`/blog/${post.slug}/`} class="post-title">
-              {decodeHTML(post.title.rendered)}
-            </a>
+    {
+      posts.length > 0 && (
+        <ul class="post-list">
+          {posts.map((post) => (
+            <li class="post-card">
+              <a href={`/blog/${post.slug}/`} class="post-title">
+                {decodeHTML(post.title.rendered)}
+              </a>
 
-            <p class="post-meta">
-              <time datetime={post.date}>
-                {new Date(post.date).toLocaleDateString("en-GB", {
-                  year: "numeric",
-                  month: "short",
-                  day: "2-digit",
-                })}
-              </time>
-            </p>
+              <p class="post-meta">
+                <time datetime={post.date}>
+                  {new Date(post.date).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "short",
+                    day: "2-digit",
+                  })}
+                </time>
+              </p>
 
-            <p class="post-excerpt" set:html={post.excerpt.rendered} />
-          </li>
-        ))}
-      </ul>
-    )}
+              <p class="post-excerpt" set:html={post.excerpt.rendered} />
+            </li>
+          ))}
+        </ul>
+      )
+    }
   </section>
 
   <section class="section">
@@ -167,7 +226,8 @@ const posts: WPPost[] = await getPosts(3); // show 3 latest on the frontpage
     </div>
     <div class="contact-block">
       <p>
-        Feel free to reach out if you are interested in my work, have any questions, or just want to say hi!
+        Feel free to reach out if you are interested in my work, have any
+        questions, or just want to say hi!
       </p>
       <p>
         You can reach me at
