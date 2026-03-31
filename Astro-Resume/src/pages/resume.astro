@@ -35,52 +35,78 @@ const posts: WPPost[] = await getPosts(3); // show 3 latest on the frontpage
     </div>
   </section>
 
-  <section id="experience" class="section">
-    <div class="section-header">
-      <h2 class="section-title">Work Experience</h2>
-      <p class="section-subtitle">What I’ve worked on professionally</p>
-    </div>
+<section id="experience" class="section">
+  <div class="section-header">
+    <h2 class="section-title">Work Experience</h2>
+    <p class="section-subtitle">A short overview of my professional background</p>
+  </div>
 
-    <div class="cards-grid">
-      <article class="card">
-        <h3 class="card-title">Your Job Title</h3>
-        <p class="card-meta">Company Name · 2023 — Present</p>
-        <p>
-          Short description of what you did. Focus on impact, not just tasks.
-        </p>
-        <ul>
-          <li>• Built X that improved Y</li>
-          <li>• Worked with Z technologies</li>
-          <li>• Collaborated with A/B teams</li>
-        </ul>
-      </article>
+  <div class="experience-panel">
+    <div class="experience-list">
+      <article class="experience-item">
+        <div class="experience-head">
+          <div>
+            <h3 class="experience-title">Creative Developer</h3>
+            <p class="experience-company">Company Name</p>
+          </div>
+          <p class="experience-period">2023 — Present</p>
+        </div>
 
-      <article class="card">
-        <h3 class="card-title">Previous Role</h3>
-        <p class="card-meta">Company Name · 2021 — 2023</p>
-        <p>
-          Another short, impact-focused description.
+        <p class="experience-description">
+          Short description of your role, what kind of work you did, and what made it interesting or impactful.
         </p>
       </article>
-    </div>
-  </section>
 
-  <section id="education" class="section">
-    <div class="section-header">
-      <h2 class="section-title">Education</h2>
-      <p class="section-subtitle">Background and learning</p>
-    </div>
+      <article class="experience-item">
+        <div class="experience-head">
+          <div>
+            <h3 class="experience-title">3D Generalist / Technical Artist</h3>
+            <p class="experience-company">Previous Company</p>
+          </div>
+          <p class="experience-period">2021 — 2023</p>
+        </div>
 
-    <div class="cards-grid">
-      <article class="card">
-        <h3 class="card-title">Your Degree</h3>
-        <p class="card-meta">University Name · 2018 — 2022</p>
-        <p>
-          Optional: focus area, thesis, or notable projects.
+        <p class="experience-description">
+          A second role that is immediately visible. You can mention tools, projects, or collaboration here.
         </p>
       </article>
     </div>
-  </section>
+
+    <details class="experience-more">
+      <summary class="experience-toggle">Show more experience</summary>
+
+      <div class="experience-list experience-list-more">
+        <article class="experience-item">
+          <div class="experience-head">
+            <div>
+              <h3 class="experience-title">Intern / Junior Role</h3>
+              <p class="experience-company">Earlier Company</p>
+            </div>
+            <p class="experience-period">2020 — 2021</p>
+          </div>
+
+          <p class="experience-description">
+            Placeholder text for an older role. Add a short summary of responsibilities or outcomes.
+          </p>
+        </article>
+
+        <article class="experience-item">
+          <div class="experience-head">
+            <div>
+              <h3 class="experience-title">Freelance Creative Technologist</h3>
+              <p class="experience-company">Self-employed</p>
+            </div>
+            <p class="experience-period">2018 — 2020</p>
+          </div>
+
+          <p class="experience-description">
+            Placeholder text for freelance or project-based work.
+          </p>
+        </article>
+      </div>
+    </details>
+  </div>
+</section>
 
   <section id="work" class="section">
     <div class="section-header">
