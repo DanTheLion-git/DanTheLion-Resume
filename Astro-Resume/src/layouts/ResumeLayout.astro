@@ -24,8 +24,11 @@ const {
     <!-- Apply saved theme before CSS renders — prevents flash of wrong theme -->
     <script is:inline>
       (function () {
-        var t = localStorage.getItem('lions-theme');
-        if (t) document.documentElement.className = 'theme-' + t;
+        var stored = localStorage.getItem('lions-theme');
+        var theme  = stored
+          ? stored
+          : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.className = 'theme-' + theme;
       })();
     </script>
 
