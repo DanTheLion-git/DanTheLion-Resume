@@ -253,3 +253,87 @@ footer{border-top:1px solid var(--border); padding:30px 24px; color:var(--muted)
 .prose h2{font-size:1.3rem; margin:18px 0 8px}
 .prose p{margin:0 0 12px}
 .prose ul, .prose ol{margin:0 0 12px 1.2rem; color:var(--text)}
+
+/* =========
+   3-D Podium — Projects Section
+   ========= */
+
+.podium-wrapper {
+  position: relative;
+  width: 100%;
+  height: 520px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(ellipse 80% 55% at 50% -5%, rgba(106,169,255,.09), transparent 65%),
+    var(--panel);
+  cursor: grab;
+}
+.podium-wrapper:active { cursor: grabbing; }
+
+#podium-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Slide-in info panel */
+.proj-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: min(320px, 100%);
+  height: 100%;
+  background: color-mix(in oklab, var(--panel) 94%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-left: 1px solid var(--border);
+  padding: 18px 16px 18px 18px;
+  transform: translateX(100%);
+  transition: transform .28s cubic-bezier(.4,0,.2,1);
+  overflow-y: auto;
+  z-index: 5;
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  pointer-events: none;
+}
+.proj-panel.open {
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.proj-panel h3 { margin: 0; font-size: 1.05rem; line-height: 1.3; }
+.proj-panel .meta { color: var(--muted); font-size: .88rem; margin: 0; }
+.proj-panel p:not(.meta) { color: var(--text); font-size: .93rem; margin: 0; line-height: 1.55; }
+
+#proj-close {
+  justify-self: end;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1;
+  padding: 5px 11px;
+  cursor: pointer;
+  transition: background .12s;
+}
+#proj-close:hover { background: var(--border); }
+
+.podium-hint {
+  text-align: center;
+  margin-top: 10px;
+  font-size: .85rem;
+  opacity: .7;
+}
+
+/* Mobile: panel slides up from the bottom */
+@media (max-width: 640px) {
+  .podium-wrapper      { height: 360px; }
+  .proj-panel          { width: 100%; height: 52%; bottom: 0; top: auto;
+                         transform: translateY(100%);
+                         border-left: none; border-top: 1px solid var(--border); }
+  .proj-panel.open     { transform: translateY(0); }
+}
