@@ -206,27 +206,22 @@ h1, h2, h3 { font-family: var(--ff-serif); line-height: 1.2; }
   grid-template-columns: repeat(5, 1fr);
   gap: .75rem;
   width: 100%;
-  max-width: 340px;
+  max-width: 680px;
 }
 
 .camera-card {
   aspect-ratio: 1;
-  background: var(--clr-white);
-  border: 1px solid var(--clr-border);
-  border-radius: var(--radius);
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  box-shadow: var(--shadow);
   animation: floatIn .5s ease both;
   animation-delay: var(--delay);
   transition: transform .2s;
 }
 .camera-card:hover { transform: scale(1.08) rotate(-2deg); }
 .camera-card img {
-  width: 90%;
-  height: 90%;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   display: block;
 }
