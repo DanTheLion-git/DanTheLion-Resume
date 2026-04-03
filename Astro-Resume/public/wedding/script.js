@@ -1,10 +1,4 @@
 // =========================================================
-// CONFIGURATION
-// =========================================================
-const BASE_PRICE   = 79.99;
-const POSTAL_PRICE = 15.00; // PostNL send + return — update if PostNL rates change
-
-// =========================================================
 // STICKY NAV
 // =========================================================
 const nav = document.getElementById('nav');
@@ -21,39 +15,6 @@ hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
 mobileMenu.querySelectorAll('a').forEach(link => {
   link.addEventListener('click', () => mobileMenu.classList.remove('open'));
 });
-
-// =========================================================
-// DELIVERY CALCULATOR — PostNL flat rate
-// =========================================================
-const deliveryRadios = document.querySelectorAll('input[name="delivery"]');
-
-deliveryRadios.forEach(radio => {
-  radio.addEventListener('change', () => {
-    const isPostal = radio.value === 'postal';
-    document.getElementById('postalHint').style.display = isPostal ? '' : 'none';
-    updatePriceDisplay(isPostal);
-  });
-});
-
-function formatPrice(amount) {
-  return '€' + amount.toFixed(2).replace('.', ',');
-}
-
-function updatePriceDisplay(includePostal = false) {
-  const shippingCost    = includePostal ? POSTAL_PRICE : 0;
-  const total           = BASE_PRICE + shippingCost;
-  const deliveryCostRow = document.getElementById('deliveryCostRow');
-  const grandTotalEl    = document.getElementById('grandTotal');
-  const bookBtn         = document.getElementById('bookBtn');
-
-  deliveryCostRow.style.display = includePostal ? 'flex' : 'none';
-  if (includePostal) {
-    document.getElementById('deliveryCostAmount').textContent = formatPrice(shippingCost);
-  }
-
-  grandTotalEl.textContent = formatPrice(total);
-  bookBtn.textContent      = `Book for ${formatPrice(total)}`;
-}
 
 // =========================================================
 // BOOKING FORM VALIDATION
@@ -114,7 +75,7 @@ form.querySelectorAll('input, textarea').forEach(input => {
 // =========================================================
 // SCROLL REVEAL
 // =========================================================
-const revealEls = document.querySelectorAll('.step, .feature, .pricing__card, .quote, .portal-step, .portal-coming-soon');
+const revealEls = document.querySelectorAll('.step, .feature, .pricing-card, .quote, .portal-step, .portal-coming-soon');
 const observer  = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
