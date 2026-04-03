@@ -599,55 +599,61 @@ html.theme-light .btn-social {
 }
 
 /* ===============================
-   Light theme — Sunny Forest Clearing
+   Light theme — Forest Clearing
    Applied when <html class="theme-light">
    =============================== */
 
 html.theme-light {
-  /* Warm sunlit clearing palette */
-  --bg:                #f7f0e0;   /* warm parchment */
-  --bg-alt:            #f0e8d0;
-  --fg:                #2a1a06;   /* dark bark */
-  --fg-muted:          #6b4d22;   /* warm brown */
-  --accent-green:      #3d7a1a;   /* fresh grass */
-  --accent-green-light:#4d9420;   /* bright meadow */
-  --accent-brown:      #8c5e28;   /* sunlit wood */
-  --card-bg:           #fdf6e4;   /* cream */
-  --border:            #c9a96e;   /* golden tan */
+  /* Muted sage base — dark bark + leaf tones, no peach */
+  --bg:                #e4ead8;   /* light sage */
+  --bg-alt:            #dae1ce;   /* deeper sage */
+  --fg:                #1c1208;   /* dark bark brown */
+  --fg-muted:          #485430;   /* olive-brown */
+  --accent-green:      #2b6415;   /* deep leaf green */
+  --accent-green-light:#3d8420;   /* bright canopy green */
+  --accent-brown:      #5e3212;   /* dark tree bark */
+  --card-bg:           #ecf0e6;   /* frosted leaf white */
+  --border:            #88a86a;   /* mossy olive */
 }
 
 html.theme-light body {
   background:
-    radial-gradient(ellipse 120% 60% at 50% 0%, #e8f5d0 0%, transparent 55%),
-    radial-gradient(ellipse 80%  80% at 80% 100%, #f5e4b8 0%, transparent 60%),
-    #f7f0e0;
+    /* dark canopy pressing in from top */
+    radial-gradient(ellipse 130% 48% at 50%   0%,  rgba(16,44,10,.22)  0%, transparent 60%),
+    /* bark shadow on left edge */
+    radial-gradient(ellipse  32% 90% at  0%  50%,  rgba(36,16,5,.13)   0%, transparent 52%),
+    /* bark shadow on right edge */
+    radial-gradient(ellipse  32% 90% at 100% 50%,  rgba(36,16,5,.13)   0%, transparent 52%),
+    /* mossy ground at bottom */
+    radial-gradient(ellipse 110% 45% at 50% 110%,  rgba(20,50,12,.10)  0%, transparent 55%),
+    #e4ead8;
 }
 
 html.theme-light .site-header {
-  background: rgba(247, 240, 224, 0.90);
+  background: rgba(218, 226, 210, 0.92);
 }
 
 html.theme-light .hero-side {
   background:
-    radial-gradient(circle at top,    rgba(61,122,26,.12), transparent),
-    radial-gradient(circle at bottom, rgba(140,94,40,.10), transparent);
-  border-color: rgba(140, 94, 40, 0.3);
+    radial-gradient(circle at top,    rgba(28,80,14,.14), transparent),
+    radial-gradient(circle at bottom, rgba(60,28,8,.10),  transparent);
+  border-color: rgba(70, 95, 40, 0.35);
 }
 
 html.theme-light .podium-wrapper {
   background:
-    radial-gradient(ellipse 80% 50% at 50% -5%, rgba(61,148,32,.09), transparent 65%),
-    #fdf6e4;
+    radial-gradient(ellipse 80% 50% at 50% -5%, rgba(28,80,14,.10), transparent 65%),
+    #ecf0e6;
   border-color: var(--border);
 }
 
 html.theme-light .pill {
-  border-color: rgba(61,148,32,.45);
-  background: radial-gradient(circle at top left, rgba(61,148,32,.10), transparent);
+  border-color: rgba(43,100,21,.45);
+  background: radial-gradient(circle at top left, rgba(43,100,21,.10), transparent);
 }
 
 html.theme-light .nav a:hover {
-  background: rgba(61,148,32,.15);
+  background: rgba(43,100,21,.15);
 }
 
 html.theme-light .post-card:hover,
