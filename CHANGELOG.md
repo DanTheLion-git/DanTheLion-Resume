@@ -5,7 +5,61 @@ Timestamps without a known exact time are marked as the date only.
 
 ---
 
-## [2026-04-04] — CV redesign white/blue + 7 client projects + docs to GitHub
+## [2026-04-03T18:19] — Floating 3D canvas + side panel layout
+
+**Request:** Make the Three.js object float on the page background (no container box). When a project is clicked, show the info panel to the side on desktop and below on mobile.
+
+**Changes (live repo — DanTheLion-git/DanTheLion-Resume):**
+
+- `Astro-Resume/src/pages/resume.astro` — restructured the `#work` section HTML:
+  - Removed the old single `#podium-wrapper` that contained both canvas and panel
+  - Added `.projects-layout` flex container wrapping both `#podium-wrapper` (canvas only) and `#proj-panel` (now a flex sibling, not a child of the canvas)
+  - Canvas wrapper class changed to `podium-canvas-wrap`
+
+- `Astro-Resume/src/styles/global.css` — rewrote the podium/panel CSS block:
+  - `.projects-layout` — `display: flex; align-items: flex-start; gap: 1.5rem;`
+  - `.podium-canvas-wrap` — `flex: 1 1 auto; height: 500px;` — **no background, no border** so the canvas floats transparently on the page
+  - `.proj-panel` — starts at `width: 0; opacity: 0`; transitions to `flex: 0 0 320px; width: 320px; opacity: 1` with cubic-bezier easing when `.open` is added
+  - Mobile (`≤680px`): layout switches to `flex-direction: column`, panel expands to full width below the canvas
+  - Removed `html.theme-light .podium-wrapper` background override (canvas is now always transparent)
+
+---
+
+## [2026-04-03T18:11] — Auto-detect OS light/dark mode preference
+
+**Request:** Make the website automatically detect the browser/OS dark or light mode setting and apply the correct theme as default.
+
+**Changes (live repo — DanTheLion-git/DanTheLion-Resume):**
+
+- `Astro-Resume/src/layouts/ResumeLayout.astro` — updated the anti-FOUC inline `<script>` in `<head>`:
+  - **Before:** only read `localStorage` to restore a saved choice; fell back to `theme-light` (the Astro prop default)
+  - **After:** reads `localStorage` first (explicit user choice takes priority); if nothing is stored, reads `window.matchMedia('(prefers-color-scheme: dark)')` and applies `theme-dark` or `theme-light` accordingly
+  - Theme toggle button still saves to `localStorage` — once the user manually switches, their choice persists across visits
+
+---
+
+## [2026-04-03T18:05] — WP-style grey theme pair (light + dark)
+
+**Request:** Replace the full-white light theme with professional shades of grey similar to the WordPress admin UI. Make the dark theme a matching dark version.
+
+**Changes (live repo — DanTheLion-git/DanTheLion-Resume):**
+
+- `Astro-Resume/src/styles/global.css`:
+  - **`:root` (dark theme)** updated to WordPress sidebar colours:
+    - `--bg: #1d2327`, `--bg-alt: #252a2d`, `--fg: #f0f0f1`, `--fg-muted: #a7aaad`
+    - `--accent-green-light: #5fa8d3` (lighter blue, readable on dark), `--accent-green: #2271b1`
+    - `--card-bg: #2c3338`, `--border: #3c434a`
+    - Body background: `#1d2327` (plain, no gradient)
+  - **`html.theme-light` (light theme)** updated to WordPress admin panel greys:
+    - `--bg: #f0f0f1`, `--bg-alt: #e8e8e9`, `--fg: #1d2327`, `--fg-muted: #646970`
+    - `--accent-green-light: #2271b1`, `--accent-green: #135e96`
+    - `--card-bg: #ffffff` (white cards on grey background), `--border: #c3c4c7`
+    - Body background: `#f0f0f1`
+  - Updated component overrides: `.site-header`, `.hero-side`, `.podium-wrapper`, `.pill`, `.nav a:hover` all updated to use the new grey palette
+
+---
+
+## [2026-04-04] — CV redesign + 7 client projects + docs to GitHub
 
 **Request:** Redesign `/resume` as a proper Curriculum Vitae with a clean, modern, white/blue style. Update the ThreeJS component with 7 new client projects (Amsterdam Rederij, Martens Beton, Werken bij Schiphol, Lucardi, Oosterschelde, Garbage Gary, Meijel Museum). Add transform config per project. Add placeholder `.glb` files. Push CHANGELOG.md and REFERENCE.md to GitHub.
 
