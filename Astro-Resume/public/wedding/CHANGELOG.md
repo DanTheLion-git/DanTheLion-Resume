@@ -263,3 +263,78 @@ Astro-Resume/public/wedding/photoportal/portal.js
   - Booking form labels and validation messages rewritten in Dutch wedding tone
 
 **GitHub commit:** `158a4c9`
+
+---
+
+## [2026-04-03 16:00] — CHANGELOG and INSTRUCTIONS updated
+
+**Request:** Update CHANGELOG.md and INSTRUCTIONS.md to reflect all changes made so far.
+
+**Changes:**
+- `CHANGELOG.md` — added 6 missing entries (icons/PostNL, camera PNG, storage stats move, 3-tier pricing, 3-step portal, admin dashboard, i18n, Dutch copy rewrite)
+- `INSTRUCTIONS.md` — full rewrite: removed duplicate sections, removed obsolete delivery calculator section, updated all file paths (`weddings/` → `wedding/`), added EmailJS setup guide, added admin dashboard usage notes, added camera.png replacement instructions, updated future roadmap
+
+**GitHub commit:** `3cd78e9`
+
+---
+
+## [2026-04-03 16:15] — Real product camera photo uploaded
+
+**Request:** User replaced `camera.png` with their own product photo. Push it to GitHub so it appears on the live site.
+
+**Changes:**
+- `camera.png` — replaced 400×400 generated placeholder with real product photo (1280×1280, 687 KB, user-supplied)
+
+**GitHub commit:** `81fb308`
+
+---
+
+## [2026-04-03 16:30] — Camera images restyled (larger, no background)
+
+**Request:** Make camera images twice as large and display them as plain PNGs without any white box, border, or rounded background behind them.
+
+**Changes:**
+- `styles.css` — `.camera-grid` max-width doubled from 340px to 680px; `.camera-card` background, border, border-radius, box-shadow, and overflow removed; image size increased from 90% to 100% of card
+
+**GitHub commit:** `4536a57`
+
+---
+
+## [2026-04-03 18:10] — Booking requests flow in admin portal
+
+**Request:** When someone submits a booking request from the homepage, it should appear in the admin portal under a "Requests" tab, showing all contact info. Admin can approve the request (which creates a portal account and adds the client to the dashboard) or decline it.
+
+**Changes:**
+- `index.html` — added **Package** `<select>` dropdown to booking form (Basic / Standard / Premium)
+- `script.js` — on form submit, saves request object to `localStorage['wcb_booking_requests']` with: `id`, `name`, `email`, `date`, `guests`, `package`, `message`, `submittedAt`, `status: 'pending'`
+- `photoportal/index.html`
+  - Added **Clients / Booking Requests** tab bar below dashboard header
+  - Added `panelClients` and `panelRequests` wrapper divs
+  - Added **Approve modal** (auto-generated username, random password, package selector, confirm button)
+- `photoportal/portal.js`
+  - Changed `const USERS` / `const CUSTOMERS` → `let` to allow runtime additions
+  - Added IIFE `loadDynamicUsers()` on startup to merge `localStorage['wcb_dynamic_users']` and `['wcb_dynamic_customers']` into the runtime objects
+  - `switchAdminTab(tab)` — toggles Clients / Requests panels and tab active state
+  - `updateRequestsBadge()` — counts pending requests and shows/hides red badge on tab
+  - `renderRequests()` — renders all request cards (reversed chronological); each shows name, email (mailto link), wedding date, package, guest count, message, and Approve / Decline buttons for pending requests
+  - `openApproveModal(id)` — pre-fills username (name → kebab-case), generates random password, opens modal
+  - `generatePassword()` / `regeneratePassword()` — 8-char alphanumeric password helpers
+  - `approveRequest()` — creates user in `USERS` + `CUSTOMERS` in memory, persists to `localStorage['wcb_dynamic_users']` and `['wcb_dynamic_customers']`, initialises empty photo/guest/bin storage, marks request approved, shows toast with credentials
+  - `declineRequest(id)` — marks request as declined after confirmation
+  - `renderDashboard()` now calls `updateRequestsBadge()` on every render
+- `photoportal/portal.css` — added admin tabs styles, request card styles, approve modal styles
+
+**GitHub commit:** `ac7dda0`
+
+---
+
+## [2026-04-03 18:15] — REFERENCE.md and handoff file created
+
+**Request:** Store all project context, credentials, and instructions in a `REFERENCE.md` file so the project can be resumed on another device.
+
+**Changes:**
+- `REFERENCE.md` — created: full project reference including live URLs, repo details, file structure, tech stack, portal credentials, feature summary, known limitations, and push instructions
+- `copilot_handoff.md` — created locally (not pushed): contains a ready-to-paste Copilot restart prompt; keep private as it contains the GitHub token
+- `CHANGELOG.md` — this update
+
+**GitHub commit:** _(pending push after this entry)_
