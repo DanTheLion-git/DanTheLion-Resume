@@ -11,12 +11,11 @@ const posts: WPPost[] = await getPosts(3);
   <section class="hero">
     <div class="hero-grid">
       <div class="hero-main">
-        <p class="hero-tagline">CURRICULUM VITAE · CREATIVE TECHNOLOGIST</p>
+        <p class="hero-tagline">Curriculum Vitae · Creative Technologist</p>
         <h1 class="hero-title">Daniël <span class="hero-highlight">van Leeuwen</span></h1>
         <p class="hero-text">
-          Creative developer based in the Netherlands with 5+ years of experience in
-          interactive 3D, WebGL / Three.js, motion capture, VR production, and custom
-          hardware development. Available for freelance projects worldwide.
+          Creative developer based in the Netherlands with 2+ years of experience in
+          3D, motion capture, VR , and custom hardware development.
         </p>
         <div class="hero-actions">
           <a href="https://www.youtube.com/@DanTheLionVFX" class="btn-social btn-yt" target="_blank" rel="noopener noreferrer">
@@ -32,7 +31,7 @@ const posts: WPPost[] = await getPosts(3);
             Itch.io
           </a>
         </div>
-        <p class="hero-subnote">info.mvdvl@gmail.com &nbsp;·&nbsp; The Netherlands &nbsp;·&nbsp; Available for freelance</p>
+        <p class="hero-subnote">info.mvdvl@gmail.com &nbsp;·&nbsp; The Netherlands</p>
       </div>
       <aside class="hero-side">
         <div class="pill">Currently exploring</div>
@@ -43,6 +42,7 @@ const posts: WPPost[] = await getPosts(3);
           <li>• Amsterdam 2.0</li>
           <li>• Puzzle Lantern</li>
           <li>• Home Streaming</li>
+          <li>• Wedding Camera Rentals</li>
         </ul>
       </aside>
     </div>
@@ -93,7 +93,7 @@ const posts: WPPost[] = await getPosts(3);
   <!-- ── Client Projects (Carousel) ───────────────────────── -->
   <section id="work" class="section">
     <div class="section-header">
-      <h2 class="section-title">Client Projects</h2>
+      <h2 class="section-title">Projects</h2>
       <p class="section-subtitle">Click the arrows or swipe to browse</p>
     </div>
     <div class="carousel-wrap">
@@ -179,32 +179,32 @@ var PROJECTS = [
     title:   'Amsterdam Rederij',
     meta:    'Interactive WebGL · 3D Experience',
     image:   null,
-    youtube: null,
+    youtube: 'https://youtu.be/sfveQ_2cajM?si=3svZRFPYH1WRLxwk',
     desc:    'Interactive 3D web experience created for Amsterdam Rederij.',
-    link:    null,
+    link:    { label: 'Watch Playlist', href: 'https://www.youtube.com/playlist?list=PLh7EOh1n0_buBScK2L7dAFNsPW2xpWRCT' },
   },
   {
     title:   'Martens Beton',
-    meta:    'Product Visualisation · 3D',
+    meta:    'Product Visualisation · Blender 3D',
     image:   null,
-    youtube: null,
-    desc:    'Product visualisation project for Martens Beton.',
+    youtube: 'https://youtu.be/AVFDtIFl_yc',
+    desc:    'Animated video to showcase the new product line of Martens Beton, created using Blender and After Effects.',
     link:    null,
   },
   {
     title:   'Werken bij Schiphol',
-    meta:    'Recruitment Campaign · Interactive',
-    image:   null,
+    meta:    'On-site recording · Greenscreen',
+    image:   'https://www.werkopschiphol.nl/App_SkinMaster/images/og-image.jpg',
     youtube: null,
     desc:    'Interactive recruitment experience for Werken bij Schiphol.',
     link:    null,
   },
   {
     title:   'Lucardi',
-    meta:    'Product Showcase · WebGL',
+    meta:    'Product Showcase · Blender 3D',
     image:   null,
-    youtube: null,
-    desc:    'Interactive WebGL product showcase for Lucardi jewellery.',
+    youtube: 'https://youtube.com/shorts/bbm4KqhNv1E',
+    desc:    'A 3D product showcase for Lucardi, created using Blender',
     link:    null,
   },
   {
@@ -219,14 +219,14 @@ var PROJECTS = [
     title:   'Garbage Gary',
     meta:    'Game Development · Unity',
     image:   null,
-    youtube: null,
-    desc:    'A game project featuring the loveable Garbage Gary.',
-    link:    null,
+    youtube: 'https://youtu.be/Nn0hLqFrPOk',
+    desc:    'A game project created with other students for the Oyfo museum using Unity 3D, my responsibility was product lead and engine development.',
+    link:    { label: 'Play Game', href: 'https://daanvanleeuwen.itch.io/viktor-vuilnis' },
   },
   {
     title:   'Meijel Museum',
     meta:    'Interactive Museum Experience',
-    image:   null,
+    image:   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcy-9dPnImDKqCkmfymIThv7mLA-2zTguw_g&s',
     youtube: null,
     desc:    'Interactive digital experience developed for Meijel Museum.',
     link:    null,
