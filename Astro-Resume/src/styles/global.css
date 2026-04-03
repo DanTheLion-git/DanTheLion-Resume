@@ -1,6 +1,6 @@
 /* ===============================
    THE LIONS ALLIANCE – GLOBAL THEME
-   Dark Forest + Warm Earth Tones
+   WP-style greys, clean & professional
    Mobile-first, portfolio-focused
    =============================== */
 
@@ -9,15 +9,16 @@
 
 /* Root Colors */
 :root {
-  --bg: #0d0f0c;               /* Deep forest night */
-  --bg-alt: #131710;           /* Slightly lighter forest tone */
-  --fg: #e9e5d9;               /* Warm parchment text */
-  --fg-muted: #c6c1b3;
-  --accent-green: #3a5f3a;     /* Mossy green */
-  --accent-green-light: #4c7b4c;
-  --accent-brown: #5c4433;     /* Earth brown */
-  --card-bg: #1a1f18;          /* Deep foliage shadow */
-  --border: #2b3326;
+  /* Dark — WordPress-style professional charcoal */
+  --bg:                #1d2327;
+  --bg-alt:            #252a2d;
+  --fg:                #f0f0f1;
+  --fg-muted:          #a7aaad;
+  --accent-green:      #2271b1;
+  --accent-green-light:#5fa8d3;
+  --accent-brown:      #3582c4;
+  --card-bg:           #2c3338;
+  --border:            #3c434a;
   --radius: 14px;
   --transition: 150ms ease;
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -33,7 +34,7 @@
 
 html,
 body {
-  background: radial-gradient(circle at top, #11140f, #050604 60%);
+  background: #1d2327;
   color: var(--fg);
   line-height: 1.7;
 }
@@ -604,37 +605,38 @@ html.theme-light .btn-social {
    =============================== */
 
 html.theme-light {
-  --bg:                #ffffff;
-  --bg-alt:            #f1f5f9;
-  --fg:                #0f172a;
-  --fg-muted:          #475569;
-  --accent-green:      #1e40af;
-  --accent-green-light:#2563eb;
-  --accent-brown:      #1d4ed8;
-  --card-bg:           #f8fafc;
-  --border:            #e2e8f0;
+  /* Light — WordPress admin panel grey */
+  --bg:                #f0f0f1;
+  --bg-alt:            #e8e8e9;
+  --fg:                #1d2327;
+  --fg-muted:          #646970;
+  --accent-green:      #135e96;
+  --accent-green-light:#2271b1;
+  --accent-brown:      #0a4b78;
+  --card-bg:           #ffffff;
+  --border:            #c3c4c7;
 }
 html.theme-light body {
-  background: #ffffff;
+  background: #f0f0f1;
 }
 html.theme-light .site-header {
-  background: rgba(255, 255, 255, 0.95);
-  border-bottom: 1px solid #e2e8f0;
+  background: rgba(240, 240, 241, 0.96);
+  border-bottom: 1px solid #c3c4c7;
 }
 html.theme-light .hero-side {
-  background: #f1f5f9;
-  border-color: #bfdbfe;
+  background: #ffffff;
+  border-color: #c3c4c7;
 }
 html.theme-light .podium-wrapper {
-  background: #f8fafc;
-  border-color: #e2e8f0;
+  background: #ffffff;
+  border-color: #c3c4c7;
 }
 html.theme-light .pill {
-  border-color: rgba(37, 99, 235, 0.40);
-  background: rgba(219, 234, 254, 0.35);
+  border-color: rgba(34, 113, 177, 0.40);
+  background: rgba(53, 130, 196, 0.10);
 }
 html.theme-light .nav a:hover {
-  background: rgba(37, 99, 235, 0.10);
+  background: rgba(34, 113, 177, 0.12);
 }
 html.theme-light .post-card:hover,
 html.theme-light .card:hover {
