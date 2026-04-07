@@ -127,11 +127,11 @@ const sheets = Array.from({ length: SHEETS }, (_, s) => {
       align-items: center; justify-content: space-between;
       padding: 5mm 3mm; text-align: center;
     }
-    .info-artist { font-size: 8pt; font-weight: 400; line-height: 1.3; width: 100%; color: #ccc; }
-    .info-year   { font-size: 72pt; font-weight: 900; line-height: 1; color: #e8e8e8; }
-    .info-song   { font-size: 8pt; font-weight: 700; line-height: 1.3; width: 100%; color: #ccc; }
+    .info-artist { font-size: 10pt; font-weight: 400; line-height: 1.3; width: 100%; color: #ccc; overflow-wrap: break-word; word-break: break-word; }
+    .info-year   { font-size: 58pt; font-weight: 900; line-height: 1; color: #e8e8e8; }
+    .info-song   { font-size: 10pt; font-weight: 700; line-height: 1.3; width: 100%; color: #ccc; overflow-wrap: break-word; word-break: break-word; }
     .print-card.loaded .info-artist,
-    .print-card.loaded .info-song   { color: #000; }
+    .print-card.loaded .info-song   { color: #000; overflow-wrap: break-word; word-break: break-word; }
     .print-card.loaded .info-year   { color: #000; }
 
     /* ── Screen preview ────────────────────────────────────────────────── */
