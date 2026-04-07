@@ -225,10 +225,10 @@ const sheets = Array.from({ length: SHEETS }, (_, s) => {
   }
 
   // ── Read track data ───────────────────────────────────────────────────────
-  const raw = localStorage.getItem('hitster_print_job');
+  const raw = localStorage.getItem('swf_print_job');
   if (!raw) {
     setStatus('⚠ No track data found — go back to the admin page and click "Open Print Sheet".');
-    throw new Error('missing hitster_print_job');
+    throw new Error('missing swf_print_job');
   }
 
   let tracks;
@@ -246,7 +246,7 @@ const sheets = Array.from({ length: SHEETS }, (_, s) => {
     await new Promise(r => setTimeout(r, 2000));
   }
 
-  localStorage.removeItem('hitster_print_job');
+  localStorage.removeItem('swf_print_job');
 
   // ── Fill slots ────────────────────────────────────────────────────────────
   // card slot n (1-indexed) → DOM element helper

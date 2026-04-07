@@ -7,7 +7,7 @@
  */
 
 export const CLIENT_ID    = 'a7bbba876c354c84b9d5932024a1e951';
-export const REDIRECT_URI = 'https://thelionsalliance.com/games/hitster/callback';
+export const REDIRECT_URI = 'https://thelionsalliance.com/games/songs-with-friends/callback';
 export const SCOPES = [
   'streaming',
   'user-read-email',

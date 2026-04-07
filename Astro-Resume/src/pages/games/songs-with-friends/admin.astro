@@ -164,12 +164,12 @@ import '../../../styles/games.css';
   <!-- ══ NOT AUTHENTICATED ════════════════════════════════════════════════ -->
   <div id="screen-unauthed" class="game-content no-print hidden">
     <div style="text-align:center;">
-      <div class="hitster-logo">ADMIN</div>
+      <div class="swf-logo">ADMIN</div>
       <p class="g-subtitle" style="margin-top:0.5rem;">Card Generator</p>
     </div>
     <div class="g-card" style="text-align:center;display:flex;flex-direction:column;gap:1rem;align-items:center;">
       <p style="font-size:0.9rem;color:var(--g-muted);">You need to connect Spotify first.</p>
-      <a href="/games/hitster/" class="g-btn green" style="max-width:260px;">← Go to Songs with Friends</a>
+      <a href="/games/songs-with-friends/" class="g-btn green" style="max-width:260px;">← Go to Songs with Friends</a>
     </div>
   </div>
 
@@ -178,7 +178,7 @@ import '../../../styles/games.css';
 
     <!-- Title -->
     <div style="text-align:center;width:100%;">
-      <div class="hitster-logo" style="font-size:1.8rem;">ADMIN</div>
+      <div class="swf-logo" style="font-size:1.8rem;">ADMIN</div>
       <p class="g-subtitle">Card Generator</p>
     </div>
 
@@ -558,7 +558,7 @@ import '../../../styles/games.css';
       $('playlist-grid').innerHTML = '';
       try {
         const token = await getValidToken();
-        if (!token) { logout(); location.href = '/games/hitster/'; return; }
+        if (!token) { logout(); location.href = '/games/songs-with-friends/'; return; }
         const playlists = await fetchUserPlaylists(token);
         renderPlaylistGrid(playlists);
       } catch (err) {
@@ -578,7 +578,7 @@ import '../../../styles/games.css';
 
       try {
         const token = await getValidToken();
-        if (!token) { logout(); location.href = '/games/hitster/'; return; }
+        if (!token) { logout(); location.href = '/games/songs-with-friends/'; return; }
 
         const tracks = await fetchAllTracks(playlistId, token);
         allTracks = tracks;
@@ -633,10 +633,10 @@ import '../../../styles/games.css';
         artist: t.artist,
         year:   t.year,
       }));
-      localStorage.setItem('hitster_print_job', JSON.stringify(job));
+      localStorage.setItem('swf_print_job', JSON.stringify(job));
 
       // Open the clean, site-CSS-free print page in a new tab
-      window.open('/games/hitster/print/', '_blank');
+      window.open('/games/songs-with-friends/print/', '_blank');
     });
 
     $('btn-back-to-playlists').addEventListener('click', () => {
@@ -647,11 +647,11 @@ import '../../../styles/games.css';
     $('btn-refresh-playlists').addEventListener('click', () => loadUserPlaylists());
 
     // ── Logout ─────────────────────────────────────────────────────────────
-    $('btn-logout').addEventListener('click', () => { logout(); location.href = '/games/hitster/'; });
+    $('btn-logout').addEventListener('click', () => { logout(); location.href = '/games/songs-with-friends/'; });
 
     // Re-auth with full scope — store return-to so callback lands back on admin
     $('btn-reauth').addEventListener('click', () => {
-      sessionStorage.setItem('spotify_return_to', '/games/hitster/admin/');
+      sessionStorage.setItem('spotify_return_to', '/games/songs-with-friends/admin/');
       logout();
       startSpotifyAuth();
     });

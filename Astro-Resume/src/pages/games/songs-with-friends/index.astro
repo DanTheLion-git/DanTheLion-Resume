@@ -35,7 +35,7 @@ import '../../../styles/games.css';
       <nav class="nav">
         <a href="/games/">Games</a>
         <a href="/resume/">Resume</a>
-        <a id="btn-admin" href="/games/hitster/admin/" class="hidden" style="font-size:0.85rem;">&#x1F3B4; Cards</a>
+        <a id="btn-admin" href="/games/songs-with-friends/admin/" class="hidden" style="font-size:0.85rem;">&#x1F3B4; Cards</a>
         <button id="btn-logout" class="g-btn outline small hidden" style="width:auto;font-size:0.8rem;">Disconnect</button>
         <button id="theme-toggle" class="theme-toggle" aria-label="Toggle colour scheme" title="Toggle light / dark mode">
           <svg class="theme-icon theme-icon--sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
@@ -56,7 +56,7 @@ import '../../../styles/games.css';
   <!-- ══ AUTH SCREEN ══════════════════════════════════════════════════════ -->
   <div id="screen-auth" class="game-content hidden">
     <div style="text-align:center;">
-      <div class="hitster-logo">SONGS WITH FRIENDS</div>
+      <div class="swf-logo">SONGS WITH FRIENDS</div>
       <p class="g-subtitle" style="margin-top:0.5rem;">
         Guess the year — beat your friends' timelines
       </p>
@@ -89,7 +89,7 @@ import '../../../styles/games.css';
     <!-- ── IDLE: waiting to scan ──────────────────────────────────────── -->
     <div id="state-idle">
       <div style="text-align:center;margin-bottom:1rem;">
-        <div class="hitster-logo">SONGS WITH FRIENDS</div>
+        <div class="swf-logo">SONGS WITH FRIENDS</div>
         <p class="g-subtitle">Scan the QR code on a card to play the song</p>
       </div>
       <button id="btn-scan" class="g-btn primary" style="font-size:1.2rem;padding:1.2rem;">
@@ -158,7 +158,7 @@ import '../../../styles/games.css';
   <!-- ══ SCRIPTS ══════════════════════════════════════════════════════════ -->
   <script>
     import { startSpotifyAuth, getValidToken, isAuthenticated, logout, playTrack } from '../../../lib/spotify';
-    import { parseQRToTrackUri, fetchTrackInfo } from '../../../lib/hitster';
+    import { parseQRToTrackUri, fetchTrackInfo } from '../../../lib/songs-with-friends';
     import { Html5Qrcode } from 'html5-qrcode';
 
     // ── State ──────────────────────────────────────────────────────────────

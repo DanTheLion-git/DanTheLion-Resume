@@ -1,5 +1,5 @@
 /**
- * Hitster game helpers: QR parsing and Spotify track info fetching.
+ * Songs with Friends game helpers: QR parsing and Spotify track info fetching.
  */
 
 export interface TrackInfo {

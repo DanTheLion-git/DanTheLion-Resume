@@ -167,8 +167,8 @@
   color: var(--g-muted);
 }
 
-/* ── Hitster-specific ─────────────────────────────────────────────────────── */
-.hitster-logo {
+/* ── Songs with Friends-specific ─────────────────────────────────────────────────────── */
+.swf-logo {
   font-size: clamp(1.8rem, 8vw, 2.5rem);
   font-weight: 900;
   background: linear-gradient(135deg, var(--g-accent), var(--g-accent2));

@@ -65,7 +65,7 @@ const title = "Songs with Friends — Callback";
       try {
         await exchangeCode(code);
         statusEl.textContent = '✅ Connected! Redirecting…';
-        const returnTo = sessionStorage.getItem('spotify_return_to') ?? '/games/hitster/';
+        const returnTo = sessionStorage.getItem('spotify_return_to') ?? '/games/songs-with-friends/';
         sessionStorage.removeItem('spotify_return_to');
         setTimeout(() => { window.location.href = returnTo; }, 800);
       } catch (err: unknown) {
