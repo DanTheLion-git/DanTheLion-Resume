@@ -241,6 +241,14 @@ import '../../../styles/games.css';
     <button id="btn-play-again" class="g-btn green" style="font-size:1rem;">&#8635; Play Again</button>
     <button id="btn-back-to-setup" class="g-btn secondary" style="font-size:.9rem;">&#9881;&#65039; New Setup</button>
   </div>
+  <!-- Persistent scores shortcut — shown during active game (handover / play / result) -->
+  <button id="btn-show-scores" class="g-btn secondary small hidden"
+    style="position:fixed;bottom:1.25rem;right:1rem;z-index:30;width:auto;
+           padding:.55rem 1rem;font-size:.85rem;
+           box-shadow:0 2px 12px rgba(0,0,0,0.4);">
+    &#128202; Scores
+  </button>
+
   <!-- ══ SCRIPTS ══════════════════════════════════════════════════════════ -->
   <script>
     interface Team  { name: string; score: number; }
