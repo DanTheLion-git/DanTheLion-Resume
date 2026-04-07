@@ -5,6 +5,13 @@ Format: [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.4.1] — 2026-04-07
+
+### Fixed
+- 30 Seconds: CSS import path corrected (`../../../styles/games.css`) — build was failing with "could not resolve" error
+
+---
+
 ## [1.4.0] — 2026-04-07
 
 ### Added — 30 Seconds
