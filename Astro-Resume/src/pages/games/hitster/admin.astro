@@ -229,6 +229,48 @@ import '../../../styles/games.css';
     }
 
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Playlist picker grid ───────────────────────────────────────────── */
+    .playlist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 0.75rem;
+      width: 100%;
+    }
+    .playlist-tile {
+      background: var(--g-surface);
+      border: 1px solid var(--g-border);
+      border-radius: var(--g-radius-sm);
+      cursor: pointer;
+      overflow: hidden;
+      transition: border-color 150ms, transform 150ms;
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      padding: 0;
+    }
+    .playlist-tile:hover {
+      border-color: var(--g-accent2);
+      transform: translateY(-2px);
+    }
+    .playlist-tile img, .playlist-tile .pl-art-placeholder {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      display: block;
+      background: var(--g-surface2);
+      font-size: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .playlist-tile-info  { padding: 0.5rem 0.6rem; }
+    .playlist-tile-name  {
+      font-size: 0.82rem; font-weight: 700;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      color: var(--g-text);
+    }
+    .playlist-tile-count { font-size: 0.7rem; color: var(--g-muted); margin-top: 0.15rem; }
   </style>
 </head>
 
@@ -278,32 +320,34 @@ import '../../../styles/games.css';
       <p class="g-subtitle">Card Generator</p>
     </div>
 
-    <!-- Playlist input -->
-    <div class="g-card" style="display:flex;flex-direction:column;gap:0.75rem;">
-      <label class="g-label" for="playlist-input">Spotify Playlist URL or URI</label>
-      <input
-        id="playlist-input"
-        type="text"
-        placeholder="https://open.spotify.com/playlist/… or spotify:playlist:…"
-        style="
-          width:100%;padding:0.7rem 0.85rem;
-          background:var(--g-bg);border:1px solid var(--g-border);
-          border-radius:var(--g-radius-sm);color:var(--g-text);font-size:0.9rem;
-        "
-      />
-      <button id="btn-load" class="g-btn green">🎵 Load Playlist</button>
-      <div id="load-error" class="g-alert error hidden"></div>
+    <!-- Playlist picker (shown on load) -->
+    <div id="playlist-section" style="width:100%;display:flex;flex-direction:column;gap:1rem;">
+
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;">
+        <div class="g-label" style="font-size:0.9rem;">Your Playlists</div>
+        <button id="btn-refresh-playlists" class="g-btn secondary small">&#8635; Refresh</button>
+      </div>
+
+      <!-- Loading / error states -->
+      <div id="pl-loading" class="g-alert info hidden">
+        <span class="spinner"></span>&nbsp; Loading your playlists…
+      </div>
+      <div id="pl-error" class="g-alert error hidden"></div>
       <button id="btn-reauth" class="g-btn outline small hidden" style="width:auto;align-self:flex-start;">
-        🔑 Reconnect Spotify with playlist access
+        &#128273; Reconnect Spotify with playlist access
       </button>
+
+      <!-- Playlist grid -->
+      <div id="playlist-grid" class="playlist-grid"></div>
     </div>
 
-    <!-- Track list (hidden until loaded) -->
+    <!-- Track list (hidden until a playlist is picked) -->
     <div id="track-section" class="hidden" style="width:100%;display:flex;flex-direction:column;gap:1rem;">
 
       <!-- Playlist header -->
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;">
         <div>
+          <button id="btn-back-to-playlists" class="g-btn secondary small" style="width:auto;margin-bottom:0.4rem;">&#8592; All Playlists</button>
           <div id="playlist-name" class="g-label" style="font-size:0.9rem;color:var(--g-text);font-weight:700;"></div>
           <div id="playlist-meta" class="g-label"></div>
         </div>
@@ -344,7 +388,7 @@ import '../../../styles/games.css';
           Each QR back will align with the matching song info when stacked. Cut along the dashed lines.
         </p>
         <button id="btn-print" class="g-btn green" style="font-size:1rem;">🖨 Print / Save as PDF</button>
-        <button id="btn-back"  class="g-btn secondary">← Back to track list</button>
+        <button id="btn-back"  class="g-btn secondary">&#8592; Back to track list</button>
       </div>
 
       <div class="print-preview-section">
@@ -581,46 +625,103 @@ import '../../../styles/games.css';
       items.forEach(el => container.appendChild(el));
     }
 
-    // ── Load playlist flow ─────────────────────────────────────────────────
-    $('btn-load').addEventListener('click', async () => {
-      hide('load-error', 'track-section', 'preview-section');
-      const input = ($('playlist-input') as HTMLInputElement).value;
-      const playlistId = parsePlaylistId(input);
+    // ── Fetch user's playlists ─────────────────────────────────────────────
+    interface SpotifyPlaylist {
+      id: string;
+      name: string;
+      images: Array<{ url: string }>;
+      tracks: { total: number };
+    }
 
-      if (!playlistId) {
-        $('load-error').textContent = 'Could not parse a playlist ID from that URL. Paste a Spotify playlist link or URI.';
-        show('load-error');
+    async function fetchUserPlaylists(token: string): Promise<SpotifyPlaylist[]> {
+      const playlists: SpotifyPlaylist[] = [];
+      let url: string | null = 'https://api.spotify.com/v1/me/playlists?limit=50';
+      while (url) {
+        const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+        if (!res.ok) {
+          if (res.status === 403) {
+            show('btn-reauth');
+            throw new Error(
+              'Access denied (403) — missing playlist permissions. ' +
+              'Click "Reconnect Spotify" below to re-authorise.'
+            );
+          }
+          throw new Error(`Could not load playlists (${res.status})`);
+        }
+        const data = await res.json();
+        playlists.push(...(data.items as SpotifyPlaylist[]).filter(p => p));
+        url = data.next as string | null;
+      }
+      return playlists;
+    }
+
+    function renderPlaylistGrid(playlists: SpotifyPlaylist[]) {
+      const grid = $('playlist-grid');
+      grid.innerHTML = '';
+      if (playlists.length === 0) {
+        grid.innerHTML = '<p style="color:var(--g-muted);font-size:0.88rem;">No playlists found in your Spotify library.</p>';
         return;
       }
+      for (const pl of playlists) {
+        const btn = document.createElement('button');
+        btn.className = 'playlist-tile';
+        const artUrl = pl.images?.[0]?.url;
+        btn.innerHTML = artUrl
+          ? `<img src="${artUrl}" alt="" loading="lazy" />`
+          : `<div class="pl-art-placeholder">🎵</div>`;
+        btn.innerHTML += `
+          <div class="playlist-tile-info">
+            <div class="playlist-tile-name" title="${pl.name}">${pl.name}</div>
+            <div class="playlist-tile-count">${pl.tracks.total} tracks</div>
+          </div>`;
+        btn.addEventListener('click', () => loadPlaylist(pl.id, pl.name, pl.tracks.total));
+        grid.appendChild(btn);
+      }
+    }
 
-      ($('btn-load') as HTMLButtonElement).disabled = true;
-      $('btn-load').innerHTML = '<span class="spinner"></span> Loading…';
+    async function loadUserPlaylists() {
+      hide('pl-error', 'btn-reauth');
+      show('pl-loading');
+      $('playlist-grid').innerHTML = '';
+      try {
+        const token = await getValidToken();
+        if (!token) { logout(); location.href = '/games/hitster/'; return; }
+        const playlists = await fetchUserPlaylists(token);
+        renderPlaylistGrid(playlists);
+      } catch (err) {
+        $('pl-error').textContent = err instanceof Error ? err.message : String(err);
+        show('pl-error');
+      } finally {
+        hide('pl-loading');
+      }
+    }
+
+    async function loadPlaylist(playlistId: string, name: string, total: number) {
+      hide('pl-error');
+      $('playlist-name').textContent = name;
+      $('playlist-meta').textContent = `Loading ${total} tracks…`;
+      hide('playlist-section');
+      show('track-section');
 
       try {
         const token = await getValidToken();
         if (!token) { logout(); location.href = '/games/hitster/'; return; }
-
-        const [info, tracks] = await Promise.all([
-          fetchPlaylistInfo(playlistId, token),
-          fetchAllTracks(playlistId, token),
-        ]);
-
+        const tracks = await fetchAllTracks(playlistId, token);
         allTracks = tracks;
         selectedIds = new Set(tracks.map(t => t.id));
-
-        $('playlist-name').textContent = info.name ?? 'Playlist';
         $('playlist-meta').textContent = `${tracks.length} tracks loaded`;
-
         renderTrackList(tracks);
-        show('track-section');
       } catch (err) {
-        $('load-error').textContent = err instanceof Error ? err.message : String(err);
-        show('load-error');
-      } finally {
-        ($('btn-load') as HTMLButtonElement).disabled = false;
-        $('btn-load').innerHTML = '🎵 Load Playlist';
+        $('playlist-meta').textContent = 'Failed to load tracks';
+        // Fall back to playlist picker on error
+        hide('track-section');
+        show('playlist-section');
+        $('pl-error').textContent = err instanceof Error ? err.message : String(err);
+        show('pl-error');
       }
-    });
+    }
+
+    // ── Load playlist flow (back-compat removed; replaced by playlist picker) ─
 
     // ── Select all / none ──────────────────────────────────────────────────
     $('btn-select-all').addEventListener('click', () => {
@@ -676,8 +777,8 @@ import '../../../styles/games.css';
         show('preview-section');
       } catch (err) {
         hide('gen-progress');
-        $('load-error').textContent = err instanceof Error ? err.message : String(err);
-        show('load-error', 'track-section');
+        $('pl-error').textContent = err instanceof Error ? err.message : String(err);
+        show('pl-error', 'track-section');
       }
     });
 
@@ -688,6 +789,13 @@ import '../../../styles/games.css';
       show('track-section');
     });
 
+    $('btn-back-to-playlists').addEventListener('click', () => {
+      hide('track-section', 'preview-section');
+      show('playlist-section');
+    });
+
+    $('btn-refresh-playlists').addEventListener('click', () => loadUserPlaylists());
+
     // ── Logout ─────────────────────────────────────────────────────────────
     $('btn-logout').addEventListener('click', () => { logout(); location.href = '/games/hitster/'; });
 
@@ -697,16 +805,9 @@ import '../../../styles/games.css';
     // ── Init ───────────────────────────────────────────────────────────────
     if (isAuthenticated()) {
       show('screen-admin', 'btn-logout');
+      loadUserPlaylists();
     } else {
       show('screen-unauthed');
-    }
-
-    // Also load playlist immediately if URL has ?playlist= param
-    const params = new URLSearchParams(location.search);
-    const preload = params.get('playlist');
-    if (preload && isAuthenticated()) {
-      ($('playlist-input') as HTMLInputElement).value = preload;
-      $('btn-load').click();
     }
   </script>
 
