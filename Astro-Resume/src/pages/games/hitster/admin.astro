@@ -427,7 +427,13 @@ import '../../../styles/games.css';
 
       while (url) {
         const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
-        if (!res.ok) throw new Error(`Track fetch failed (${res.status})`);
+        if (!res.ok) {
+          if (res.status === 403) throw new Error(
+            'Access denied (403). Your Spotify connection is missing playlist permissions. ' +
+            'Click "Disconnect" above, then reconnect via the Hitster page to grant access.'
+          );
+          throw new Error(`Track fetch failed (${res.status})`);
+        }
         const data = await res.json();
 
         for (const item of (data.items as Array<{ track: null | Record<string, unknown> }>)) {

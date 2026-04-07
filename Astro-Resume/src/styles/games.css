@@ -38,6 +38,36 @@
 .game-page .site-header,
 .game-page .site-footer { align-self: stretch; }
 
+/* ── Mobile-safe header overrides ───────────────────────────────────────── */
+/* Override the content-page container padding so header stays compact */
+.game-page .site-header .container {
+  padding: 0 0.75rem;       /* tighter horizontal padding */
+  overflow: visible;
+}
+
+/* Logo: never shrink, never wrap */
+.game-page .site-header .logo {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Nav: allow horizontal scroll on very small screens, hide scrollbar */
+.game-page .site-header .nav {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;         /* Firefox */
+  flex-shrink: 1;
+  min-width: 0;
+}
+.game-page .site-header .nav::-webkit-scrollbar { display: none; }
+
+/* Reduce nav gap on small phones */
+@media (max-width: 400px) {
+  .game-page .site-header .container { gap: 0.5rem; }
+  .game-page .site-header .nav       { gap: 0.5rem; font-size: 0.82rem; }
+  .game-page .site-header .logo      { font-size: 0.9rem; }
+}
+
 .game-content {
   width: 100%;
   max-width: 480px;
