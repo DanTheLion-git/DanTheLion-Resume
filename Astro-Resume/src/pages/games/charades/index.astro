@@ -9,23 +9,11 @@ import '../../../styles/games.css';
   <title>Charades — The Lions Alliance</title>
 
   <style>
-    /* ── Charades-specific styles ─────────────────────────────────────── */
-    .setup-section {
-      background: var(--g-surface);
-      border: 1px solid var(--g-border);
-      border-radius: var(--g-radius);
-      padding: 1rem;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-    }
-
-    /* Toggle chips for language / category / difficulty */
+    /* ── Chip toggles ───────────────────────────────────────────────────── */
     .chip-group { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 
     .chip {
-      padding: 0.4rem 0.85rem;
+      padding: 0.4rem 0.9rem;
       border-radius: 999px;
       border: 1.5px solid var(--g-border);
       background: var(--g-bg);
@@ -35,199 +23,168 @@ import '../../../styles/games.css';
       cursor: pointer;
       transition: all 0.12s;
       user-select: none;
+      white-space: nowrap;
+    }
+    .chip.on      { border-color: var(--g-accent);  background: rgba(233,69,96,0.15);   color: var(--g-text);   }
+    .chip.lang-on { border-color: #5882ff;           background: rgba(88,130,255,0.15);  color: #a0b4ff;         }
+
+    /* ── Setup card ─────────────────────────────────────────────────────── */
+    .setup-block {
+      background: var(--g-surface);
+      border: 1px solid var(--g-border);
+      border-radius: var(--g-radius);
+      padding: 0.9rem 1rem;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
     }
 
-    .chip.active {
-      border-color: var(--g-accent);
-      background: rgba(233,69,96,0.15);
-      color: var(--g-text);
-    }
-
-    .chip.lang-active {
-      border-color: #5882ff;
-      background: rgba(88,130,255,0.15);
-      color: #a0b4ff;
-    }
-
-    /* Team list */
-    .team-row {
+    .setup-block summary {
+      cursor: pointer;
+      list-style: none;
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 0.5rem;
     }
+    .setup-block summary::-webkit-details-marker { display: none; }
+    .setup-block summary::after { content: '›'; color: var(--g-muted); transition: transform 0.2s; font-size: 1.2rem; }
+    .setup-block[open] summary::after { transform: rotate(90deg); }
 
-    .team-row input[type="text"] {
+    /* ── Custom prompt manager ──────────────────────────────────────────── */
+    .custom-add-row {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .custom-add-row input[type="text"] {
       flex: 1;
-      padding: 0.5rem 0.75rem;
+      min-width: 130px;
+      padding: 0.45rem 0.7rem;
       background: var(--g-bg);
       border: 1px solid var(--g-border);
       border-radius: var(--g-radius-sm);
       color: var(--g-text);
-      font-size: 0.9rem;
+      font-size: 0.88rem;
     }
+    .custom-add-row input:focus { outline: none; border-color: var(--g-accent); }
 
-    .team-row input[type="text"]:focus {
-      outline: none;
-      border-color: var(--g-accent);
-    }
-
-    .btn-remove-team {
-      background: none;
-      border: none;
+    .mini-select {
+      padding: 0.45rem 0.5rem;
+      background: var(--g-bg);
+      border: 1px solid var(--g-border);
+      border-radius: var(--g-radius-sm);
       color: var(--g-muted);
-      font-size: 1.1rem;
+      font-size: 0.8rem;
       cursor: pointer;
-      padding: 0.25rem;
-      line-height: 1;
     }
 
-    .btn-remove-team:hover { color: var(--g-accent); }
-
-    /* Timer ring */
-    .timer-ring {
-      position: relative;
-      width: 110px;
-      height: 110px;
-      flex-shrink: 0;
-    }
-
-    .timer-ring svg {
-      transform: rotate(-90deg);
-      width: 110px;
-      height: 110px;
-    }
-
-    .timer-ring .ring-bg   { fill: none; stroke: var(--g-border);   stroke-width: 6; }
-    .timer-ring .ring-fill { fill: none; stroke: var(--g-green);    stroke-width: 6;
-                              stroke-linecap: round; transition: stroke 0.3s, stroke-dashoffset 0.2s linear; }
-
-    .timer-ring .timer-text {
-      position: absolute;
-      inset: 0;
+    .cp-item {
       display: flex;
       align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.6rem;
+      background: var(--g-bg);
+      border: 1px solid var(--g-border);
+      border-radius: var(--g-radius-sm);
+      font-size: 0.82rem;
+    }
+    .cp-item .cp-text  { flex: 1; color: var(--g-text); }
+    .cp-item .cp-badge { font-size: 0.68rem; color: var(--g-muted); white-space: nowrap; }
+    .cp-item .cp-del   { background: none; border: none; color: var(--g-muted); cursor: pointer; font-size: 1rem; line-height: 1; padding: 0 2px; }
+    .cp-item .cp-del:hover { color: var(--g-accent); }
+
+    /* ── Prompt browser modal ───────────────────────────────────────────── */
+    #modal-browse {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.82);
+      z-index: 200;
+      display: flex;
+      align-items: flex-start;
       justify-content: center;
-      font-size: 1.6rem;
-      font-weight: 900;
-      color: var(--g-text);
-      transition: color 0.3s;
+      padding: 1rem;
+      overflow-y: auto;
     }
 
-    .timer-ring.urgent .ring-fill { stroke: var(--g-accent); }
-    .timer-ring.urgent .timer-text { color: var(--g-accent); }
-    .timer-ring.urgent .timer-text { animation: pulse-text 0.5s ease infinite alternate; }
+    .browse-inner {
+      background: var(--g-surface);
+      border: 1px solid var(--g-border);
+      border-radius: var(--g-radius);
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      padding: 1rem;
+      margin: auto;
+    }
 
-    @keyframes pulse-text { from { opacity: 1; } to { opacity: 0.5; } }
+    .pb-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.6rem;
+      border-radius: var(--g-radius-sm);
+      background: var(--g-bg);
+      font-size: 0.82rem;
+    }
+    .pb-item .pb-text  { flex: 1; color: var(--g-text); }
+    .pb-item .pb-cat   { font-size: 0.7rem; color: var(--g-muted); }
+    .pb-item .pb-diff  { font-size: 0.66rem; border-radius: 999px; padding: 1px 6px; }
+    .diff-easy   { background:rgba(29,185,84,.2);  color:var(--g-green);   }
+    .diff-medium { background:rgba(245,166,35,.2); color:var(--g-accent2); }
+    .diff-hard   { background:rgba(233,69,96,.2);  color:var(--g-accent);  }
 
-    /* Prompt card */
+    /* ── Play screen ────────────────────────────────────────────────────── */
+    .timer-bar-wrap {
+      width: 100%; height: 4px;
+      background: var(--g-border);
+      border-radius: 2px; overflow: hidden;
+    }
+    .timer-bar-fill {
+      height: 100%; background: var(--g-green);
+      border-radius: 2px; transition: width 0.2s linear, background 0.3s;
+    }
+    .timer-bar-fill.urgent { background: var(--g-accent); }
+
     .prompt-card {
       background: var(--g-surface);
       border: 2px solid var(--g-border);
       border-radius: var(--g-radius);
-      padding: 1.5rem 1rem;
+      padding: 2rem 1.5rem;
       width: 100%;
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 0.75rem;
-      min-height: 160px;
+      min-height: 200px;
       justify-content: center;
+      position: relative;
+      transition: border-color 0.2s, opacity 0.18s;
+    }
+    .prompt-card.hidden-card { border-color: var(--g-surface2); background: var(--g-bg); }
+
+    .cat-label    { font-size:0.75rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--g-muted); }
+    .prompt-text  { font-size:clamp(1.5rem,6vw,2.2rem); font-weight:800; line-height:1.2; color:var(--g-text); }
+    .diff-badge   { font-size:0.7rem; border-radius:999px; padding:2px 10px; }
+
+    .hidden-overlay {
+      position: absolute; inset: 0;
+      background: var(--g-bg);
+      border-radius: calc(var(--g-radius) - 2px);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 0.5rem;
+      color: var(--g-muted); font-size:0.9rem; font-weight:600;
     }
 
-    .prompt-category {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--g-muted);
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
+    .play-action-row { display: flex; gap: 0.75rem; width: 100%; }
+    .btn-hide { flex:1; background:var(--g-surface2); border:1px solid var(--g-border); color:var(--g-text); }
+    .btn-next { flex:2; background:var(--g-accent); color:white; font-size:1.1rem; }
 
-    .prompt-text {
-      font-size: clamp(1.4rem, 5vw, 2rem);
-      font-weight: 800;
-      color: var(--g-text);
-      line-height: 1.2;
-    }
-
-    .prompt-diff {
-      font-size: 0.7rem;
-      padding: 2px 8px;
-      border-radius: 999px;
-    }
-
-    .diff-easy   { background: rgba(29,185,84,0.2);  color: var(--g-green); }
-    .diff-medium { background: rgba(245,166,35,0.2); color: var(--g-accent2); }
-    .diff-hard   { background: rgba(233,69,96,0.2);  color: var(--g-accent); }
-
-    /* Game action buttons */
-    .action-row {
-      display: flex;
-      gap: 0.75rem;
-      width: 100%;
-    }
-
-    .btn-got-it {
-      flex: 2;
-      background: var(--g-green);
-      color: white;
-      font-size: 1.1rem;
-      padding: 1.1rem;
-    }
-
-    .btn-skip {
-      flex: 1;
-      background: var(--g-surface2);
-      border: 1px solid var(--g-border);
-      color: var(--g-muted);
-      font-size: 1rem;
-      padding: 1.1rem;
-    }
-
-    /* Score table */
-    .scores-table { width: 100%; border-collapse: collapse; }
-    .scores-table td { padding: 0.5rem 0.25rem; border-bottom: 1px solid var(--g-border); font-size: 0.9rem; }
-    .scores-table tr:last-child td { border-bottom: none; }
-    .scores-table .score-name   { color: var(--g-text); font-weight: 600; }
-    .scores-table .score-pts    { text-align: right; color: var(--g-accent2); font-weight: 700; font-size: 1rem; }
-    .scores-table tr.current-team td { color: var(--g-accent); }
-
-    /* Team ready screen */
-    .team-badge {
-      font-size: 3rem;
-      font-weight: 900;
-      color: var(--g-accent);
-      text-align: center;
-      line-height: 1;
-    }
-
-    /* Game over podium */
-    .podium-row {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.75rem;
-      border-radius: var(--g-radius-sm);
-      background: var(--g-surface);
-      border: 1px solid var(--g-border);
-    }
-
-    .podium-row.first  { border-color: #f5a623; background: rgba(245,166,35,0.1); }
-    .podium-row.second { border-color: #888; background: rgba(136,136,136,0.08); }
-    .podium-row.third  { border-color: #cd7f32; background: rgba(205,127,50,0.08); }
-
-    .podium-rank   { font-size: 1.5rem; width: 2rem; text-align: center; flex-shrink: 0; }
-    .podium-name   { flex: 1; font-weight: 700; font-size: 1rem; }
-    .podium-score  { font-weight: 800; color: var(--g-accent2); font-size: 1.1rem; }
-
-    /* Range input */
-    input[type="range"] {
-      width: 100%;
-      accent-color: var(--g-accent);
-    }
+    .progress-info { font-size:0.78rem; color:var(--g-muted); text-align:center; }
   </style>
 </head>
 
@@ -235,123 +192,166 @@ import '../../../styles/games.css';
 
   <header class="game-header">
     <a href="/games/" class="brand">🦁 Games</a>
-    <button id="btn-rules" class="g-btn secondary small" style="width:auto;">Rules</button>
+    <button id="btn-browse" class="g-btn secondary small" style="width:auto;">📋 Prompts</button>
   </header>
 
-  <!-- ══ RULES MODAL ══════════════════════════════════════════════════════ -->
-  <div id="modal-rules" class="hidden" style="
-    position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:100;
-    display:flex;align-items:center;justify-content:center;padding:1rem;
-  ">
-    <div class="g-card" style="max-width:420px;display:flex;flex-direction:column;gap:0.75rem;max-height:90vh;overflow-y:auto;">
+
+  <!-- ══ BROWSE PROMPTS MODAL ══════════════════════════════════════════════ -->
+  <div id="modal-browse" class="hidden">
+    <div class="browse-inner">
       <div style="display:flex;justify-content:space-between;align-items:center;">
-        <strong>🎭 How to Play Charades</strong>
-        <button id="btn-close-rules" class="g-btn secondary small" style="width:auto;">✕</button>
+        <strong>📋 All Prompts</strong>
+        <button id="btn-close-browse" class="g-btn secondary small" style="width:auto;">✕ Close</button>
       </div>
-      <ol style="padding-left:1.25rem;font-size:0.9rem;line-height:1.8;color:var(--g-muted);">
-        <li>Teams take turns. The acting player <strong>holds the phone</strong>.</li>
-        <li>Tap <strong>Start Round</strong> — a prompt appears on screen.</li>
-        <li>Act it out silently — <strong>no speaking, no sounds</strong>.</li>
-        <li>Your team guesses — tap <strong>✓ Got it!</strong> for each correct guess.</li>
-        <li>Tap <strong>Skip</strong> to pass on a prompt (no penalty).</li>
-        <li>When the timer runs out, the round ends.</li>
-        <li>The team with the most points after all rounds wins! 🏆</li>
-      </ol>
-      <p style="font-size:0.8rem;color:var(--g-muted);">
-        Classic gestures: film → wind imaginary camera ·
-        book → open palms · song → mime singing · TV show → draw rectangle
-      </p>
+
+      <!-- Filters -->
+      <div style="display:flex;gap:0.4rem;flex-wrap:wrap;">
+        <select id="bf-cat"  class="mini-select" style="flex:1;">
+          <option value="">All categories</option>
+          <option value="movies">🎬 Movies</option>
+          <option value="books">📚 Books</option>
+          <option value="artists">🎤 Artists</option>
+          <option value="songs">🎵 Songs</option>
+          <option value="places">🌍 Places</option>
+          <option value="sayings">💬 Sayings</option>
+          <option value="custom">⭐ Custom</option>
+        </select>
+        <select id="bf-diff" class="mini-select">
+          <option value="">All difficulties</option>
+          <option value="easy">🟢 Easy</option>
+          <option value="medium">🟡 Medium</option>
+          <option value="hard">🔴 Hard</option>
+        </select>
+        <select id="bf-lang" class="mini-select">
+          <option value="">All languages</option>
+          <option value="en">🇬🇧 EN</option>
+          <option value="nl">🇳🇱 NL</option>
+          <option value="any">Both</option>
+        </select>
+      </div>
+
+      <div id="browse-count" class="progress-info"></div>
+      <div id="prompt-browser-list" style="display:flex;flex-direction:column;gap:0.3rem;max-height:60vh;overflow-y:auto;"></div>
     </div>
   </div>
 
+
   <!-- ══ SETUP ════════════════════════════════════════════════════════════ -->
-  <div id="screen-setup" class="game-content" style="gap:1rem;">
+  <div id="screen-setup" class="game-content" style="gap:0.85rem;">
 
     <div style="text-align:center;">
-      <div style="font-size:2rem;font-weight:900;background:linear-gradient(135deg,var(--g-accent),var(--g-accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">CHARADES</div>
+      <div style="font-size:2rem;font-weight:900;background:linear-gradient(135deg,var(--g-accent),var(--g-accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-1px;">CHARADES</div>
       <p class="g-subtitle">Act it out — no talking!</p>
     </div>
 
     <!-- Language -->
-    <div class="setup-section">
+    <div class="setup-block">
       <div class="g-label">Language / Taal</div>
       <div class="chip-group" id="lang-chips">
-        <div class="chip lang-active" data-lang="en">🇬🇧 English</div>
-        <div class="chip lang-active" data-lang="nl">🇳🇱 Nederlands</div>
+        <div class="chip lang-on" data-lang="en">🇬🇧 English</div>
+        <div class="chip lang-on" data-lang="nl">🇳🇱 Nederlands</div>
       </div>
     </div>
 
     <!-- Categories -->
-    <div class="setup-section">
+    <div class="setup-block">
       <div class="g-label">Categories / Categorieën</div>
       <div class="chip-group" id="cat-chips">
-        <div class="chip active" data-cat="movies">🎬 Movies</div>
-        <div class="chip active" data-cat="books">📚 Books</div>
-        <div class="chip active" data-cat="artists">🎤 Artists</div>
-        <div class="chip active" data-cat="songs">🎵 Songs</div>
-        <div class="chip active" data-cat="places">🌍 Places</div>
-        <div class="chip active" data-cat="sayings">💬 Sayings</div>
+        <div class="chip on" data-cat="movies">🎬 Movies</div>
+        <div class="chip on" data-cat="books">📚 Books</div>
+        <div class="chip on" data-cat="artists">🎤 Artists</div>
+        <div class="chip on" data-cat="songs">🎵 Songs</div>
+        <div class="chip on" data-cat="places">🌍 Places</div>
+        <div class="chip on" data-cat="sayings">💬 Sayings</div>
+        <div class="chip on" data-cat="custom">⭐ Custom</div>
       </div>
     </div>
 
     <!-- Difficulty -->
-    <div class="setup-section">
+    <div class="setup-block">
       <div class="g-label">Difficulty / Moeilijkheidsgraad</div>
       <div class="chip-group" id="diff-chips">
-        <div class="chip active" data-diff="easy">🟢 Easy</div>
-        <div class="chip active" data-diff="medium">🟡 Medium</div>
-        <div class="chip active" data-diff="hard">🔴 Hard</div>
+        <div class="chip on" data-diff="easy">🟢 Easy</div>
+        <div class="chip on" data-diff="medium">🟡 Medium</div>
+        <div class="chip on" data-diff="hard">🔴 Hard</div>
       </div>
     </div>
 
-    <!-- Timer -->
-    <div class="setup-section">
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <div class="g-label">Timer per round</div>
-        <div id="timer-display" style="font-weight:700;color:var(--g-accent2);font-size:1rem;">60s</div>
+    <!-- Timer (visual only — never auto-advances) -->
+    <div class="setup-block">
+      <div class="g-label">Timer — visual only, never skips the card</div>
+      <div class="chip-group" id="timer-chips">
+        <div class="chip on" data-timer="0">⏱ Off</div>
+        <div class="chip"    data-timer="30">30s</div>
+        <div class="chip"    data-timer="60">60s</div>
+        <div class="chip"    data-timer="90">90s</div>
+        <div class="chip"    data-timer="120">120s</div>
       </div>
-      <input type="range" id="timer-range" min="30" max="120" step="15" value="60" />
-      <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--g-muted);">
-        <span>30s</span><span>60s</span><span>90s</span><span>120s</span>
+    </div>
+
+    <!-- My Custom Prompts (permanently saved in localStorage) -->
+    <details class="setup-block" id="custom-section">
+      <summary>
+        <span class="g-label" style="font-size:0.85rem;">
+          ⭐ My Custom Prompts
+          <span id="custom-count-badge" style="color:var(--g-accent2);font-weight:700;"></span>
+        </span>
+      </summary>
+
+      <p style="font-size:0.78rem;color:var(--g-muted);line-height:1.5;">
+        Saved permanently on this device. Included in every future game when the ⭐ Custom category is enabled.
+      </p>
+
+      <!-- Add single -->
+      <div class="custom-add-row">
+        <input type="text" id="cp-text" placeholder="Word or phrase…" maxlength="120" />
+        <select id="cp-cat" class="mini-select">
+          <option value="custom">⭐ Custom</option>
+          <option value="movies">🎬 Movie</option>
+          <option value="books">📚 Book</option>
+          <option value="artists">🎤 Artist</option>
+          <option value="songs">🎵 Song</option>
+          <option value="places">🌍 Place</option>
+          <option value="sayings">💬 Saying</option>
+        </select>
+        <select id="cp-diff" class="mini-select">
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+        <select id="cp-lang" class="mini-select">
+          <option value="any">Both</option>
+          <option value="en">🇬🇧 EN</option>
+          <option value="nl">🇳🇱 NL</option>
+        </select>
+        <button id="btn-cp-add" class="g-btn green small" style="flex-shrink:0;">+ Add</button>
       </div>
-    </div>
 
-    <!-- Rounds per team -->
-    <div class="setup-section">
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <div class="g-label">Rounds per team</div>
-        <div id="rounds-display" style="font-weight:700;color:var(--g-accent2);font-size:1rem;">3</div>
+      <!-- Bulk import -->
+      <details style="margin-top:0.1rem;">
+        <summary style="font-size:0.78rem;color:var(--g-muted);cursor:pointer;list-style:none;">▸ Bulk add (comma-separated)</summary>
+        <div style="display:flex;flex-direction:column;gap:0.4rem;margin-top:0.4rem;">
+          <textarea id="cp-bulk" rows="2"
+            placeholder="Uncle Bob dancing, The family dog, Christmas dinner…"
+            style="width:100%;padding:0.5rem;background:var(--g-bg);border:1px solid var(--g-border);border-radius:var(--g-radius-sm);color:var(--g-text);font-size:0.82rem;resize:vertical;font-family:inherit;"></textarea>
+          <button id="btn-cp-bulk" class="g-btn secondary small" style="align-self:flex-start;">Import as Custom · Easy · Both languages</button>
+        </div>
+      </details>
+
+      <!-- List -->
+      <div id="custom-prompt-list" style="display:flex;flex-direction:column;gap:0.3rem;max-height:260px;overflow-y:auto;"></div>
+      <div id="cp-empty" style="font-size:0.8rem;color:var(--g-muted);text-align:center;padding:0.4rem 0;">No custom prompts yet.</div>
+
+      <!-- Actions -->
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.2rem;">
+        <button id="btn-cp-export" class="g-btn secondary small">📋 Copy all to clipboard</button>
+        <button id="btn-cp-clear"  class="g-btn secondary small" style="color:var(--g-accent);">🗑 Clear all</button>
       </div>
-      <input type="range" id="rounds-range" min="1" max="8" step="1" value="3" />
-    </div>
+    </details>
 
-    <!-- Teams -->
-    <div class="setup-section">
-      <div class="g-label">Teams</div>
-      <div id="teams-list" style="display:flex;flex-direction:column;gap:0.4rem;"></div>
-      <button id="btn-add-team" class="g-btn secondary" style="font-size:0.85rem;padding:0.5rem;">+ Add Team</button>
-      <div id="teams-error" class="g-alert error hidden">Add at least 2 teams.</div>
-    </div>
-
-    <!-- Custom words -->
-    <div class="setup-section">
-      <div class="g-label">Custom words / phrases ⭐</div>
-      <textarea
-        id="custom-words"
-        rows="3"
-        placeholder="Comma-separated, e.g.: Uncle Bob dancing, The family dog, Christmas dinner…"
-        style="
-          width:100%;padding:0.6rem 0.75rem;
-          background:var(--g-bg);border:1px solid var(--g-border);
-          border-radius:var(--g-radius-sm);color:var(--g-text);
-          font-size:0.85rem;resize:vertical;font-family:inherit;
-        "
-      ></textarea>
-    </div>
-
-    <div id="pool-warning" class="g-alert error hidden">
-      No prompts match your settings. Try enabling more categories or difficulties.
-    </div>
+    <!-- Pool count -->
+    <div id="pool-info" class="g-alert info" style="font-size:0.82rem;"></div>
+    <div id="pool-warn" class="g-alert error hidden">No prompts match your filters. Enable more categories or difficulties.</div>
 
     <button id="btn-start" class="g-btn primary" style="font-size:1.1rem;padding:1.1rem;">
       🎭 Start Game
@@ -360,567 +360,412 @@ import '../../../styles/games.css';
   </div><!-- /screen-setup -->
 
 
-  <!-- ══ TEAM READY ════════════════════════════════════════════════════════ -->
-  <div id="screen-team-ready" class="game-content hidden" style="gap:1.5rem;">
+  <!-- ══ PLAY ══════════════════════════════════════════════════════════════ -->
+  <div id="screen-play" class="game-content hidden" style="gap:1rem;">
 
-    <div style="text-align:center;display:flex;flex-direction:column;gap:0.5rem;align-items:center;">
-      <div class="g-subtitle">It's time for…</div>
-      <div class="team-badge" id="ready-team-name">Team 1</div>
-      <div id="ready-round-info" class="g-label"></div>
+    <!-- Timer bar -->
+    <div id="timer-bar-wrap" class="timer-bar-wrap hidden">
+      <div id="timer-bar-fill" class="timer-bar-fill" style="width:100%;"></div>
     </div>
 
-    <div class="g-card" style="text-align:center;display:flex;flex-direction:column;gap:0.5rem;">
-      <p style="font-size:0.9rem;color:var(--g-muted);">
-        Pass the phone to the person who will act. When they're ready, tap the button below.
-      </p>
-    </div>
-
-    <!-- Quick scoreboard -->
-    <div class="g-card" style="padding:0.75rem;">
-      <div class="g-label" style="margin-bottom:0.5rem;">Current Scores</div>
-      <table class="scores-table" id="ready-scores"></table>
-    </div>
-
-    <button id="btn-ready-start" class="g-btn green" style="font-size:1.1rem;padding:1.2rem;">
-      ▶ Start Round
-    </button>
-
-  </div><!-- /screen-team-ready -->
-
-
-  <!-- ══ PLAYING ════════════════════════════════════════════════════════════ -->
-  <div id="screen-playing" class="game-content hidden" style="gap:1rem;">
-
-    <div style="display:flex;align-items:center;justify-content:space-between;width:100%;">
-      <div>
-        <div id="play-team-name" style="font-weight:700;font-size:1rem;"></div>
-        <div id="play-round-pts" class="g-label"></div>
-      </div>
-      <div class="timer-ring" id="timer-ring">
-        <svg viewBox="0 0 110 110">
-          <circle class="ring-bg"   cx="55" cy="55" r="48" />
-          <circle class="ring-fill" id="ring-fill" cx="55" cy="55" r="48"
-                  stroke-dasharray="301.59" stroke-dashoffset="0" />
-        </svg>
-        <div class="timer-text" id="timer-text">60</div>
-      </div>
-    </div>
-
+    <!-- Prompt card -->
     <div class="prompt-card" id="prompt-card">
-      <div class="prompt-category" id="prompt-cat">🎬 Movie</div>
-      <div class="prompt-text"     id="prompt-text">Loading…</div>
-      <div class="prompt-diff"     id="prompt-diff"></div>
+      <div class="cat-label"   id="play-cat">🎬 Movie</div>
+      <div class="prompt-text" id="play-text">Loading…</div>
+      <div class="diff-badge"  id="play-diff"></div>
+
+      <!-- Hidden overlay -->
+      <div class="hidden-overlay hidden" id="hidden-overlay">
+        <span style="font-size:2.5rem;">🙈</span>
+        <span>Card hidden</span>
+        <span style="font-size:0.75rem;font-weight:400;">Tap "Show" to reveal</span>
+      </div>
     </div>
 
-    <div class="action-row">
-      <button class="g-btn btn-got-it" id="btn-got-it">✓ Got it!</button>
-      <button class="g-btn btn-skip"   id="btn-skip">✗ Skip</button>
+    <!-- Buttons -->
+    <div class="play-action-row">
+      <button class="g-btn btn-hide" id="btn-hide">🙈 Hide</button>
+      <button class="g-btn btn-next" id="btn-next">Next →</button>
     </div>
 
-    <button id="btn-pause" class="g-btn secondary" style="font-size:0.85rem;padding:0.5rem;">⏸ Pause</button>
+    <!-- Progress -->
+    <div class="progress-info" id="play-progress"></div>
 
-  </div><!-- /screen-playing -->
-
-
-  <!-- ══ ROUND END ══════════════════════════════════════════════════════════ -->
-  <div id="screen-round-end" class="game-content hidden" style="gap:1.25rem;">
-
-    <div style="text-align:center;">
-      <div style="font-size:2.5rem;">⏰</div>
-      <div style="font-weight:800;font-size:1.3rem;margin-top:0.25rem;" id="round-end-title">Time's up!</div>
-    </div>
-
-    <div class="g-card" style="text-align:center;display:flex;flex-direction:column;gap:0.25rem;">
-      <div class="g-label">Round score — <span id="round-end-team"></span></div>
-      <div style="font-size:3rem;font-weight:900;color:var(--g-green);" id="round-end-pts">0</div>
-      <div style="font-size:0.85rem;color:var(--g-muted);" id="round-end-skips"></div>
-    </div>
-
-    <div class="g-card" style="padding:0.75rem;">
-      <div class="g-label" style="margin-bottom:0.5rem;">Scoreboard</div>
-      <table class="scores-table" id="round-end-scores"></table>
-    </div>
-
-    <button id="btn-next-team" class="g-btn primary" style="font-size:1.05rem;">
-      Next Team →
+    <button id="btn-back-setup" class="g-btn secondary" style="font-size:0.85rem;padding:0.55rem;">
+      ⚙ Back to Setup
     </button>
 
-  </div><!-- /screen-round-end -->
+  </div><!-- /screen-play -->
 
 
-  <!-- ══ GAME OVER ═══════════════════════════════════════════════════════════ -->
-  <div id="screen-game-over" class="game-content hidden" style="gap:1.25rem;">
-
+  <!-- ══ ALL DONE ═══════════════════════════════════════════════════════════ -->
+  <div id="screen-done" class="game-content hidden" style="gap:1.25rem;">
     <div style="text-align:center;">
-      <div style="font-size:2.5rem;">🏆</div>
-      <div style="font-weight:900;font-size:1.5rem;margin-top:0.25rem;">Game Over!</div>
-      <div class="g-subtitle" id="winner-text"></div>
+      <div style="font-size:2.5rem;">🎉</div>
+      <div style="font-weight:800;font-size:1.3rem;margin-top:0.25rem;">All cards done!</div>
+      <p class="g-subtitle">You've gone through every prompt.</p>
     </div>
-
-    <div id="podium" style="display:flex;flex-direction:column;gap:0.5rem;width:100%;"></div>
-
-    <button id="btn-play-again"   class="g-btn green"     style="font-size:1.05rem;">↺ Play Again</button>
-    <button id="btn-change-setup" class="g-btn secondary"  style="font-size:0.9rem;">⚙ Change Settings</button>
-
-  </div><!-- /screen-game-over -->
+    <button id="btn-reshuffle"  class="g-btn green"    style="font-size:1.05rem;">↺ Shuffle &amp; Play Again</button>
+    <button id="btn-done-setup" class="g-btn secondary" style="font-size:0.9rem;">⚙ Change Settings</button>
+  </div>
 
 
   <!-- ══ SCRIPTS ══════════════════════════════════════════════════════════ -->
   <script>
     // ── Types ──────────────────────────────────────────────────────────────
     interface Prompt {
-      id:         number;
+      id:         number | string;
       text:       string;
       category:   string;
       difficulty: string;
-      lang:       'en' | 'nl' | 'any';
+      lang:       string;
     }
 
-    interface Team {
-      name:  string;
-      score: number;
-      rounds: number;
-    }
+    // ── Constants ──────────────────────────────────────────────────────────
+    const LS_KEY = 'charades_custom_prompts';
 
-    interface GameConfig {
-      langs:         string[];
-      cats:          string[];
-      diffs:         string[];
-      timePerRound:  number;
-      roundsPerTeam: number;
-      teams:         Team[];
-      customWords:   string[];
-    }
+    const CAT_META: Record<string, { icon: string; label: string }> = {
+      movies:  { icon: '🎬', label: 'Movie'   },
+      books:   { icon: '📚', label: 'Book'    },
+      artists: { icon: '🎤', label: 'Artist'  },
+      songs:   { icon: '🎵', label: 'Song'    },
+      places:  { icon: '🌍', label: 'Place'   },
+      sayings: { icon: '💬', label: 'Saying'  },
+      custom:  { icon: '⭐', label: 'Custom'  },
+    };
 
-    type Screen = 'setup' | 'team-ready' | 'playing' | 'round-end' | 'game-over';
-
-    // ── DOM ────────────────────────────────────────────────────────────────
-    const $   = (id: string) => document.getElementById(id)!;
+    // ── DOM helpers ────────────────────────────────────────────────────────
+    const $ = (id: string) => document.getElementById(id)!;
     const show = (...ids: string[]) => ids.forEach(id => $(id).classList.remove('hidden'));
     const hide = (...ids: string[]) => ids.forEach(id => $(id).classList.add('hidden'));
 
-    function showScreen(s: Screen) {
-      (['setup','team-ready','playing','round-end','game-over'] as Screen[]).forEach(sc =>
-        hide(`screen-${sc}`)
-      );
+    function showScreen(s: 'setup' | 'play' | 'done') {
+      ['setup','play','done'].forEach(sc => hide(`screen-${sc}`));
       show(`screen-${s}`);
     }
 
-    // ── Setup: chip toggles ────────────────────────────────────────────────
-    document.querySelectorAll<HTMLElement>('#lang-chips .chip').forEach(chip => {
-      chip.addEventListener('click', () => {
-        chip.classList.toggle('lang-active');
-      });
-    });
-
-    document.querySelectorAll<HTMLElement>('#cat-chips .chip').forEach(chip => {
-      chip.addEventListener('click', () => chip.classList.toggle('active'));
-    });
-
-    document.querySelectorAll<HTMLElement>('#diff-chips .chip').forEach(chip => {
-      chip.addEventListener('click', () => chip.classList.toggle('active'));
-    });
-
-    // ── Setup: sliders ─────────────────────────────────────────────────────
-    const timerRange  = $('timer-range')  as HTMLInputElement;
-    const roundsRange = $('rounds-range') as HTMLInputElement;
-
-    timerRange.addEventListener('input',  () => { $('timer-display').textContent  = timerRange.value  + 's'; });
-    roundsRange.addEventListener('input', () => { $('rounds-display').textContent = roundsRange.value; });
-
-    // ── Setup: teams ───────────────────────────────────────────────────────
-    const teamsList = $('teams-list');
-    let teamCount   = 0;
-
-    function addTeam(name = '') {
-      if (teamCount >= 6) return;
-      teamCount++;
-      const idx = teamCount;
-      const row = document.createElement('div');
-      row.className = 'team-row';
-      row.dataset.idx = String(idx);
-      row.innerHTML = `
-        <input type="text" placeholder="Team ${idx}" value="${name}" maxlength="20" />
-        <button class="btn-remove-team" title="Remove team">✕</button>
-      `;
-      row.querySelector('.btn-remove-team')!.addEventListener('click', () => {
-        row.remove();
-        teamCount = Math.max(0, teamCount - 1);
-      });
-      teamsList.appendChild(row);
+    function catLabel(cat: string) {
+      const m = CAT_META[cat];
+      return m ? `${m.icon} ${m.label}` : cat;
     }
 
-    addTeam('Lions');
-    addTeam('Cubs');
+    function escHtml(s: string) {
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
 
-    $('btn-add-team').addEventListener('click', () => addTeam());
+    function activeData(groupId: string, attr: string): string[] {
+      return Array.from(
+        document.querySelectorAll<HTMLElement>(`#${groupId} .chip.on, #${groupId} .chip.lang-on`)
+      ).map(c => c.dataset[attr]!).filter(Boolean);
+    }
 
-    // ── Rules modal ────────────────────────────────────────────────────────
-    $('btn-rules').addEventListener('click', () => {
-      $('modal-rules').style.display = 'flex';
+    // ── Chip wire-up ───────────────────────────────────────────────────────
+    document.querySelectorAll<HTMLElement>('#lang-chips .chip').forEach(c =>
+      c.addEventListener('click', () => { c.classList.toggle('lang-on'); updatePoolInfo(); })
+    );
+    document.querySelectorAll<HTMLElement>('#cat-chips  .chip').forEach(c =>
+      c.addEventListener('click', () => { c.classList.toggle('on');      updatePoolInfo(); })
+    );
+    document.querySelectorAll<HTMLElement>('#diff-chips .chip').forEach(c =>
+      c.addEventListener('click', () => { c.classList.toggle('on');      updatePoolInfo(); })
+    );
+    // timer chips: single-select
+    document.querySelectorAll<HTMLElement>('#timer-chips .chip').forEach(c =>
+      c.addEventListener('click', () => {
+        document.querySelectorAll<HTMLElement>('#timer-chips .chip').forEach(x => x.classList.remove('on'));
+        c.classList.add('on');
+      })
+    );
+
+    // ── localStorage prompts ───────────────────────────────────────────────
+    function loadCustom(): Prompt[] {
+      try { return JSON.parse(localStorage.getItem(LS_KEY) ?? '[]'); }
+      catch { return []; }
+    }
+
+    function saveCustom(list: Prompt[]) {
+      localStorage.setItem(LS_KEY, JSON.stringify(list));
+    }
+
+    let customPrompts: Prompt[] = loadCustom();
+
+    function renderCustomList() {
+      const list = $('custom-prompt-list');
+      list.innerHTML = '';
+
+      if (customPrompts.length === 0) {
+        show('cp-empty');
+      } else {
+        hide('cp-empty');
+        customPrompts.forEach((p, i) => {
+          const el = document.createElement('div');
+          el.className = 'cp-item';
+          el.innerHTML = `
+            <span class="cp-text">${escHtml(p.text)}</span>
+            <span class="cp-badge">${catLabel(p.category)} · ${p.difficulty} · ${p.lang}</span>
+            <button class="cp-del" data-i="${i}" title="Remove">×</button>
+          `;
+          el.querySelector<HTMLButtonElement>('.cp-del')!.addEventListener('click', () => {
+            customPrompts.splice(i, 1);
+            saveCustom(customPrompts);
+            renderCustomList();
+            updatePoolInfo();
+          });
+          list.appendChild(el);
+        });
+      }
+
+      $('custom-count-badge').textContent = customPrompts.length > 0 ? `(${customPrompts.length})` : '';
+    }
+
+    function addCustom(text: string, cat: string, diff: string, lang: string) {
+      const t = text.trim();
+      if (!t) return;
+      customPrompts.push({ id: `cp_${Date.now()}_${Math.random()}`, text: t, category: cat, difficulty: diff, lang });
+      saveCustom(customPrompts);
+      renderCustomList();
+      updatePoolInfo();
+    }
+
+    $('btn-cp-add').addEventListener('click', () => {
+      const inp = $('cp-text') as HTMLInputElement;
+      addCustom(
+        inp.value,
+        ($('cp-cat')  as HTMLSelectElement).value,
+        ($('cp-diff') as HTMLSelectElement).value,
+        ($('cp-lang') as HTMLSelectElement).value,
+      );
+      inp.value = '';
+      inp.focus();
     });
-    $('btn-close-rules').addEventListener('click', () => {
-      $('modal-rules').style.display = 'none';
+
+    ($('cp-text') as HTMLInputElement).addEventListener('keydown', e => {
+      if (e.key === 'Enter') $('btn-cp-add').click();
     });
-    $('modal-rules').addEventListener('click', (e) => {
-      if (e.target === $('modal-rules')) $('modal-rules').style.display = 'none';
+
+    $('btn-cp-bulk').addEventListener('click', () => {
+      const raw = ($('cp-bulk') as HTMLTextAreaElement).value;
+      raw.split(',').map(w => w.trim()).filter(Boolean).forEach(w => addCustom(w, 'custom', 'easy', 'any'));
+      ($('cp-bulk') as HTMLTextAreaElement).value = '';
     });
+
+    $('btn-cp-export').addEventListener('click', async () => {
+      const text = customPrompts.map(p => p.text).join(', ');
+      try {
+        await navigator.clipboard.writeText(text);
+        $('btn-cp-export').textContent = '✅ Copied!';
+        setTimeout(() => { $('btn-cp-export').textContent = '📋 Copy all to clipboard'; }, 2000);
+      } catch { prompt('Copy these:', text); }
+    });
+
+    $('btn-cp-clear').addEventListener('click', () => {
+      if (!confirm(`Delete all ${customPrompts.length} custom prompt(s)?`)) return;
+      customPrompts = [];
+      saveCustom(customPrompts);
+      renderCustomList();
+      updatePoolInfo();
+    });
+
+    // ── Built-in prompts ───────────────────────────────────────────────────
+    let builtIn: Prompt[] = [];
+
+    async function loadBuiltIn(): Promise<Prompt[]> {
+      if (builtIn.length) return builtIn;
+      const res = await fetch('/charades/prompts.json');
+      builtIn = await res.json();
+      return builtIn;
+    }
+
+    // ── Pool info ──────────────────────────────────────────────────────────
+    async function updatePoolInfo() {
+      const base  = await loadBuiltIn().catch(() => [] as Prompt[]);
+      const langs = activeData('lang-chips', 'lang');
+      const cats  = activeData('cat-chips',  'cat');
+      const diffs = activeData('diff-chips', 'diff');
+
+      const count = [...base, ...customPrompts].filter(p =>
+        (p.lang === 'any' || langs.includes(p.lang)) &&
+        cats.includes(p.category) &&
+        diffs.includes(p.difficulty)
+      ).length;
+
+      $('pool-info').textContent = `${count} prompt${count !== 1 ? 's' : ''} match your current filters.`;
+      count > 0 ? hide('pool-warn') : show('pool-warn');
+    }
+
+    // ── Browse modal ───────────────────────────────────────────────────────
+    async function renderBrowser() {
+      const base     = await loadBuiltIn().catch(() => [] as Prompt[]);
+      const all      = [...base, ...customPrompts];
+      const cat      = ($('bf-cat')  as HTMLSelectElement).value;
+      const diff     = ($('bf-diff') as HTMLSelectElement).value;
+      const lang     = ($('bf-lang') as HTMLSelectElement).value;
+      const filtered = all.filter(p =>
+        (!cat  || p.category   === cat)  &&
+        (!diff || p.difficulty === diff) &&
+        (!lang || p.lang       === lang)
+      );
+
+      $('browse-count').textContent = `Showing ${filtered.length} of ${all.length} prompts`;
+      $('prompt-browser-list').innerHTML = filtered.map(p => `
+        <div class="pb-item">
+          <span class="pb-text">${escHtml(p.text)}</span>
+          <span class="pb-cat">${catLabel(p.category)}</span>
+          <span class="pb-diff diff-${p.difficulty}">${p.difficulty}</span>
+        </div>
+      `).join('');
+    }
+
+    $('btn-browse').addEventListener('click', async () => {
+      $('modal-browse').style.display = 'flex';
+      await renderBrowser();
+    });
+    $('btn-close-browse').addEventListener('click', () => { $('modal-browse').style.display = 'none'; });
+    $('modal-browse').addEventListener('click', e => {
+      if (e.target === $('modal-browse')) $('modal-browse').style.display = 'none';
+    });
+    ['bf-cat','bf-diff','bf-lang'].forEach(id => $(id).addEventListener('change', renderBrowser));
 
     // ── Game state ─────────────────────────────────────────────────────────
-    let allPrompts:     Prompt[] = [];
-    let promptQueue:    Prompt[] = [];
-    let config:         GameConfig;
-    let currentTeamIdx: number   = 0;
-    let roundScore:     number   = 0;
-    let roundSkips:     number   = 0;
-    let timerEndTime:   number   = 0;
-    let timerInterval:  number | null = null;
-    let isPaused        = false;
-    let timeRemaining   = 60;
+    let queue:         Prompt[] = [];
+    let totalInQueue   = 0;
+    let cardHidden     = false;
+    let timerSecs      = 0;
+    let timerEndTime   = 0;
+    let timerInterval: number | null = null;
 
-    const CIRCUMFERENCE = 2 * Math.PI * 48; // r=48
-
-    // ── Category meta ──────────────────────────────────────────────────────
-    const CAT_META: Record<string, { icon: string; en: string; nl: string }> = {
-      movies:  { icon: '🎬', en: 'Movie',   nl: 'Film'      },
-      books:   { icon: '📚', en: 'Book',    nl: 'Boek'      },
-      artists: { icon: '🎤', en: 'Artist',  nl: 'Artiest'   },
-      songs:   { icon: '🎵', en: 'Song',    nl: 'Nummer'    },
-      places:  { icon: '🌍', en: 'Place',   nl: 'Plaats'    },
-      sayings: { icon: '💬', en: 'Saying',  nl: 'Gezegde'   },
-      custom:  { icon: '⭐', en: 'Custom',  nl: 'Eigen'     },
-    };
-
-    function catLabel(cat: string): string {
-      const m   = CAT_META[cat];
-      const isNL = config?.langs.includes('nl') && !config.langs.includes('en');
-      return m ? `${m.icon} ${isNL ? m.nl : m.en}` : cat;
-    }
-
-    // ── Prompt loading & filtering ─────────────────────────────────────────
-    async function loadPrompts(): Promise<Prompt[]> {
-      if (allPrompts.length) return allPrompts;
-      const res = await fetch('/charades/prompts.json');
-      allPrompts = await res.json();
-      return allPrompts;
-    }
-
-    function shuffle<T>(arr: T[]): T[] {
-      const a = [...arr];
-      for (let i = a.length - 1; i > 0; i--) {
+    function shuffle<T>(a: T[]): T[] {
+      const arr = [...a];
+      for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
+        [arr[i], arr[j]] = [arr[j], arr[i]];
       }
-      return a;
+      return arr;
     }
 
-    function buildQueue(cfg: GameConfig, base: Prompt[]): Prompt[] {
-      const custom: Prompt[] = cfg.customWords
-        .filter(w => w.trim())
-        .map((w, i) => ({
-          id: 9000 + i,
-          text: w.trim(),
-          category: 'custom',
-          difficulty: 'medium',
-          lang: 'any' as const,
-        }));
-
-      const filtered = base.filter(p => {
-        const langOk  = p.lang === 'any' || cfg.langs.includes(p.lang);
-        const catOk   = cfg.cats.includes(p.category);
-        const diffOk  = cfg.diffs.includes(p.difficulty);
-        return langOk && catOk && diffOk;
-      });
-
-      return shuffle([...filtered, ...custom]);
+    function buildQueue(): Prompt[] {
+      const langs = activeData('lang-chips', 'lang');
+      const cats  = activeData('cat-chips',  'cat');
+      const diffs = activeData('diff-chips', 'diff');
+      return shuffle([...builtIn, ...customPrompts].filter(p =>
+        (p.lang === 'any' || langs.includes(p.lang)) &&
+        cats.includes(p.category) &&
+        diffs.includes(p.difficulty)
+      ));
     }
 
-    // ── Build config from UI ───────────────────────────────────────────────
-    function readConfig(): GameConfig | null {
-      const langs = Array.from(document.querySelectorAll<HTMLElement>('#lang-chips .lang-active'))
-        .map(c => c.dataset.lang!);
-      const cats  = Array.from(document.querySelectorAll<HTMLElement>('#cat-chips .active'))
-        .map(c => c.dataset.cat!);
-      const diffs = Array.from(document.querySelectorAll<HTMLElement>('#diff-chips .active'))
-        .map(c => c.dataset.diff!);
-
-      const timePerRound  = parseInt(timerRange.value,  10);
-      const roundsPerTeam = parseInt(roundsRange.value, 10);
-
-      const teamInputs = Array.from(teamsList.querySelectorAll<HTMLInputElement>('input[type=text]'));
-      const teams: Team[] = teamInputs.map((inp, i) => ({
-        name:   inp.value.trim() || `Team ${i + 1}`,
-        score:  0,
-        rounds: 0,
-      }));
-
-      if (teams.length < 2) { show('teams-error'); return null; }
-      hide('teams-error');
-
-      if (!langs.length) langs.push('en');
-
-      const customWords = ($('custom-words') as HTMLTextAreaElement).value
-        .split(',')
-        .map(w => w.trim())
-        .filter(Boolean);
-
-      return { langs, cats, diffs, timePerRound, roundsPerTeam, teams, customWords };
-    }
-
-    // ── Start game ─────────────────────────────────────────────────────────
+    // ── Start ──────────────────────────────────────────────────────────────
     $('btn-start').addEventListener('click', async () => {
-      const cfg = readConfig();
-      if (!cfg) return;
-
       ($('btn-start') as HTMLButtonElement).disabled = true;
-      $('btn-start').textContent = '⏳ Loading prompts…';
-
+      $('btn-start').textContent = '⏳ Loading…';
       try {
-        const base = await loadPrompts();
-        const q    = buildQueue(cfg, base);
+        await loadBuiltIn();
+        const q = buildQueue();
+        if (q.length === 0) { show('pool-warn'); return; }
+        hide('pool-warn');
 
-        if (q.length === 0) {
-          show('pool-warning');
-          return;
-        }
-        hide('pool-warning');
+        queue        = q;
+        totalInQueue = q.length;
+        timerSecs    = parseInt(
+          document.querySelector<HTMLElement>('#timer-chips .chip.on')?.dataset.timer ?? '0', 10
+        );
 
-        config         = cfg;
-        promptQueue    = q;
-        currentTeamIdx = 0;
-
-        showTeamReady();
+        showScreen('play');
+        displayCard();
       } finally {
         ($('btn-start') as HTMLButtonElement).disabled = false;
         $('btn-start').textContent = '🎭 Start Game';
       }
     });
 
-    // ── Team ready screen ──────────────────────────────────────────────────
-    function showTeamReady() {
-      const team = config.teams[currentTeamIdx];
-      $('ready-team-name').textContent  = team.name;
-      $('ready-round-info').textContent =
-        `Round ${team.rounds + 1} of ${config.roundsPerTeam} · ${promptQueue.length} prompts left`;
-      renderScoresTable('ready-scores', -1);
-      showScreen('team-ready');
+    // ── Display card ───────────────────────────────────────────────────────
+    function displayCard() {
+      cardHidden = false;
+      hide('hidden-overlay');
+      $('prompt-card').classList.remove('hidden-card');
+      $('btn-hide').textContent = '🙈 Hide';
+
+      if (queue.length === 0) { stopTimer(); showScreen('done'); return; }
+
+      const p = queue[0];
+      $('play-cat').textContent  = catLabel(p.category);
+      $('play-text').textContent = p.text;
+      const diff = $('play-diff');
+      diff.className = `diff-badge diff-${p.difficulty}`;
+      diff.textContent = p.difficulty.charAt(0).toUpperCase() + p.difficulty.slice(1);
+
+      const done = totalInQueue - queue.length;
+      $('play-progress').textContent = `Card ${done + 1} of ${totalInQueue}`;
+
+      // Fade in
+      const card = $('prompt-card') as HTMLElement;
+      card.style.opacity = '0';
+      requestAnimationFrame(() => { card.style.opacity = '1'; });
+
+      // Timer
+      if (timerSecs > 0) { show('timer-bar-wrap'); startTimer(timerSecs); }
+      else                { hide('timer-bar-wrap'); stopTimer(); }
     }
 
-    $('btn-ready-start').addEventListener('click', startRound);
-
-    // ── Round logic ────────────────────────────────────────────────────────
-    function startRound() {
-      roundScore = 0;
-      roundSkips = 0;
-      isPaused   = false;
-      $('btn-pause').textContent = '⏸ Pause';
-
-      const team = config.teams[currentTeamIdx];
-      $('play-team-name').textContent = team.name;
-      updateRoundPts();
-      showScreen('playing');
-
-      nextPrompt();
-      startTimer(config.timePerRound);
-    }
-
-    function nextPrompt() {
-      if (promptQueue.length === 0) {
-        endRound();
-        return;
-      }
-      const p = promptQueue.shift()!;
-      $('prompt-cat').textContent  = catLabel(p.category);
-      $('prompt-text').textContent = p.text;
-
-      const diffEl = $('prompt-diff');
-      diffEl.className = `prompt-diff diff-${p.difficulty}`;
-      diffEl.textContent = p.difficulty.charAt(0).toUpperCase() + p.difficulty.slice(1);
-
-      // Flash animation
-      const card = $('prompt-card');
-      card.style.transition = 'none';
-      card.style.opacity    = '0';
-      requestAnimationFrame(() => {
-        card.style.transition = 'opacity 0.2s';
-        card.style.opacity    = '1';
-      });
-    }
-
-    function updateRoundPts() {
-      $('play-round-pts').textContent = `${roundScore} point${roundScore !== 1 ? 's' : ''} this round`;
-    }
-
-    $('btn-got-it').addEventListener('click', () => {
-      if (isPaused) return;
-      roundScore++;
-      updateRoundPts();
-      nextPrompt();
-    });
-
-    $('btn-skip').addEventListener('click', () => {
-      if (isPaused) return;
-      roundSkips++;
-      nextPrompt();
-    });
-
-    $('btn-pause').addEventListener('click', togglePause);
-
-    function togglePause() {
-      if (isPaused) {
-        // Resume
-        timerEndTime = Date.now() + timeRemaining * 1000;
-        isPaused = false;
-        $('btn-pause').textContent = '⏸ Pause';
-        $('prompt-text').classList.remove('hidden');
-        $('prompt-cat').classList.remove('hidden');
-        $('btn-got-it').disabled = false;
-        $('btn-skip').disabled   = false;
+    // ── Hide / Show ────────────────────────────────────────────────────────
+    $('btn-hide').addEventListener('click', () => {
+      cardHidden = !cardHidden;
+      if (cardHidden) {
+        show('hidden-overlay');
+        $('prompt-card').classList.add('hidden-card');
+        $('btn-hide').textContent = '👁 Show';
+        stopTimer();
       } else {
-        // Pause
-        timeRemaining = Math.ceil((timerEndTime - Date.now()) / 1000);
-        isPaused = true;
-        $('btn-pause').textContent = '▶ Resume';
-        $('prompt-text').classList.add('hidden');
-        $('prompt-cat').classList.add('hidden');
-        $('btn-got-it').disabled = true;
-        $('btn-skip').disabled   = true;
+        hide('hidden-overlay');
+        $('prompt-card').classList.remove('hidden-card');
+        $('btn-hide').textContent = '🙈 Hide';
+        if (timerSecs > 0) startTimer(timerSecs);
       }
-    }
+    });
+
+    // ── Next ───────────────────────────────────────────────────────────────
+    $('btn-next').addEventListener('click', () => { queue.shift(); displayCard(); });
+
+    // ── Back / reshuffle ───────────────────────────────────────────────────
+    $('btn-back-setup').addEventListener('click', () => { stopTimer(); showScreen('setup'); });
+    $('btn-done-setup').addEventListener('click', () => { stopTimer(); showScreen('setup'); });
+    $('btn-reshuffle').addEventListener('click', () => {
+      queue        = buildQueue();
+      totalInQueue = queue.length;
+      showScreen('play');
+      displayCard();
+    });
 
     // ── Timer ──────────────────────────────────────────────────────────────
-    const ringFill = $('ring-fill') as unknown as SVGCircleElement;
-    const timerRingEl = $('timer-ring');
-
-    function startTimer(seconds: number) {
-      timeRemaining = seconds;
-      timerEndTime  = Date.now() + seconds * 1000;
-      updateTimerDisplay(seconds, seconds);
-
-      if (timerInterval) clearInterval(timerInterval);
+    function startTimer(secs: number) {
+      stopTimer();
+      timerEndTime = Date.now() + secs * 1000;
+      updateBar(secs, secs);
       timerInterval = window.setInterval(() => {
-        if (isPaused) return;
-        const rem = Math.ceil((timerEndTime - Date.now()) / 1000);
+        const rem = (timerEndTime - Date.now()) / 1000;
         if (rem <= 0) {
-          clearInterval(timerInterval!);
-          timerInterval = null;
-          updateTimerDisplay(0, seconds);
-          endRound();
+          updateBar(0, secs);
+          stopTimer();
+          if ('vibrate' in navigator) navigator.vibrate([100, 60, 100]);
         } else {
-          timeRemaining = rem;
-          updateTimerDisplay(rem, seconds);
+          updateBar(rem, secs);
         }
       }, 200);
     }
 
     function stopTimer() {
-      if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+      if (timerInterval !== null) { clearInterval(timerInterval); timerInterval = null; }
     }
 
-    function updateTimerDisplay(rem: number, total: number) {
-      $('timer-text').textContent = String(rem);
-      const pct    = rem / total;
-      const offset = CIRCUMFERENCE * (1 - pct);
-      ringFill.style.strokeDashoffset = String(offset);
-
-      const urgent = rem <= 10;
-      timerRingEl.classList.toggle('urgent', urgent);
-      if (urgent && 'vibrate' in navigator) navigator.vibrate(50);
-    }
-
-    // ── End round ──────────────────────────────────────────────────────────
-    function endRound() {
-      stopTimer();
-      const team = config.teams[currentTeamIdx];
-      team.score  += roundScore;
-      team.rounds += 1;
-
-      $('round-end-title').textContent  = promptQueue.length === 0 ? 'Prompts exhausted!' : "Time's up!";
-      $('round-end-team').textContent   = team.name;
-      $('round-end-pts').textContent    = String(roundScore);
-      $('round-end-skips').textContent  = roundSkips > 0 ? `${roundSkips} skip${roundSkips !== 1 ? 's' : ''}` : '';
-
-      renderScoresTable('round-end-scores', currentTeamIdx);
-      showScreen('round-end');
-    }
-
-    $('btn-next-team').addEventListener('click', () => {
-      // Check if game over
-      const allDone = config.teams.every(t => t.rounds >= config.roundsPerTeam);
-      const poolEmpty = promptQueue.length === 0;
-
-      if (allDone || poolEmpty) {
-        showGameOver();
-        return;
-      }
-
-      // Advance to next team that still has rounds left
-      let next = (currentTeamIdx + 1) % config.teams.length;
-      while (config.teams[next].rounds >= config.roundsPerTeam) {
-        next = (next + 1) % config.teams.length;
-      }
-      currentTeamIdx = next;
-      showTeamReady();
-    });
-
-    // ── Scoreboard rendering ───────────────────────────────────────────────
-    function renderScoresTable(tableId: string, highlightIdx: number) {
-      const sorted = [...config.teams]
-        .map((t, i) => ({ ...t, origIdx: i }))
-        .sort((a, b) => b.score - a.score);
-
-      const table = $(tableId);
-      table.innerHTML = sorted.map(t => `
-        <tr class="${t.origIdx === highlightIdx ? 'current-team' : ''}">
-          <td class="score-name">${escHtml(t.name)}</td>
-          <td class="score-pts">${t.score} pt${t.score !== 1 ? 's' : ''}</td>
-        </tr>
-      `).join('');
-    }
-
-    // ── Game over ──────────────────────────────────────────────────────────
-    function showGameOver() {
-      const sorted = [...config.teams].sort((a, b) => b.score - a.score);
-      const winner = sorted[0];
-      const tied   = sorted.filter(t => t.score === winner.score).length > 1;
-
-      $('winner-text').textContent = tied
-        ? `It's a tie! 🤝`
-        : `${winner.name} wins! 🎉`;
-
-      const medals = ['🥇', '🥈', '🥉'];
-      const ranks  = ['first', 'second', 'third'];
-
-      $('podium').innerHTML = sorted.map((t, i) => `
-        <div class="podium-row ${ranks[i] ?? ''}">
-          <div class="podium-rank">${medals[i] ?? `${i + 1}.`}</div>
-          <div class="podium-name">${escHtml(t.name)}</div>
-          <div class="podium-score">${t.score} pts</div>
-        </div>
-      `).join('');
-
-      showScreen('game-over');
-    }
-
-    $('btn-play-again').addEventListener('click', () => {
-      // Reset scores, keep settings
-      config.teams.forEach(t => { t.score = 0; t.rounds = 0; });
-      promptQueue    = buildQueue(config, allPrompts);
-      currentTeamIdx = 0;
-      showTeamReady();
-    });
-
-    $('btn-change-setup').addEventListener('click', () => showScreen('setup'));
-
-    // ── Utility ────────────────────────────────────────────────────────────
-    function escHtml(s: string): string {
-      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    function updateBar(rem: number, total: number) {
+      const fill = $('timer-bar-fill');
+      fill.style.width = `${Math.max(0, (rem / total) * 100)}%`;
+      fill.classList.toggle('urgent', rem > 0 && rem <= 10);
     }
 
     // ── Init ───────────────────────────────────────────────────────────────
-    showScreen('setup');
-    // Pre-load prompts in the background for faster start
-    loadPrompts().catch(() => {});
+    renderCustomList();
+    loadBuiltIn().then(updatePoolInfo).catch(() => {});
   </script>
 
 </body>
