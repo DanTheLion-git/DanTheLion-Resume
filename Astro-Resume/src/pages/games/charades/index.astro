@@ -27,113 +27,6 @@ import '../../../styles/games.css';
       width:100%; display:flex; flex-direction:column; gap:.6rem;
     }
 
-    /* ── Prompt Library screen ──────────────────────────────────────────── */
-    #screen-prompts { padding:0; }
-
-    .lib-toolbar {
-      position:sticky; top:0; z-index:10;
-      background:var(--g-surface);
-      border-bottom:1px solid var(--g-border);
-      padding:.65rem 1rem;
-      display:flex; flex-direction:column; gap:.5rem;
-    }
-
-    .lib-toolbar-top {
-      display:flex; align-items:center; gap:.5rem; flex-wrap:wrap;
-    }
-
-    .lib-search {
-      flex:1; min-width:120px;
-      padding:.45rem .75rem;
-      background:var(--g-bg); border:1px solid var(--g-border);
-      border-radius:var(--g-radius-sm); color:var(--g-text); font-size:.88rem;
-    }
-    .lib-search:focus { outline:none; border-color:var(--g-accent); }
-
-    .mini-sel {
-      padding:.4rem .45rem; background:var(--g-bg);
-      border:1px solid var(--g-border); border-radius:var(--g-radius-sm);
-      color:var(--g-muted); font-size:.78rem; cursor:pointer;
-    }
-
-    .lib-meta {
-      font-size:.75rem; color:var(--g-muted);
-      display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:.3rem;
-    }
-
-    /* ── Prompt table ───────────────────────────────────────────────────── */
-    .prompt-table-wrap {
-      width:100%; overflow-x:auto;
-    }
-
-    table.prompt-table {
-      width:100%; border-collapse:collapse; font-size:.82rem;
-    }
-
-    table.prompt-table thead th {
-      background:var(--g-surface2);
-      padding:.5rem .6rem;
-      text-align:left;
-      font-size:.72rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
-      color:var(--g-muted);
-      border-bottom:1px solid var(--g-border);
-      white-space:nowrap;
-      cursor:pointer;
-      user-select:none;
-    }
-    table.prompt-table thead th:hover { color:var(--g-text); }
-    table.prompt-table thead th.sorted { color:var(--g-accent2); }
-
-    table.prompt-table tbody tr { border-bottom:1px solid var(--g-border); }
-    table.prompt-table tbody tr:hover { background:rgba(255,255,255,.03); }
-
-    table.prompt-table td { padding:.45rem .5rem; vertical-align:middle; }
-
-    /* Text cell — takes most width */
-    .col-text { min-width:160px; }
-    .row-text {
-      width:100%; padding:.35rem .5rem;
-      background:transparent; border:1px solid transparent;
-      border-radius:var(--g-radius-sm); color:var(--g-text); font-size:.85rem;
-      transition:border-color .12s;
-    }
-    .row-text:hover  { border-color:var(--g-border); }
-    .row-text:focus  { outline:none; border-color:var(--g-accent); background:var(--g-bg); }
-
-    /* Compact selects */
-    .row-sel {
-      padding:.3rem .35rem;
-      background:var(--g-bg); border:1px solid var(--g-border);
-      border-radius:var(--g-radius-sm); color:var(--g-muted); font-size:.75rem;
-      cursor:pointer; width:100%;
-    }
-    .row-sel:focus { outline:none; border-color:var(--g-accent); color:var(--g-text); }
-
-    /* Difficulty badge colours inside selects / labels */
-    .badge-easy   { color:var(--g-green);   }
-    .badge-medium { color:var(--g-accent2); }
-    .badge-hard   { color:var(--g-accent);  }
-
-    .row-del {
-      background:none; border:none; color:var(--g-muted);
-      cursor:pointer; font-size:1.1rem; padding:.1rem .3rem; line-height:1;
-    }
-    .row-del:hover { color:var(--g-accent); }
-
-    /* ── Add-new sticky row ─────────────────────────────────────────────── */
-    .add-row td { background:rgba(29,185,84,.06); border-bottom:2px solid var(--g-green) !important; }
-    .add-row .row-text { border-color:var(--g-border); }
-
-    /* ── Save banner ────────────────────────────────────────────────────── */
-    .save-banner {
-      position:sticky; bottom:0;
-      background:var(--g-surface);
-      border-top:1px solid var(--g-border);
-      padding:.65rem 1rem;
-      display:flex; align-items:center; gap:.75rem;
-    }
-    .save-banner .dirty-label { flex:1; font-size:.8rem; color:var(--g-accent2); }
-
     /* ── Play screen ────────────────────────────────────────────────────── */
     .timer-bar-wrap { width:100%; height:4px; background:var(--g-border); border-radius:2px; overflow:hidden; }
     .timer-bar-fill { height:100%; background:var(--g-green); border-radius:2px; transition:width .2s linear, background .3s; }
@@ -176,7 +69,6 @@ import '../../../styles/games.css';
   <!-- ══ HEADER ═══════════════════════════════════════════════════════════ -->
   <header class="game-header">
     <a href="/games/" class="brand">🦁 Games</a>
-    <button id="btn-goto-prompts" class="g-btn secondary small" style="width:auto;">📋 Edit Prompts</button>
   </header>
 
 
@@ -236,102 +128,9 @@ import '../../../styles/games.css';
       🎭 Start Game
     </button>
 
-  </div>
-
-
-  <!-- ══ PROMPT LIBRARY ════════════════════════════════════════════════════ -->
-  <div id="screen-prompts" class="hidden" style="display:flex;flex-direction:column;min-height:calc(100vh - 52px);width:100%;">
-
-    <!-- Sticky toolbar -->
-    <div class="lib-toolbar">
-      <div class="lib-toolbar-top">
-        <button id="btn-back-from-prompts" class="g-btn secondary small" style="width:auto;">← Back</button>
-        <input id="lib-search" class="lib-search" placeholder="🔍 Search prompts…" />
-        <select id="lib-cat"  class="mini-sel">
-          <option value="">All categories</option>
-          <option value="movies">🎬 Movies</option>
-          <option value="books">📚 Books</option>
-          <option value="artists">🎤 Artists</option>
-          <option value="songs">🎵 Songs</option>
-          <option value="places">🌍 Places</option>
-          <option value="sayings">💬 Sayings</option>
-          <option value="custom">⭐ Custom</option>
-        </select>
-        <select id="lib-diff" class="mini-sel">
-          <option value="">All diffs</option>
-          <option value="easy">🟢 Easy</option>
-          <option value="medium">🟡 Medium</option>
-          <option value="hard">🔴 Hard</option>
-        </select>
-        <select id="lib-lang" class="mini-sel">
-          <option value="">All lang</option>
-          <option value="en">🇬🇧 EN</option>
-          <option value="nl">🇳🇱 NL</option>
-          <option value="any">Both</option>
-        </select>
-      </div>
-      <div class="lib-meta">
-        <span id="lib-count"></span>
-        <div style="display:flex;gap:.4rem;">
-          <button id="btn-reset-defaults" class="g-btn secondary small" style="font-size:.72rem;padding:.3rem .6rem;width:auto;color:var(--g-muted);">↺ Reset to defaults</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Table -->
-    <div class="prompt-table-wrap" style="flex:1;padding:.5rem;">
-      <table class="prompt-table">
-        <thead>
-          <tr>
-            <th data-sort="text"       class="sorted col-text">Text ▲</th>
-            <th data-sort="category"   style="min-width:90px;">Category</th>
-            <th data-sort="difficulty" style="min-width:70px;">Difficulty</th>
-            <th data-sort="lang"       style="min-width:55px;">Lang</th>
-            <th style="width:32px;cursor:default;"></th>
-          </tr>
-        </thead>
-        <!-- Add-new row (always first) -->
-        <tbody id="add-row-body">
-          <tr class="add-row">
-            <td class="col-text"><input id="new-text" class="row-text" placeholder="New prompt text…" maxlength="150" /></td>
-            <td>
-              <select id="new-cat" class="row-sel">
-                <option value="custom">⭐ Custom</option>
-                <option value="movies">🎬 Movies</option>
-                <option value="books">📚 Books</option>
-                <option value="artists">🎤 Artists</option>
-                <option value="songs">🎵 Songs</option>
-                <option value="places">🌍 Places</option>
-                <option value="sayings">💬 Sayings</option>
-              </select>
-            </td>
-            <td>
-              <select id="new-diff" class="row-sel">
-                <option value="easy">Easy</option>
-                <option value="medium">Medium</option>
-                <option value="hard">Hard</option>
-              </select>
-            </td>
-            <td>
-              <select id="new-lang" class="row-sel">
-                <option value="any">Both</option>
-                <option value="en">EN</option>
-                <option value="nl">NL</option>
-              </select>
-            </td>
-            <td><button id="btn-add-row" class="g-btn green small" style="padding:.3rem .6rem;width:auto;font-size:.85rem;">+ Add</button></td>
-          </tr>
-        </tbody>
-        <tbody id="prompts-tbody"></tbody>
-      </table>
-    </div>
-
-    <!-- Sticky save banner -->
-    <div class="save-banner">
-      <span class="dirty-label" id="dirty-label"></span>
-      <button id="btn-reset-view"  class="g-btn secondary small" style="width:auto;" title="Undo unsaved changes">↩ Undo</button>
-      <button id="btn-save-prompts" class="g-btn green" style="width:auto;padding:.55rem 1.25rem;font-size:.95rem;">💾 Save Changes</button>
-    </div>
+    <p style="text-align:center;margin-top:.25rem;">
+      <a href="/games/charades/admin/" style="font-size:.72rem;color:var(--g-muted);text-decoration:none;">⚙ Edit prompt library</a>
+    </p>
 
   </div>
 
@@ -391,7 +190,7 @@ import '../../../styles/games.css';
       lang:       string;
     }
 
-    type Screen = 'setup' | 'prompts' | 'play' | 'done';
+    type Screen = 'setup' | 'play' | 'done';
 
     // ── Constants ──────────────────────────────────────────────────────────
     const LS_ALL = 'charades_prompts_all';    // edited / full list
@@ -423,14 +222,11 @@ import '../../../styles/games.css';
     });
 
     function showScreen(s: Screen) {
-      (['setup','prompts','play','done'] as Screen[]).forEach(sc => {
+      (['setup','play','done'] as Screen[]).forEach(sc => {
         const el = $(`screen-${sc}`);
-        if (sc === s) { el.classList.remove('hidden'); el.style.display = sc === 'prompts' ? 'flex' : ''; }
+        if (sc === s) { el.classList.remove('hidden'); el.style.display = ''; }
         else          { el.classList.add('hidden');    el.style.display = 'none'; }
       });
-      // Header "Edit Prompts" button: hide while in prompts or play
-      const hdrBtn = $('btn-goto-prompts') as HTMLButtonElement;
-      hdrBtn.style.display = (s === 'play' || s === 'done') ? 'none' : '';
     }
 
     function activeData(groupId: string, attr: string): string[] {
@@ -461,10 +257,8 @@ import '../../../styles/games.css';
     );
 
     // ── Prompt data ────────────────────────────────────────────────────────
-    let allPrompts: Prompt[]     = [];  // live working copy
-    let savedPrompts: Prompt[]   = [];  // last-saved snapshot (for undo)
-    let isDirty                  = false;
-    let nextId                   = 1;
+    let allPrompts: Prompt[] = [];
+    let nextId               = 1;
 
     function makeId() { return `p_${nextId++}_${Math.random().toString(36).slice(2,7)}`; }
 
@@ -473,36 +267,14 @@ import '../../../styles/games.css';
     }
 
     async function initPrompts() {
-      // 1. Try saved/edited list
       const saved = localStorage.getItem(LS_ALL);
-      if (saved) {
-        allPrompts  = withIds(JSON.parse(saved));
-        savedPrompts = allPrompts.map(p => ({ ...p }));
-        return;
-      }
+      if (saved) { allPrompts = withIds(JSON.parse(saved)); return; }
 
-      // 2. Load built-in from JSON
-      const res   = await fetch('/charades/prompts.json');
+      const res  = await fetch('/charades/prompts.json');
       const base: Record<string,unknown>[] = await res.json();
-
-      // 3. Merge legacy custom prompts if they exist
       let legacy: Record<string,unknown>[] = [];
       try { legacy = JSON.parse(localStorage.getItem(LS_OLD) ?? '[]'); } catch { /* */ }
-
-      allPrompts   = withIds([...base, ...legacy]);
-      savedPrompts = allPrompts.map(p => ({ ...p }));
-    }
-
-    function markDirty() {
-      isDirty = true;
-      $('dirty-label').textContent = '⚠️ Unsaved changes';
-      ($('btn-save-prompts') as HTMLButtonElement).disabled = false;
-    }
-
-    function markClean() {
-      isDirty = false;
-      $('dirty-label').textContent = '';
-      ($('btn-save-prompts') as HTMLButtonElement).disabled = true;
+      allPrompts = withIds([...base, ...legacy]);
     }
 
     // ── Pool info (setup screen) ───────────────────────────────────────────
@@ -518,193 +290,6 @@ import '../../../styles/games.css';
       $('pool-info').textContent = `${count} prompt${count !== 1 ? 's' : ''} match your filters.`;
       count > 0 ? ($('pool-warn').style.display = 'none') : ($('pool-warn').style.display = '');
     }
-
-    // ── Prompt Library screen ──────────────────────────────────────────────
-    let sortCol: keyof Prompt = 'text';
-    let sortDir: 'asc' | 'desc' = 'asc';
-
-    const LIB_SEARCH = () => ($('lib-search') as HTMLInputElement).value.toLowerCase().trim();
-    const LIB_CAT    = () => ($('lib-cat')    as HTMLSelectElement).value;
-    const LIB_DIFF   = () => ($('lib-diff')   as HTMLSelectElement).value;
-    const LIB_LANG   = () => ($('lib-lang')   as HTMLSelectElement).value;
-
-    function filteredPrompts(): Prompt[] {
-      const q    = LIB_SEARCH();
-      const cat  = LIB_CAT();
-      const diff = LIB_DIFF();
-      const lang = LIB_LANG();
-      return allPrompts.filter(p =>
-        (!q    || p.text.toLowerCase().includes(q)) &&
-        (!cat  || p.category   === cat)  &&
-        (!diff || p.difficulty === diff) &&
-        (!lang || p.lang       === lang)
-      );
-    }
-
-    function sortedPrompts(list: Prompt[]): Prompt[] {
-      return [...list].sort((a, b) => {
-        const av = a[sortCol] as string;
-        const bv = b[sortCol] as string;
-        const cmp = av.localeCompare(bv);
-        return sortDir === 'asc' ? cmp : -cmp;
-      });
-    }
-
-    // Build a <select> for a row cell with current value
-    function makeSelect(name: string, opts: {v:string;l:string}[], current: string, cls: string): string {
-      const options = opts.map(o =>
-        `<option value="${o.v}"${o.v === current ? ' selected' : ''}>${escHtml(o.l)}</option>`
-      ).join('');
-      return `<select class="${cls} row-sel" data-field="${name}">${options}</select>`;
-    }
-
-    const DIFF_OPTS = [{v:'easy',l:'🟢 Easy'},{v:'medium',l:'🟡 Medium'},{v:'hard',l:'🔴 Hard'}];
-    const LANG_OPTS = [{v:'any',l:'Both'},{v:'en',l:'🇬🇧 EN'},{v:'nl',l:'🇳🇱 NL'}];
-
-    function renderTable() {
-      const list   = sortedPrompts(filteredPrompts());
-      const tbody  = $('prompts-tbody');
-      tbody.innerHTML = '';
-
-      $('lib-count').textContent =
-        `${list.length} of ${allPrompts.length} prompts`;
-
-      list.forEach(p => {
-        const tr = document.createElement('tr');
-        tr.dataset.id = p._id;
-        tr.innerHTML = `
-          <td class="col-text">
-            <input type="text" class="row-text" value="${escHtml(p.text)}" maxlength="150" />
-          </td>
-          <td>${makeSelect('category',   CAT_OPTS,   p.category,   'row-cat')}</td>
-          <td>${makeSelect('difficulty', DIFF_OPTS,  p.difficulty, 'row-diff')}</td>
-          <td>${makeSelect('lang',       LANG_OPTS,  p.lang,       'row-lang')}</td>
-          <td><button class="row-del" title="Delete">✕</button></td>
-        `;
-
-        // Text change
-        tr.querySelector<HTMLInputElement>('.row-text')!.addEventListener('input', e => {
-          const p2 = allPrompts.find(x => x._id === tr.dataset.id);
-          if (p2) { p2.text = (e.target as HTMLInputElement).value; markDirty(); }
-        });
-
-        // Select changes
-        tr.querySelectorAll<HTMLSelectElement>('.row-sel').forEach(sel => {
-          sel.addEventListener('change', () => {
-            const p2 = allPrompts.find(x => x._id === tr.dataset.id);
-            if (p2) { (p2 as unknown as Record<string,string>)[sel.dataset.field!] = sel.value; markDirty(); }
-          });
-        });
-
-        // Delete
-        tr.querySelector<HTMLButtonElement>('.row-del')!.addEventListener('click', () => {
-          if (!confirm(`Delete "${p.text}"?`)) return;
-          allPrompts = allPrompts.filter(x => x._id !== tr.dataset.id);
-          tr.remove();
-          $('lib-count').textContent = `${filteredPrompts().length} of ${allPrompts.length} prompts`;
-          markDirty();
-        });
-
-        tbody.appendChild(tr);
-      });
-    }
-
-    // Sort header clicks
-    document.querySelectorAll<HTMLElement>('table.prompt-table thead th[data-sort]').forEach(th => {
-      th.addEventListener('click', () => {
-        const col = th.dataset.sort as keyof Prompt;
-        if (sortCol === col) { sortDir = sortDir === 'asc' ? 'desc' : 'asc'; }
-        else { sortCol = col; sortDir = 'asc'; }
-
-        document.querySelectorAll<HTMLElement>('table.prompt-table thead th').forEach(h => {
-          h.classList.remove('sorted');
-          if (h.dataset.sort === col) {
-            h.classList.add('sorted');
-            h.textContent = h.textContent!.replace(/ [▲▼]$/, '') + (sortDir === 'asc' ? ' ▲' : ' ▼');
-          } else {
-            h.textContent = h.textContent!.replace(/ [▲▼]$/, '');
-          }
-        });
-
-        renderTable();
-      });
-    });
-
-    // Filter changes
-    ['lib-search','lib-cat','lib-diff','lib-lang'].forEach(id =>
-      $(id).addEventListener('input', renderTable)
-    );
-
-    // Add new row
-    $('btn-add-row').addEventListener('click', () => {
-      const textEl = $('new-text') as HTMLInputElement;
-      const text   = textEl.value.trim();
-      if (!text) { textEl.focus(); return; }
-
-      allPrompts.unshift({
-        _id:        makeId(),
-        text,
-        category:   ($('new-cat')  as HTMLSelectElement).value,
-        difficulty: ($('new-diff') as HTMLSelectElement).value,
-        lang:       ($('new-lang') as HTMLSelectElement).value,
-      });
-
-      textEl.value = '';
-      textEl.focus();
-      markDirty();
-      renderTable();
-    });
-
-    ($('new-text') as HTMLInputElement).addEventListener('keydown', e => {
-      if (e.key === 'Enter') $('btn-add-row').click();
-    });
-
-    // Save
-    $('btn-save-prompts').addEventListener('click', () => {
-      localStorage.setItem(LS_ALL, JSON.stringify(allPrompts));
-      // Remove legacy key now that everything is merged
-      localStorage.removeItem(LS_OLD);
-      savedPrompts = allPrompts.map(p => ({ ...p }));
-      markClean();
-      $('btn-save-prompts').textContent = '✅ Saved!';
-      setTimeout(() => { $('btn-save-prompts').textContent = '💾 Save Changes'; }, 2000);
-      updatePoolInfo();
-    });
-
-    // Undo
-    $('btn-reset-view').addEventListener('click', () => {
-      if (!isDirty) return;
-      if (!confirm('Discard all unsaved changes?')) return;
-      allPrompts = savedPrompts.map(p => ({ ...p }));
-      markClean();
-      renderTable();
-    });
-
-    // Reset to defaults
-    $('btn-reset-defaults').addEventListener('click', async () => {
-      if (!confirm('Reset ALL prompts back to the original built-in list? This will delete all your edits and custom prompts.')) return;
-      localStorage.removeItem(LS_ALL);
-      localStorage.removeItem(LS_OLD);
-      const res = await fetch('/charades/prompts.json');
-      const base: Record<string,unknown>[] = await res.json();
-      allPrompts   = withIds(base);
-      savedPrompts = allPrompts.map(p => ({ ...p }));
-      markClean();
-      renderTable();
-      updatePoolInfo();
-    });
-
-    // Navigate to/from prompts
-    $('btn-goto-prompts').addEventListener('click', () => {
-      showScreen('prompts');
-      renderTable();
-      markClean();
-    });
-
-    $('btn-back-from-prompts').addEventListener('click', () => {
-      if (isDirty && !confirm('You have unsaved changes. Leave anyway?')) return;
-      showScreen('setup');
-    });
 
     // ── Game ───────────────────────────────────────────────────────────────
     let queue:       Prompt[] = [];
@@ -829,7 +414,6 @@ import '../../../styles/games.css';
     }
 
     // ── Init ───────────────────────────────────────────────────────────────
-    markClean();
     initPrompts().then(updatePoolInfo);
 
   </script>
