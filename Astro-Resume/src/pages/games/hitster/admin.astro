@@ -429,7 +429,7 @@ import '../../../styles/games.css';
 
   <!-- ══ SCRIPTS ══════════════════════════════════════════════════════════ -->
   <script>
-    import { isAuthenticated, getValidToken, logout, startSpotifyAuth } from '../../../lib/spotify';
+    import { isAuthenticated, getValidToken, logout, startSpotifyAuth, hasScope, grantedScopes } from '../../../lib/spotify';
     import QRCode from 'qrcode';
 
     // ── Types ──────────────────────────────────────────────────────────────
@@ -695,6 +695,16 @@ import '../../../styles/games.css';
       try {
         const token = await getValidToken();
         if (!token) { logout(); location.href = '/games/hitster/'; return; }
+
+        // Proactively check scope — stored from the token exchange response
+        if (!hasScope('playlist-read-private')) {
+          show('btn-reauth');
+          throw new Error(
+            `Your Spotify connection is missing playlist permissions (granted: ${grantedScopes()}). ` +
+            'Please click "Reconnect Spotify with playlist access" below — make sure to click Agree on the consent screen.'
+          );
+        }
+
         const playlists = await fetchUserPlaylists(token);
         renderPlaylistGrid(playlists);
       } catch (err) {
@@ -715,6 +725,15 @@ import '../../../styles/games.css';
       try {
         const token = await getValidToken();
         if (!token) { logout(); location.href = '/games/hitster/'; return; }
+
+        if (!hasScope('playlist-read-private')) {
+          hide('track-section');
+          show('playlist-section', 'btn-reauth');
+          $('pl-error').textContent = 'Missing playlist-read-private scope. Please reconnect Spotify below.';
+          show('pl-error');
+          return;
+        }
+
         const tracks = await fetchAllTracks(playlistId, token);
         allTracks = tracks;
         selectedIds = new Set(tracks.map(t => t.id));

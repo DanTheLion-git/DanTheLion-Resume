@@ -110,6 +110,18 @@ function storeTokens(data: Record<string, unknown>): void {
   if (data.refresh_token) {
     localStorage.setItem('spotify_refresh_token', data.refresh_token as string);
   }
+  if (data.scope) {
+    localStorage.setItem('spotify_granted_scopes', data.scope as string);
+  }
+}
+
+export function hasScope(scope: string): boolean {
+  const granted = localStorage.getItem('spotify_granted_scopes') ?? '';
+  return granted.split(' ').includes(scope);
+}
+
+export function grantedScopes(): string {
+  return localStorage.getItem('spotify_granted_scopes') ?? '(none stored)';
 }
 
 export async function getValidToken(): Promise<string | null> {
@@ -135,7 +147,7 @@ export function isAuthenticated(): boolean {
 }
 
 export function logout(): void {
-  ['spotify_access_token', 'spotify_refresh_token', 'spotify_token_expiry'].forEach(
+  ['spotify_access_token', 'spotify_refresh_token', 'spotify_token_expiry', 'spotify_granted_scopes'].forEach(
     (k) => localStorage.removeItem(k)
   );
 }
