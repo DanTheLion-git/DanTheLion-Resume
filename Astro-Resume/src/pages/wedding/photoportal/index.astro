@@ -1,16 +1,22 @@
+---
+// WeddingCamBox — Photo Portal (login + admin dashboard + guest portal)
+// Static assets (portal.css, portal.js) live in public/wedding/photoportal/
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WeddingCamBox — Photo Portal</title>
-  <link rel="stylesheet" href="portal.css" />
+  <meta name="description" content="Log in to your private WeddingCamBox photo gallery to curate, download, and share your wedding photos." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="canonical" href="https://thelionsalliance.com/wedding/photoportal/" />
+  <link rel="stylesheet" href="/wedding/photoportal/portal.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-  <!-- EmailJS SDK — used for sending gallery links to guests -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script is:inline src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script is:inline src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 
@@ -18,7 +24,7 @@
   <div class="view view--login" id="viewLogin" style="display:none">
     <div class="login-wrap">
       <div class="login-card">
-        <a href="../" class="login-back"><i data-lucide="arrow-left"></i> Back to site</a>
+        <a href="/wedding/" class="login-back"><i data-lucide="arrow-left"></i> Back to site</a>
         <div class="login-brand">
           <span class="login-brand__logo">WeddingCamBox</span>
           <p class="login-brand__tagline">Your photos are waiting for you</p>
@@ -47,7 +53,7 @@
     <header class="p-header">
       <div class="p-header__inner">
         <div style="display:flex;align-items:center;gap:.75rem">
-          <a href="../" class="p-header__logo">WeddingCamBox</a>
+          <a href="/wedding/" class="p-header__logo">WeddingCamBox</a>
           <span class="admin-badge"><i data-lucide="shield"></i> Admin</span>
         </div>
         <button class="btn btn--sm btn--ghost" id="adminLogoutBtn">Sign out</button>
@@ -175,7 +181,7 @@
     <!-- Header -->
     <header class="p-header">
       <div class="p-header__inner">
-        <a href="../" class="p-header__logo">WeddingCamBox</a>
+        <a href="/wedding/" class="p-header__logo">WeddingCamBox</a>
         <div class="p-header__user">
           <span class="p-header__name" id="headerName"></span>
           <button class="btn btn--sm btn--ghost" id="logoutBtn">Sign out</button>
@@ -276,7 +282,6 @@
           </div>
         </div>
 
-        <!-- EmailJS not configured notice -->
         <div class="emailjs-notice" id="emailjsNotice" style="display:none">
           <i data-lucide="mail-warning"></i>
           <div>
@@ -366,6 +371,7 @@
   <!-- ==================== TOAST ==================== -->
   <div class="toast-container" id="toastContainer"></div>
 
-  <script src="portal.js"></script>
+  <script is:inline src="/wedding/photoportal/portal.js"></script>
+  <script is:inline>lucide.createIcons();</script>
 </body>
 </html>
