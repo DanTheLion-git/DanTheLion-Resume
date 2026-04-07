@@ -342,7 +342,7 @@ import '../../../styles/games.css';
       </div>
       <div id="pl-error" class="g-alert error hidden"></div>
       <button id="btn-reauth" class="g-btn outline small hidden" style="width:auto;align-self:flex-start;">
-        &#128273; Reconnect Spotify with playlist access
+        &#128273; Reconnect Spotify (or <a href="https://www.spotify.com/account/apps" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">remove app access first</a> if reconnect keeps failing)
       </button>
 
       <!-- Playlist grid -->
@@ -474,41 +474,64 @@ import '../../../styles/games.css';
       return res.json();
     }
 
+    function parseTrackItems(items: Array<{ track: null | Record<string, unknown> }>): Track[] {
+      const result: Track[] = [];
+      for (const item of items) {
+        const t = item.track;
+        if (!t || !t.id) continue;
+        const artists = t.artists as Array<{ name: string }>;
+        const album   = t.album   as { release_date: string; images: Array<{ url: string }> };
+        result.push({
+          id:       t.id      as string,
+          uri:      `spotify:track:${t.id}`,
+          name:     t.name    as string,
+          artist:   artists.map(a => a.name).join(', '),
+          year:     new Date(album.release_date).getFullYear(),
+          albumArt: album.images[0]?.url ?? '',
+        });
+      }
+      return result;
+    }
+
+    function spotifyError(status: number, detail: string): Error {
+      if (status === 403) {
+        const scopes = grantedScopes();
+        return new Error(
+          `Spotify returned 403 (Forbidden) — your access token is missing playlist permissions.\n\n` +
+          `Stored scopes: ${scopes}\n\n` +
+          `Fix: Go to spotify.com/account/apps → find this app → click "Remove Access" → ` +
+          `then click "Reconnect Spotify" below to re-authorise with the full playlist scope.`
+        );
+      }
+      return new Error(`Spotify error ${status}${detail ? ': ' + detail : ''}. Please try again.`);
+    }
+
     async function fetchAllTracks(playlistId: string, token: string): Promise<Track[]> {
       const tracks: Track[] = [];
-      // No `fields` filter — send the simplest possible request to Spotify
-      let url: string | null =
-        `https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=100`;
 
-      while (url) {
-        const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
-        if (!res.ok) {
-          const body = await res.json().catch(() => ({})) as { error?: { message?: string; status?: number } };
-          const detail = body?.error?.message ?? '';
-          throw new Error(
-            `Could not load tracks (${res.status}${detail ? ': ' + detail : ''}). ` +
-            (res.status === 403
-              ? 'Make sure the playlist is set to Public in Spotify.'
-              : 'Please try again.')
-          );
-        }
-        const data = await res.json();
+      // Strategy 1: try GET /v1/playlists/{id} (embeds first-page tracks without a sub-resource call)
+      const infoRes = await fetch(
+        `https://api.spotify.com/v1/playlists/${playlistId}?market=from_token`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (!infoRes.ok) {
+        const body = await infoRes.json().catch(() => ({})) as { error?: { message?: string } };
+        throw spotifyError(infoRes.status, body?.error?.message ?? '');
+      }
+      const playlist = await infoRes.json();
+      tracks.push(...parseTrackItems(playlist.tracks?.items ?? []));
 
-        for (const item of (data.items as Array<{ track: null | Record<string, unknown> }>)) {
-          const t = item.track;
-          if (!t || !t.id) continue;
-          const artists = t.artists as Array<{ name: string }>;
-          const album   = t.album   as { release_date: string; images: Array<{ url: string }> };
-          tracks.push({
-            id:       t.id      as string,
-            uri:      `spotify:track:${t.id}`,
-            name:     t.name    as string,
-            artist:   artists.map(a => a.name).join(', '),
-            year:     new Date(album.release_date).getFullYear(),
-            albumArt: album.images[0]?.url ?? '',
-          });
+      // Paginate remaining pages via tracks.next (points to /tracks endpoint)
+      let nextUrl: string | null = playlist.tracks?.next ?? null;
+      while (nextUrl) {
+        const pageRes = await fetch(nextUrl, { headers: { Authorization: `Bearer ${token}` } });
+        if (!pageRes.ok) {
+          const body = await pageRes.json().catch(() => ({})) as { error?: { message?: string } };
+          throw spotifyError(pageRes.status, body?.error?.message ?? '');
         }
-        url = (data.next as string | null);
+        const page = await pageRes.json();
+        tracks.push(...parseTrackItems(page.items ?? []));
+        nextUrl = page.next ?? null;
       }
 
       return tracks;
@@ -734,8 +757,11 @@ import '../../../styles/games.css';
         $('playlist-meta').textContent = 'Failed to load tracks';
         hide('track-section');
         show('playlist-section');
-        $('pl-error').textContent = err instanceof Error ? err.message : String(err);
-        show('pl-error');
+        // Show full message (may contain newlines — use pre-wrap)
+        const msg = err instanceof Error ? err.message : String(err);
+        $('pl-error').style.whiteSpace = 'pre-wrap';
+        $('pl-error').textContent = msg;
+        show('pl-error', 'btn-reauth');
       }
     }
 
