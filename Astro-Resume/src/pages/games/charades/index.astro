@@ -68,7 +68,10 @@ import '../../../styles/games.css';
 
   <!-- ══ HEADER ═══════════════════════════════════════════════════════════ -->
   <header class="game-header">
-    <a href="/games/" class="brand">🦁 Games</a>
+    <a href="/" class="brand">🦁 The Lions Alliance</a>
+    <nav>
+      <a href="/games/">← Games</a>
+    </nav>
   </header>
 
 
@@ -127,10 +130,6 @@ import '../../../styles/games.css';
     <button id="btn-start" class="g-btn primary" style="font-size:1.1rem;padding:1.1rem;">
       🎭 Start Game
     </button>
-
-    <p style="text-align:center;margin-top:.25rem;">
-      <a href="/games/charades/admin/" style="font-size:.72rem;color:var(--g-muted);text-decoration:none;">⚙ Edit prompt library</a>
-    </p>
 
   </div>
 
@@ -193,9 +192,6 @@ import '../../../styles/games.css';
     type Screen = 'setup' | 'play' | 'done';
 
     // ── Constants ──────────────────────────────────────────────────────────
-    const LS_ALL = 'charades_prompts_all';    // edited / full list
-    const LS_OLD = 'charades_custom_prompts'; // legacy key from previous version
-
     const CAT_OPTS = [
       { v:'movies',  l:'🎬 Movies'  },
       { v:'books',   l:'📚 Books'   },
@@ -267,14 +263,8 @@ import '../../../styles/games.css';
     }
 
     async function initPrompts() {
-      const saved = localStorage.getItem(LS_ALL);
-      if (saved) { allPrompts = withIds(JSON.parse(saved)); return; }
-
       const res  = await fetch('/charades/prompts.json');
-      const base: Record<string,unknown>[] = await res.json();
-      let legacy: Record<string,unknown>[] = [];
-      try { legacy = JSON.parse(localStorage.getItem(LS_OLD) ?? '[]'); } catch { /* */ }
-      allPrompts = withIds([...base, ...legacy]);
+      allPrompts = withIds(await res.json());
     }
 
     // ── Pool info (setup screen) ───────────────────────────────────────────
