@@ -1,547 +1,200 @@
 ---
-// Public homepage — The Lions Alliance
-// Design: Creative Craft Tech Light
+// Public homepage — The Lions Alliance — Coming Soon
 ---
-
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>The Lions Alliance — Creative Studio</title>
-    <meta name="description" content="The Lions Alliance crafts interactive digital experiences, bespoke physical products, and cinematic film & photography — based in the Netherlands." />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <title>The Lions Alliance</title>
+    <meta name="description" content="The Lions Alliance — coming soon." />
+    <!-- Apply saved theme before CSS renders — prevents flash of wrong theme -->
+    <script>
+      (function () {
+        var stored = localStorage.getItem('lions-theme');
+        var theme  = stored
+          ? stored
+          : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.className = 'theme-' + theme;
+      })();
+    </script>
+    <link rel="stylesheet" href="/_astro/_slug_.B77jTI1m.css" />
+    <style>
+      /* ── Coming Soon layout ── */
+      .coming-soon-page {
+        min-height: calc(100vh - 120px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 60px 24px;
+        gap: 0;
+      }
+
+      .cs-badge {
+        display: inline-block;
+        border: 1px solid var(--border);
+        background: color-mix(in srgb, var(--accent-green-light) 10%, var(--card-bg));
+        color: var(--accent-green-light);
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        padding: 5px 16px;
+        border-radius: 999px;
+        margin-bottom: 28px;
+      }
+
+      .cs-heading {
+        font-size: clamp(2rem, 6vw, 3.8rem);
+        font-weight: 700;
+        line-height: 1.1;
+        letter-spacing: -0.5px;
+        margin-bottom: 18px;
+        color: var(--fg);
+      }
+
+      .cs-heading .accent {
+        color: var(--accent-green-light);
+      }
+
+      .cs-sub {
+        font-size: clamp(0.95rem, 2vw, 1.1rem);
+        color: var(--fg-muted);
+        max-width: 420px;
+        line-height: 1.65;
+        margin: 0 auto 44px;
+      }
+
+      .cs-divider {
+        width: 44px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--accent-green), var(--accent-green-light));
+        border-radius: 999px;
+        margin: 0 auto 44px;
+      }
+
+      /* Nav cards */
+      .cs-cards {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        justify-content: center;
+        max-width: 680px;
+      }
+
+      .cs-card {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        padding: 20px 26px;
+        min-width: 180px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--card-bg);
+        box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        text-decoration: none;
+        color: var(--fg);
+        transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.14s ease;
+      }
+
+      .cs-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 28px rgba(0,0,0,0.10);
+        border-color: var(--accent-green-light);
+        text-decoration: none;
+      }
+
+      .cs-card-icon {
+        font-size: 1.55rem;
+        line-height: 1;
+        margin-bottom: 6px;
+      }
+
+      .cs-card-label {
+        font-size: 0.98rem;
+        font-weight: 700;
+        color: var(--fg);
+      }
+
+      .cs-card-desc {
+        font-size: 0.83rem;
+        color: var(--fg-muted);
+      }
+
+      @media (max-width: 480px) {
+        .cs-card { min-width: 100%; }
+      }
+    </style>
   </head>
-
   <body>
-
-    <!-- ── Navigation ── -->
-    <header class="nav">
-      <div class="nav-inner">
-        <a href="/" class="brand">
-          <svg class="brand-mark" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-            <polygon points="14,3 26,22 2,22" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/>
-            <polygon points="14,9 21,22 7,22"  fill="currentColor" opacity=".18"/>
-          </svg>
-          The Lions Alliance
-        </a>
-        <nav class="nav-links" aria-label="Main navigation">
-          <a href="/wedding">Wedding</a>
-          <a href="/resume" class="nav-pill">Portfolio</a>
+    <header class="site-header">
+      <div class="container">
+        <a href="/" class="logo">The Lions Alliance</a>
+        <nav class="nav">
+          <a href="/resume/">Resume</a>
+          <button id="theme-toggle" class="theme-toggle" aria-label="Toggle colour scheme" title="Toggle light / dark mode">
+            <svg class="theme-icon theme-icon--sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="theme-icon theme-icon--moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+            </svg>
+          </button>
         </nav>
       </div>
     </header>
 
-    <main>
-
-      <!-- ── Hero ── -->
-      <section class="hero">
-        <div class="hero-inner">
-
-          <div class="hero-text">
-            <p class="eyebrow">
-              <span class="eyebrow-dot dot-teal"></span>Creative Studio
-              <span class="eyebrow-sep">·</span>
-              <span class="eyebrow-dot dot-green"></span>Netherlands
-              <span class="eyebrow-sep">·</span>
-              <span class="eyebrow-dot dot-rust"></span>Est. 2020
-            </p>
-
-            <h1 class="hero-title">
-              We build<br/>
-              <em class="hl hl-teal">experiences</em>,<br/>
-              craft <em class="hl hl-green">products</em>,<br/>
-              &amp; capture <em class="hl hl-rust">stories</em>.
-            </h1>
-
-            <p class="hero-sub">
-              Interactive digital worlds, bespoke physical creations,
-              and cinematic film — all under one roof.
-            </p>
-
-            <div class="hero-ctas">
-              <a href="/wedding" class="btn-primary btn-rust">
-                Wedding Films
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </a>
-              <a href="/resume" class="btn-outline">
-                Full Portfolio
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </a>
-            </div>
-          </div>
-
-          <!-- Decorative triptych — three stacked colored chips -->
-          <div class="hero-visual" aria-hidden="true">
-            <div class="chip chip-teal">
-              <span class="chip-label">Interactive</span>
-              <div class="chip-grid">
-                <div></div><div></div><div></div>
-                <div></div><div></div><div></div>
-                <div></div><div></div><div></div>
-              </div>
-            </div>
-            <div class="chip chip-green">
-              <span class="chip-label">Craft</span>
-              <div class="chip-rings">
-                <div class="ring r1"></div>
-                <div class="ring r2"></div>
-                <div class="ring r3"></div>
-              </div>
-            </div>
-            <div class="chip chip-rust">
-              <span class="chip-label">Film</span>
-              <div class="chip-lens">
-                <div class="lens-outer"></div>
-                <div class="lens-inner"></div>
-                <div class="lens-dot"></div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      <!-- ── Services ── -->
-      <section class="services">
-        <div class="section-inner">
-
-          <header class="section-hd">
-            <p class="section-label">What we do</p>
-            <h2 class="section-title">Three disciplines,<br/>one studio</h2>
-          </header>
-
-          <div class="service-grid">
-
-            <!-- Interactive Experiences -->
-            <article class="svc svc-teal">
-              <div class="svc-top">
-                <div class="svc-num">01</div>
-                <svg class="svc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="2" y="4" width="20" height="14" rx="2"/>
-                  <circle cx="12" cy="11" r="3"/>
-                  <path d="M8 21h8"/>
-                  <path d="M12 18v3"/>
-                </svg>
-              </div>
-              <h3>Interactive<br/>Experiences</h3>
-              <p>Real-time 3D, WebGL showcases, VR productions, and touch installations — digital worlds people can step into and explore.</p>
-              <a href="/resume#work" class="svc-link">
-                Explore projects
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </a>
-            </article>
-
-            <!-- Customized Products -->
-            <article class="svc svc-green">
-              <div class="svc-top">
-                <div class="svc-num">02</div>
-                <svg class="svc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                </svg>
-              </div>
-              <h3>Customized<br/>Products</h3>
-              <p>Bespoke physical creations combining electronics, carpentry, and code — from interactive furniture to kinetic sculptures and puzzle installations.</p>
-              <a href="/resume#work" class="svc-link">
-                See what we build
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </a>
-            </article>
-
-            <!-- Film & Photography -->
-            <article class="svc svc-rust">
-              <div class="svc-top">
-                <div class="svc-num">03</div>
-                <svg class="svc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="3"/>
-                  <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
-                </svg>
-              </div>
-              <h3>Film &amp;<br/>Photography</h3>
-              <p>Cinematic wedding films, documentary storytelling, 360° immersive video, and stills — every frame crafted to last a lifetime.</p>
-              <a href="/wedding" class="svc-link">
-                Wedding portfolio
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </a>
-            </article>
-
-          </div>
-        </div>
-      </section>
-
-      <!-- ── Tagline band ── -->
-      <section class="tagline-band">
-        <div class="section-inner">
-          <p class="tagline">
-            <span class="tl tl-teal">Technology</span>
-            <span class="tl-sep">+</span>
-            <span class="tl tl-green">Craft</span>
-            <span class="tl-sep">+</span>
-            <span class="tl tl-rust">Story</span>
-          </p>
-          <p class="tagline-sub">Every project is a collaboration. We bring the skill, you bring the vision.</p>
-        </div>
-      </section>
-
-      <!-- ── About strip ── -->
-      <section class="about">
-        <div class="section-inner about-grid">
-          <div>
-            <p class="section-label">About</p>
-            <h2 class="section-title">Daniël van Leeuwen</h2>
-            <p class="about-body">Independent creative technologist based in the Netherlands — with a background spanning 3D animation, motion capture, real-time development, bespoke electronics, and cinematic video production. Available for freelance projects worldwide.</p>
-            <a href="/resume" class="btn-outline" style="margin-top:1.4rem">
-              Full résumé &amp; portfolio →
-            </a>
-          </div>
-          <div class="about-side">
-            <div class="about-tag tag-teal">Interactive &amp; XR</div>
-            <div class="about-tag tag-green">Custom Hardware</div>
-            <div class="about-tag tag-rust">Cinematic Video</div>
-            <div class="about-tag tag-neutral">3D Animation</div>
-            <div class="about-tag tag-neutral">Motion Capture</div>
-            <div class="about-tag tag-neutral">WebGL / Three.js</div>
-          </div>
-        </div>
-      </section>
-
+    <main class="site-main">
+      <div class="coming-soon-page">
+        <span class="cs-badge">Launching Soon</span>
+        <h1 class="cs-heading">Something is<br><span class="accent">on its way.</span></h1>
+        <p class="cs-sub">The Lions Alliance is being built. In the meantime, explore the pages below.</p>
+        <div class="cs-divider"></div>
+        <nav class="cs-cards" aria-label="Available pages">
+          <a class="cs-card" href="/wedding">
+            <div class="cs-card-icon">📷</div>
+            <div class="cs-card-label">Wedding</div>
+            <div class="cs-card-desc">Camera rental for your big day</div>
+          </a>
+          <a class="cs-card" href="/resume">
+            <div class="cs-card-icon">📄</div>
+            <div class="cs-card-label">Resume</div>
+            <div class="cs-card-desc">Portfolio &amp; CV</div>
+          </a>
+          <a class="cs-card" href="/games">
+            <div class="cs-card-icon">🎮</div>
+            <div class="cs-card-label">Games</div>
+            <div class="cs-card-desc">Projects &amp; experiments</div>
+          </a>
+        </nav>
+      </div>
     </main>
 
-    <footer class="footer">
-      <div class="section-inner footer-inner">
-        <span class="footer-brand">
-          <svg class="brand-mark" viewBox="0 0 28 28" fill="none" aria-hidden="true" style="width:16px;height:16px">
-            <polygon points="14,3 26,22 2,22" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/>
-          </svg>
-          The Lions Alliance
-        </span>
-        <span class="footer-muted">© {new Date().getFullYear()} · Netherlands</span>
+    <footer class="site-footer">
+      <div class="container">
+        &copy; <span id="yr"></span> The Lions Alliance
       </div>
     </footer>
 
+    <script>
+      document.getElementById('yr').textContent = new Date().getFullYear();
+
+      const btn = document.getElementById('theme-toggle');
+      if (btn) {
+        btn.addEventListener('click', () => {
+          const isLight = document.documentElement.classList.contains('theme-light');
+          const next = isLight ? 'dark' : 'light';
+          document.documentElement.className = 'theme-' + next;
+          localStorage.setItem('lions-theme', next);
+        });
+      }
+    </script>
   </body>
 </html>
-
-<style>
-  /* ── Tokens ── */
-  :root {
-    --bg:       #f4f1eb;
-    --surface:  #ffffff;
-    --fg:       #1a1714;
-    --ink:      #2c2820;
-    --muted:    #7a7368;
-    --border:   #ddd8cf;
-    --border-s: #c8c3b8;
-
-    --teal:     #0e6e82;
-    --teal-bg:  #e6f4f7;
-    --teal-mid: #b2dde6;
-
-    --green:    #2a6b1a;
-    --green-bg: #e8f2e5;
-    --green-mid:#b4d9ac;
-
-    --rust:     #b53a18;
-    --rust-bg:  #f7ece7;
-    --rust-mid: #e8b8a8;
-
-    --radius:   20px;
-    --max:      1080px;
-    font-family: 'Inter', system-ui, sans-serif;
-  }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { min-height: 100%; }
-
-  body {
-    background: var(--bg);
-    color: var(--fg);
-    line-height: 1.7;
-    overflow-x: hidden;
-  }
-
-  a { color: inherit; text-decoration: none; }
-
-  /* ── Nav ── */
-  .nav {
-    position: sticky; top: 0; z-index: 80;
-    background: rgba(244,241,235,.92);
-    backdrop-filter: blur(14px);
-    border-bottom: 1px solid var(--border);
-  }
-  .nav-inner {
-    max-width: var(--max); margin: 0 auto;
-    padding: 0 1.5rem; height: 56px;
-    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-  }
-  .brand {
-    display: flex; align-items: center; gap: .55rem;
-    font-weight: 700; font-size: .95rem; letter-spacing: .03em;
-    white-space: nowrap; color: var(--fg);
-  }
-  .brand-mark { width: 22px; height: 22px; color: var(--teal); flex-shrink: 0; }
-  .nav-links { display: flex; align-items: center; gap: .3rem; font-size: .87rem; }
-  .nav-links a {
-    padding: .28rem .7rem; border-radius: 999px;
-    color: var(--muted); transition: color 130ms, background 130ms;
-  }
-  .nav-links a:hover { color: var(--fg); background: rgba(0,0,0,.06); }
-  .nav-pill {
-    border: 1px solid var(--border-s) !important;
-    color: var(--fg) !important;
-    font-weight: 500;
-  }
-  .nav-pill:hover { border-color: var(--teal) !important; color: var(--teal) !important; background: var(--teal-bg) !important; }
-
-  /* ── Shared ── */
-  .section-inner { max-width: var(--max); margin: 0 auto; padding: 0 1.5rem; }
-  .section-label {
-    font-size: .72rem; text-transform: uppercase;
-    letter-spacing: .2em; font-weight: 600;
-    color: var(--muted); margin-bottom: .5rem;
-  }
-  .section-title {
-    font-family: 'Fraunces', Georgia, serif;
-    font-size: clamp(1.55rem, 3.2vw, 2.3rem);
-    font-weight: 700; line-height: 1.18; color: var(--fg);
-  }
-
-  /* ── Buttons ── */
-  .btn-primary {
-    display: inline-flex; align-items: center; gap: .45rem;
-    padding: .58rem 1.25rem; border-radius: 999px;
-    font-size: .9rem; font-weight: 600;
-    border: none; cursor: pointer;
-    transition: filter 140ms, transform 140ms;
-  }
-  .btn-rust { background: var(--rust); color: #fff; }
-  .btn-rust:hover { filter: brightness(1.12); transform: translateY(-2px); }
-
-  .btn-outline {
-    display: inline-flex; align-items: center; gap: .45rem;
-    padding: .55rem 1.2rem; border-radius: 999px;
-    font-size: .9rem; font-weight: 500;
-    border: 1.5px solid var(--border-s); color: var(--ink);
-    background: transparent; cursor: pointer;
-    transition: border-color 140ms, color 140ms, transform 140ms;
-  }
-  .btn-outline:hover { border-color: var(--teal); color: var(--teal); transform: translateY(-2px); }
-
-  /* ── Hero ── */
-  .hero {
-    padding: 5.5rem 1.5rem 5rem;
-    background:
-      radial-gradient(ellipse 60% 70% at 90% 50%, rgba(14,110,130,.06) 0%, transparent 65%),
-      radial-gradient(ellipse 50% 60% at 10% 80%, rgba(42,107,26,.05)  0%, transparent 60%),
-      var(--bg);
-  }
-  .hero-inner {
-    max-width: var(--max); margin: 0 auto;
-    display: flex; align-items: center; gap: 4rem; flex-wrap: wrap;
-  }
-  .hero-text { flex: 1; min-width: 280px; }
-
-  .eyebrow {
-    display: flex; flex-wrap: wrap; align-items: center; gap: .35rem;
-    font-size: .75rem; font-weight: 600; text-transform: uppercase;
-    letter-spacing: .16em; color: var(--muted); margin-bottom: 1.1rem;
-  }
-  .eyebrow-dot {
-    width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
-  }
-  .dot-teal  { background: var(--teal);  }
-  .dot-green { background: var(--green); }
-  .dot-rust  { background: var(--rust);  }
-  .eyebrow-sep { opacity: .4; }
-
-  .hero-title {
-    font-family: 'Fraunces', Georgia, serif;
-    font-size: clamp(2.8rem, 6.5vw, 5rem);
-    font-weight: 800;
-    line-height: 1.02;
-    letter-spacing: -.03em;
-    margin-bottom: 1.5rem;
-    color: var(--fg);
-  }
-  .hl { font-style: italic; font-weight: 800; position: relative; }
-  .hl::after {
-    content: ''; position: absolute; left: 0; bottom: .04em;
-    width: 100%; height: .12em; border-radius: 4px; opacity: .35;
-  }
-  .hl-teal  { color: var(--teal);  } .hl-teal::after  { background: var(--teal);  }
-  .hl-green { color: var(--green); } .hl-green::after { background: var(--green); }
-  .hl-rust  { color: var(--rust);  } .hl-rust::after  { background: var(--rust);  }
-
-  .hero-sub {
-    font-size: 1.02rem; color: var(--muted); max-width: 38ch;
-    line-height: 1.72; margin-bottom: 2rem;
-  }
-  .hero-ctas { display: flex; flex-wrap: wrap; gap: .7rem; align-items: center; }
-
-  /* Hero decorative chips */
-  .hero-visual {
-    flex-shrink: 0;
-    display: flex; flex-direction: column; gap: .9rem;
-    width: 200px;
-  }
-  .chip {
-    border-radius: 16px; padding: 1rem 1.1rem;
-    border: 1px solid transparent;
-    position: relative; overflow: hidden;
-  }
-  .chip-teal  { background: var(--teal-bg);  border-color: var(--teal-mid);  }
-  .chip-green { background: var(--green-bg); border-color: var(--green-mid); }
-  .chip-rust  { background: var(--rust-bg);  border-color: var(--rust-mid);  }
-  .chip-label {
-    display: block; font-size: .7rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: .15em; margin-bottom: .6rem;
-    opacity: .7;
-  }
-  .chip-teal  .chip-label { color: var(--teal);  }
-  .chip-green .chip-label { color: var(--green); }
-  .chip-rust  .chip-label { color: var(--rust);  }
-
-  /* grid dots */
-  .chip-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 5px; }
-  .chip-grid div { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); opacity: .35; }
-  /* rings */
-  .chip-rings { position: relative; height: 34px; }
-  .ring { position: absolute; border-radius: 50%; border: 2px solid var(--green); opacity: .35; }
-  .r1 { width: 34px; height: 34px; left: 0;  top: 0; }
-  .r2 { width: 22px; height: 22px; left: 6px; top: 6px; opacity: .55; }
-  .r3 { width: 10px; height: 10px; left: 12px; top: 12px; opacity: .8; }
-  /* lens */
-  .chip-lens { position: relative; height: 34px; }
-  .lens-outer { position: absolute; width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--rust); opacity: .35; }
-  .lens-inner { position: absolute; width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--rust); opacity: .55; left: 7px; top: 7px; }
-  .lens-dot   { position: absolute; width: 6px; height: 6px; border-radius: 50%; background: var(--rust); left: 14px; top: 14px; opacity: .9; }
-
-  @media (max-width: 720px) { .hero-visual { display: none; } }
-
-  /* ── Services ── */
-  .services { padding: 5rem 0 5.5rem; border-top: 1px solid var(--border); }
-  .section-hd { margin-bottom: 2.2rem; }
-  .section-hd .section-title { margin-top: .3rem; }
-
-  .service-grid {
-    display: grid; grid-template-columns: 1fr; gap: 1.1rem;
-  }
-  @media (min-width: 640px)  { .service-grid { grid-template-columns: repeat(2,1fr); } }
-  @media (min-width: 900px)  { .service-grid { grid-template-columns: repeat(3,1fr); } }
-
-  .svc {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.7rem;
-    transition: transform 150ms, box-shadow 150ms;
-    display: flex; flex-direction: column; gap: 0;
-  }
-  .svc:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,.08); }
-
-  /* Colored top accent bar */
-  .svc::before {
-    content: ''; display: block; height: 4px; border-radius: 3px;
-    margin-bottom: 1.3rem;
-  }
-  .svc-teal::before  { background: linear-gradient(90deg, var(--teal), var(--teal-mid)); }
-  .svc-green::before { background: linear-gradient(90deg, var(--green), var(--green-mid)); }
-  .svc-rust::before  { background: linear-gradient(90deg, var(--rust), var(--rust-mid)); }
-
-  .svc-top {
-    display: flex; align-items: flex-start; justify-content: space-between;
-    margin-bottom: .9rem;
-  }
-  .svc-num {
-    font-family: 'Fraunces', Georgia, serif;
-    font-size: 2.4rem; font-weight: 800; line-height: 1;
-    opacity: .12; user-select: none;
-  }
-  .svc-teal  .svc-num { color: var(--teal);  }
-  .svc-green .svc-num { color: var(--green); }
-  .svc-rust  .svc-num { color: var(--rust);  }
-
-  .svc-icon { width: 26px; height: 26px; flex-shrink: 0; }
-  .svc-teal  .svc-icon { color: var(--teal);  }
-  .svc-green .svc-icon { color: var(--green); }
-  .svc-rust  .svc-icon { color: var(--rust);  }
-
-  .svc h3 {
-    font-family: 'Fraunces', Georgia, serif;
-    font-size: 1.25rem; font-weight: 700;
-    line-height: 1.2; margin-bottom: .7rem; color: var(--fg);
-  }
-  .svc p {
-    font-size: .88rem; color: var(--muted); line-height: 1.68;
-    flex: 1; margin-bottom: 1.3rem;
-  }
-  .svc-link {
-    display: inline-flex; align-items: center; gap: .38rem;
-    font-size: .78rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: .08em;
-    transition: gap 140ms;
-    margin-top: auto;
-  }
-  .svc-teal  .svc-link { color: var(--teal);  }
-  .svc-green .svc-link { color: var(--green); }
-  .svc-rust  .svc-link { color: var(--rust);  }
-  .svc-link:hover { gap: .6rem; }
-
-  /* ── Tagline band ── */
-  .tagline-band {
-    padding: 3.8rem 0;
-    background: var(--fg);
-    text-align: center;
-  }
-  .tagline {
-    display: flex; flex-wrap: wrap; justify-content: center;
-    align-items: baseline; gap: .6rem 1.2rem;
-    font-family: 'Fraunces', Georgia, serif;
-    font-size: clamp(1.8rem, 5vw, 3.4rem);
-    font-weight: 800; line-height: 1.1;
-    margin-bottom: .9rem;
-  }
-  .tl        { font-style: italic; }
-  .tl-teal   { color: var(--teal-mid);  }
-  .tl-green  { color: var(--green-mid); }
-  .tl-rust   { color: var(--rust-mid);  }
-  .tl-sep    { color: rgba(255,255,255,.25); font-family: 'Inter', sans-serif; font-weight: 300; font-style: normal; font-size: .8em; }
-  .tagline-sub {
-    font-size: .92rem; color: rgba(255,255,255,.5);
-    letter-spacing: .02em; font-style: italic;
-  }
-
-  /* ── About ── */
-  .about { padding: 5rem 0 5.5rem; border-top: 1px solid var(--border); }
-  .about-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; }
-  @media (min-width: 780px) { .about-grid { grid-template-columns: 1.6fr 1fr; align-items: start; } }
-
-  .about-body {
-    font-size: .93rem; color: var(--muted);
-    max-width: 44ch; line-height: 1.75; margin-top: .8rem;
-  }
-  .about-side { display: flex; flex-wrap: wrap; gap: .55rem; padding-top: .4rem; }
-  .about-tag {
-    padding: .32rem .85rem; border-radius: 999px;
-    font-size: .78rem; font-weight: 600;
-    border: 1.5px solid transparent;
-  }
-  .tag-teal    { background: var(--teal-bg);  border-color: var(--teal-mid);  color: var(--teal);  }
-  .tag-green   { background: var(--green-bg); border-color: var(--green-mid); color: var(--green); }
-  .tag-rust    { background: var(--rust-bg);  border-color: var(--rust-mid);  color: var(--rust);  }
-  .tag-neutral { background: rgba(0,0,0,.04); border-color: var(--border);    color: var(--muted); }
-
-  /* ── Footer ── */
-  .footer { border-top: 1px solid var(--border); padding: 1.2rem 0 1.8rem; }
-  .footer-inner {
-    display: flex; flex-wrap: wrap;
-    align-items: center; justify-content: space-between; gap: .5rem;
-  }
-  .footer-brand {
-    display: flex; align-items: center; gap: .45rem;
-    font-weight: 700; font-size: .88rem; color: var(--fg);
-  }
-  .footer-muted { font-size: .82rem; color: var(--muted); }
-</style>
