@@ -293,6 +293,9 @@ import '../../../styles/games.css';
       />
       <button id="btn-load" class="g-btn green">🎵 Load Playlist</button>
       <div id="load-error" class="g-alert error hidden"></div>
+      <button id="btn-reauth" class="g-btn outline small hidden" style="width:auto;align-self:flex-start;">
+        🔑 Reconnect Spotify with playlist access
+      </button>
     </div>
 
     <!-- Track list (hidden until loaded) -->
@@ -428,10 +431,13 @@ import '../../../styles/games.css';
       while (url) {
         const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
         if (!res.ok) {
-          if (res.status === 403) throw new Error(
-            'Access denied (403). Your Spotify connection is missing playlist permissions. ' +
-            'Click "Disconnect" above, then reconnect via the Hitster page to grant access.'
-          );
+          if (res.status === 403) {
+            document.getElementById('btn-reauth')!.classList.remove('hidden');
+            throw new Error(
+              'Access denied (403) — your Spotify connection is missing playlist permissions. ' +
+              'Click "Reconnect Spotify with playlist access" below to re-authorise.'
+            );
+          }
           throw new Error(`Track fetch failed (${res.status})`);
         }
         const data = await res.json();
@@ -684,6 +690,9 @@ import '../../../styles/games.css';
 
     // ── Logout ─────────────────────────────────────────────────────────────
     $('btn-logout').addEventListener('click', () => { logout(); location.href = '/games/hitster/'; });
+
+    // Re-auth with full scope (forces Spotify consent screen via show_dialog=true)
+    $('btn-reauth').addEventListener('click', () => { logout(); startSpotifyAuth(); });
 
     // ── Init ───────────────────────────────────────────────────────────────
     if (isAuthenticated()) {

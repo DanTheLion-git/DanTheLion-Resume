@@ -51,6 +51,7 @@ export async function startSpotifyAuth(): Promise<void> {
     code_challenge_method: 'S256',
     code_challenge:        challenge,
     scope:                 SCOPES,
+    show_dialog:           'true',   // always show consent screen → ensures new scopes are granted
   });
 
   window.location.href = `https://accounts.spotify.com/authorize?${params}`;
