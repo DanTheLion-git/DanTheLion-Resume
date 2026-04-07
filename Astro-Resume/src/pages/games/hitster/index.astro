@@ -23,7 +23,10 @@ import '../../../styles/games.css';
 
   <header class="game-header">
     <a href="/games/" class="brand">🦁 Games</a>
-    <button id="btn-logout" class="g-btn outline small hidden" style="width:auto;">Disconnect</button>
+    <div style="display:flex;gap:0.5rem;align-items:center;">
+      <a id="btn-admin" href="/games/hitster/admin/" class="g-btn secondary small hidden" style="width:auto;">🃏 Cards</a>
+      <button id="btn-logout" class="g-btn outline small hidden" style="width:auto;">Disconnect</button>
+    </div>
   </header>
 
   <!-- ══ AUTH SCREEN ══════════════════════════════════════════════════════ -->
@@ -328,7 +331,7 @@ import '../../../styles/games.css';
     async function init() {
       if (isAuthenticated()) {
         showScreen('game');
-        show('btn-logout');
+        show('btn-logout', 'btn-admin');
         setState('loading');
         setPlayerStatus('Connecting to Spotify…');
 
@@ -355,7 +358,7 @@ import '../../../styles/games.css';
       spotifyPlayer?.disconnect();
       logout();
       showScreen('auth');
-      hide('btn-logout');
+      hide('btn-logout', 'btn-admin');
     });
 
     $('btn-scan').addEventListener('click', startScan);

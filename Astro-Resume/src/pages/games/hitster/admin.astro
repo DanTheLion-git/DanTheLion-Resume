@@ -1,0 +1,680 @@
+---
+import '../../../styles/games.css';
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hitster Admin — Card Generator</title>
+
+  <style>
+    /* ── Print layout ───────────────────────────────────────────────────── */
+    @media print {
+      /* Hide all admin UI, show only the print sheet */
+      .no-print { display: none !important; }
+
+      @page {
+        size: A4 portrait;
+        margin: 8mm;
+      }
+
+      /* 3 × 3 grid per A4 page */
+      .cards-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 3mm;
+        width: 100%;
+      }
+
+      .print-page {
+        display: block !important;
+        width: 100%;
+      }
+
+      .print-page-break {
+        page-break-after: always;
+        break-after: page;
+      }
+
+      .print-card {
+        border: 0.3mm dashed #bbb;
+        border-radius: 3mm;
+        overflow: hidden;
+        aspect-ratio: 5 / 7;
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 3mm;
+        break-inside: avoid;
+        background: #fff;
+        color: #000;
+      }
+
+      /* QR card front */
+      .qr-card .card-brand {
+        font-size: 8pt;
+        font-weight: 900;
+        letter-spacing: 1px;
+        color: #e94560;
+        margin-bottom: 2mm;
+      }
+
+      .qr-card img { width: 75%; height: auto; }
+
+      .qr-card .card-number {
+        font-size: 7pt;
+        color: #888;
+        margin-top: 2mm;
+      }
+
+      /* Song info card back */
+      .info-card {
+        justify-content: center;
+        gap: 2mm;
+        text-align: center;
+      }
+
+      .info-card .info-year {
+        font-size: 28pt;
+        font-weight: 900;
+        color: #e94560;
+        line-height: 1;
+      }
+
+      .info-card .info-song {
+        font-size: 9pt;
+        font-weight: 700;
+        color: #000;
+        line-height: 1.2;
+      }
+
+      .info-card .info-artist {
+        font-size: 8pt;
+        color: #444;
+      }
+
+      .info-card .info-brand {
+        font-size: 6pt;
+        color: #bbb;
+        letter-spacing: 1px;
+        margin-top: 1mm;
+      }
+
+      /* Print sheet headers (hidden in print) */
+      .print-sheet-label { display: none; }
+    }
+
+    /* ── Screen-only preview ────────────────────────────────────────────── */
+    @media screen {
+      .print-only { display: none; }
+
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(120px, 160px));
+        gap: 0.75rem;
+        justify-content: center;
+      }
+
+      .print-card {
+        border: 1px dashed var(--g-border);
+        border-radius: var(--g-radius-sm);
+        aspect-ratio: 5 / 7;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem;
+        background: #fff;
+        color: #000;
+        font-size: 0.7rem;
+        gap: 0.25rem;
+      }
+
+      .qr-card .card-brand {
+        font-size: 0.55rem;
+        font-weight: 900;
+        letter-spacing: 1px;
+        color: #e94560;
+      }
+
+      .qr-card img { width: 70%; height: auto; }
+
+      .qr-card .card-number {
+        font-size: 0.5rem;
+        color: #888;
+      }
+
+      .info-card {
+        text-align: center;
+        gap: 0.2rem;
+      }
+
+      .info-card .info-year   { font-size: 1.4rem; font-weight: 900; color: #e94560; line-height: 1; }
+      .info-card .info-song   { font-size: 0.65rem; font-weight: 700; color: #000; }
+      .info-card .info-artist { font-size: 0.6rem; color: #555; }
+      .info-card .info-brand  { font-size: 0.5rem; color: #bbb; letter-spacing: 1px; }
+    }
+
+    /* ── Admin-specific screen styles ───────────────────────────────────── */
+    .track-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.6rem 0.75rem;
+      border-radius: var(--g-radius-sm);
+      background: var(--g-surface);
+      border: 1px solid var(--g-border);
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+
+    .track-row:hover { border-color: var(--g-accent); }
+    .track-row.selected { border-color: var(--g-green); }
+
+    .track-row input[type="checkbox"] {
+      accent-color: var(--g-green);
+      width: 1rem;
+      height: 1rem;
+      flex-shrink: 0;
+    }
+
+    .track-thumb {
+      width: 40px;
+      height: 40px;
+      border-radius: 4px;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: var(--g-surface2);
+    }
+
+    .track-info { flex: 1; min-width: 0; }
+    .track-name { font-weight: 600; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .track-meta { font-size: 0.75rem; color: var(--g-muted); }
+
+    .track-year {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--g-accent2);
+      flex-shrink: 0;
+    }
+
+    .print-preview-section {
+      background: var(--g-surface);
+      border: 1px solid var(--g-border);
+      border-radius: var(--g-radius);
+      padding: 1rem;
+    }
+
+    .print-preview-section h3 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--g-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.75rem;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--g-border);
+      border-top-color: var(--g-accent);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+
+<body class="game-page">
+
+  <header class="game-header no-print">
+    <a href="/games/hitster/" class="brand">🎵 Hitster</a>
+    <button id="btn-logout" class="g-btn outline small hidden" style="width:auto;">Disconnect</button>
+  </header>
+
+  <!-- ══ NOT AUTHENTICATED ════════════════════════════════════════════════ -->
+  <div id="screen-unauthed" class="game-content no-print hidden">
+    <div style="text-align:center;">
+      <div class="hitster-logo">ADMIN</div>
+      <p class="g-subtitle" style="margin-top:0.5rem;">Card Generator</p>
+    </div>
+    <div class="g-card" style="text-align:center;display:flex;flex-direction:column;gap:1rem;align-items:center;">
+      <p style="font-size:0.9rem;color:var(--g-muted);">You need to connect Spotify first.</p>
+      <a href="/games/hitster/" class="g-btn green" style="max-width:260px;">← Go to Hitster</a>
+    </div>
+  </div>
+
+  <!-- ══ MAIN ADMIN UI ════════════════════════════════════════════════════ -->
+  <div id="screen-admin" class="game-content no-print hidden" style="gap:1.25rem;">
+
+    <!-- Title -->
+    <div style="text-align:center;width:100%;">
+      <div class="hitster-logo" style="font-size:1.8rem;">ADMIN</div>
+      <p class="g-subtitle">Card Generator</p>
+    </div>
+
+    <!-- Playlist input -->
+    <div class="g-card" style="display:flex;flex-direction:column;gap:0.75rem;">
+      <label class="g-label" for="playlist-input">Spotify Playlist URL or URI</label>
+      <input
+        id="playlist-input"
+        type="text"
+        placeholder="https://open.spotify.com/playlist/… or spotify:playlist:…"
+        style="
+          width:100%;padding:0.7rem 0.85rem;
+          background:var(--g-bg);border:1px solid var(--g-border);
+          border-radius:var(--g-radius-sm);color:var(--g-text);font-size:0.9rem;
+        "
+      />
+      <button id="btn-load" class="g-btn green">🎵 Load Playlist</button>
+      <div id="load-error" class="g-alert error hidden"></div>
+    </div>
+
+    <!-- Track list (hidden until loaded) -->
+    <div id="track-section" class="hidden" style="width:100%;display:flex;flex-direction:column;gap:1rem;">
+
+      <!-- Playlist header -->
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;">
+        <div>
+          <div id="playlist-name" class="g-label" style="font-size:0.9rem;color:var(--g-text);font-weight:700;"></div>
+          <div id="playlist-meta" class="g-label"></div>
+        </div>
+        <div style="display:flex;gap:0.5rem;">
+          <button id="btn-select-all"   class="g-btn secondary small">☑ All</button>
+          <button id="btn-deselect-all" class="g-btn secondary small">☐ None</button>
+        </div>
+      </div>
+
+      <!-- Track list -->
+      <div id="track-list" style="display:flex;flex-direction:column;gap:0.4rem;max-height:50vh;overflow-y:auto;padding-right:0.25rem;"></div>
+
+      <!-- Generate button -->
+      <div style="display:flex;flex-direction:column;gap:0.5rem;">
+        <div id="selection-count" class="g-label" style="text-align:center;"></div>
+        <button id="btn-generate" class="g-btn primary" style="font-size:1rem;">
+          🃏 Generate Print Sheet
+        </button>
+      </div>
+
+      <!-- Print progress -->
+      <div id="gen-progress" class="g-alert info hidden">
+        <span class="spinner"></span>
+        <span id="gen-progress-text">Generating QR codes…</span>
+      </div>
+    </div>
+
+    <!-- Print preview (screen only, shown after generation) -->
+    <div id="preview-section" class="hidden" style="width:100%;display:flex;flex-direction:column;gap:1rem;">
+
+      <div class="g-alert success">
+        ✅ Cards ready! Review the preview below, then print.
+      </div>
+
+      <div class="g-card" style="gap:0.75rem;display:flex;flex-direction:column;">
+        <p style="font-size:0.82rem;color:var(--g-muted);">
+          🖨 Print <strong>double-sided, flip on long edge</strong>. Page 1 = QR fronts, Page 2 = song info backs.
+          Each QR back will align with the matching song info when stacked. Cut along the dashed lines.
+        </p>
+        <button id="btn-print" class="g-btn green" style="font-size:1rem;">🖨 Print / Save as PDF</button>
+        <button id="btn-back"  class="g-btn secondary">← Back to track list</button>
+      </div>
+
+      <div class="print-preview-section">
+        <h3>Page 1 — QR Codes (Front)</h3>
+        <div id="preview-fronts" class="cards-grid"></div>
+      </div>
+
+      <div class="print-preview-section">
+        <h3>Page 2 — Song Info (Back, mirrored for double-sided)</h3>
+        <div id="preview-backs" class="cards-grid"></div>
+      </div>
+    </div>
+
+  </div><!-- /screen-admin -->
+
+
+  <!-- ══ PRINT SHEET (screen: hidden; print: shown) ═══════════════════════ -->
+  <div id="print-sheet" class="print-only" style="display:none;">
+
+    <!-- Page 1: QR code fronts -->
+    <div class="print-page print-page-break">
+      <div id="print-fronts" class="cards-grid"></div>
+    </div>
+
+    <!-- Page 2: Song info backs (columns mirrored for double-sided flip on long edge) -->
+    <div class="print-page">
+      <div id="print-backs" class="cards-grid"></div>
+    </div>
+
+  </div>
+
+
+  <!-- ══ SCRIPTS ══════════════════════════════════════════════════════════ -->
+  <script>
+    import { isAuthenticated, getValidToken, logout, startSpotifyAuth } from '../../../lib/spotify';
+    import QRCode from 'qrcode';
+
+    // ── Types ──────────────────────────────────────────────────────────────
+    interface Track {
+      id:       string;
+      uri:      string;
+      name:     string;
+      artist:   string;
+      year:     number;
+      albumArt: string;
+    }
+
+    // ── State ──────────────────────────────────────────────────────────────
+    let allTracks: Track[]        = [];
+    let selectedIds: Set<string>  = new Set();
+    let generatedCards: { track: Track; qrDataUrl: string }[] = [];
+
+    // ── DOM ────────────────────────────────────────────────────────────────
+    const $  = (id: string) => document.getElementById(id)!;
+    const show = (...ids: string[]) => ids.forEach(id => $( id).classList.remove('hidden'));
+    const hide = (...ids: string[]) => ids.forEach(id => $( id).classList.add('hidden'));
+
+    // ── Playlist parsing ───────────────────────────────────────────────────
+    function parsePlaylistId(raw: string): string | null {
+      const s = raw.trim();
+      const uriMatch = s.match(/^spotify:playlist:([A-Za-z0-9]+)/);
+      if (uriMatch) return uriMatch[1];
+      const urlMatch = s.match(/open\.spotify\.com\/playlist\/([A-Za-z0-9]+)/);
+      if (urlMatch) return urlMatch[1];
+      if (/^[A-Za-z0-9]{22}$/.test(s)) return s;
+      return null;
+    }
+
+    // ── Spotify API helpers ────────────────────────────────────────────────
+    async function fetchPlaylistInfo(id: string, token: string) {
+      const res = await fetch(`https://api.spotify.com/v1/playlists/${id}?fields=name,tracks.total`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error(`Could not load playlist (${res.status}). Is it public?`);
+      return res.json();
+    }
+
+    async function fetchAllTracks(playlistId: string, token: string): Promise<Track[]> {
+      const tracks: Track[] = [];
+      let url: string | null =
+        `https://api.spotify.com/v1/playlists/${playlistId}/tracks` +
+        `?limit=100&fields=next,items(track(id,name,artists(name),album(release_date,images)))`;
+
+      while (url) {
+        const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+        if (!res.ok) throw new Error(`Track fetch failed (${res.status})`);
+        const data = await res.json();
+
+        for (const item of (data.items as Array<{ track: null | Record<string, unknown> }>)) {
+          const t = item.track;
+          if (!t || !t.id) continue;
+          const artists = t.artists as Array<{ name: string }>;
+          const album   = t.album   as { release_date: string; images: Array<{ url: string }> };
+          tracks.push({
+            id:       t.id      as string,
+            uri:      `spotify:track:${t.id}`,
+            name:     t.name    as string,
+            artist:   artists.map(a => a.name).join(', '),
+            year:     new Date(album.release_date).getFullYear(),
+            albumArt: album.images[0]?.url ?? '',
+          });
+        }
+        url = (data.next as string | null);
+      }
+
+      return tracks;
+    }
+
+    // ── Track list rendering ───────────────────────────────────────────────
+    function renderTrackList(tracks: Track[]) {
+      const list = $('track-list');
+      list.innerHTML = '';
+
+      tracks.forEach((t) => {
+        const row = document.createElement('div');
+        row.className = 'track-row selected';
+        row.dataset.id = t.id;
+
+        row.innerHTML = `
+          <input type="checkbox" checked data-id="${t.id}" />
+          ${t.albumArt
+            ? `<img class="track-thumb" src="${t.albumArt}" alt="" />`
+            : `<div class="track-thumb" style="display:flex;align-items:center;justify-content:center;font-size:1.2rem;">🎵</div>`
+          }
+          <div class="track-info">
+            <div class="track-name">${escHtml(t.name)}</div>
+            <div class="track-meta">${escHtml(t.artist)}</div>
+          </div>
+          <div class="track-year">${t.year}</div>
+        `;
+
+        const cb = row.querySelector('input')!;
+        selectedIds.add(t.id);
+
+        const toggle = () => {
+          if (cb.checked) { selectedIds.add(t.id); row.classList.add('selected'); }
+          else            { selectedIds.delete(t.id); row.classList.remove('selected'); }
+          updateSelectionCount();
+        };
+
+        cb.addEventListener('change', toggle);
+        row.addEventListener('click', (e) => {
+          if ((e.target as HTMLElement).tagName === 'INPUT') return;
+          cb.checked = !cb.checked;
+          toggle();
+        });
+
+        list.appendChild(row);
+      });
+
+      updateSelectionCount();
+    }
+
+    function updateSelectionCount() {
+      $('selection-count').textContent = `${selectedIds.size} of ${allTracks.length} tracks selected`;
+    }
+
+    function escHtml(s: string): string {
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // ── QR + card generation ───────────────────────────────────────────────
+    async function generateCards(tracks: Track[]) {
+      generatedCards = [];
+      const total = tracks.length;
+      const progText = $('gen-progress-text');
+
+      for (let i = 0; i < total; i++) {
+        const t = tracks[i];
+        progText.textContent = `Generating QR codes… ${i + 1} / ${total}`;
+        const qrDataUrl = await QRCode.toDataURL(t.uri, {
+          width:        300,
+          margin:       2,
+          color:        { dark: '#000000', light: '#ffffff' },
+          errorCorrectionLevel: 'M',
+        });
+        generatedCards.push({ track: t, qrDataUrl });
+      }
+    }
+
+    // ── Build card HTML ────────────────────────────────────────────────────
+    function buildFrontCard(c: { track: Track; qrDataUrl: string }, index: number): HTMLElement {
+      const div = document.createElement('div');
+      div.className = 'print-card qr-card';
+      div.innerHTML = `
+        <div class="card-brand">HITSTER</div>
+        <img src="${c.qrDataUrl}" alt="QR code for track ${index + 1}" />
+        <div class="card-number">#${index + 1}</div>
+      `;
+      return div;
+    }
+
+    function buildBackCard(c: { track: Track; qrDataUrl: string }, index: number): HTMLElement {
+      const div = document.createElement('div');
+      div.className = 'print-card info-card';
+      div.innerHTML = `
+        <div class="info-year">${c.track.year}</div>
+        <div class="info-song">${escHtml(c.track.name)}</div>
+        <div class="info-artist">${escHtml(c.track.artist)}</div>
+        <div class="info-brand">HITSTER</div>
+      `;
+      return div;
+    }
+
+    /**
+     * For double-sided printing (flip on long edge), the back sheet needs its
+     * columns mirrored per row so each card aligns with its matching front:
+     *
+     *  Front row:  [1][2][3]   Back row (mirrored):  [3][2][1]
+     *
+     * This way, after flipping the page on the long (vertical) edge, card
+     * position [1] on the front aligns with position [1] on the back.
+     */
+    function mirrorRow<T>(arr: T[], cols: number): T[] {
+      const result: T[] = [];
+      for (let row = 0; row < Math.ceil(arr.length / cols); row++) {
+        const slice = arr.slice(row * cols, (row + 1) * cols);
+        result.push(...slice.reverse());
+      }
+      return result;
+    }
+
+    function populateGrid(container: HTMLElement, items: HTMLElement[]) {
+      container.innerHTML = '';
+      items.forEach(el => container.appendChild(el));
+    }
+
+    // ── Load playlist flow ─────────────────────────────────────────────────
+    $('btn-load').addEventListener('click', async () => {
+      hide('load-error', 'track-section', 'preview-section');
+      const input = ($('playlist-input') as HTMLInputElement).value;
+      const playlistId = parsePlaylistId(input);
+
+      if (!playlistId) {
+        $('load-error').textContent = 'Could not parse a playlist ID from that URL. Paste a Spotify playlist link or URI.';
+        show('load-error');
+        return;
+      }
+
+      ($('btn-load') as HTMLButtonElement).disabled = true;
+      $('btn-load').innerHTML = '<span class="spinner"></span> Loading…';
+
+      try {
+        const token = await getValidToken();
+        if (!token) { logout(); location.href = '/games/hitster/'; return; }
+
+        const [info, tracks] = await Promise.all([
+          fetchPlaylistInfo(playlistId, token),
+          fetchAllTracks(playlistId, token),
+        ]);
+
+        allTracks = tracks;
+        selectedIds = new Set(tracks.map(t => t.id));
+
+        $('playlist-name').textContent = info.name ?? 'Playlist';
+        $('playlist-meta').textContent = `${tracks.length} tracks loaded`;
+
+        renderTrackList(tracks);
+        show('track-section');
+      } catch (err) {
+        $('load-error').textContent = err instanceof Error ? err.message : String(err);
+        show('load-error');
+      } finally {
+        ($('btn-load') as HTMLButtonElement).disabled = false;
+        $('btn-load').innerHTML = '🎵 Load Playlist';
+      }
+    });
+
+    // ── Select all / none ──────────────────────────────────────────────────
+    $('btn-select-all').addEventListener('click', () => {
+      document.querySelectorAll<HTMLInputElement>('#track-list input[type=checkbox]').forEach(cb => {
+        cb.checked = true;
+        const row = cb.closest('.track-row') as HTMLElement;
+        row.classList.add('selected');
+      });
+      selectedIds = new Set(allTracks.map(t => t.id));
+      updateSelectionCount();
+    });
+
+    $('btn-deselect-all').addEventListener('click', () => {
+      document.querySelectorAll<HTMLInputElement>('#track-list input[type=checkbox]').forEach(cb => {
+        cb.checked = false;
+        (cb.closest('.track-row') as HTMLElement).classList.remove('selected');
+      });
+      selectedIds.clear();
+      updateSelectionCount();
+    });
+
+    // ── Generate print sheet ───────────────────────────────────────────────
+    $('btn-generate').addEventListener('click', async () => {
+      const selected = allTracks.filter(t => selectedIds.has(t.id));
+      if (selected.length === 0) {
+        alert('Please select at least one track.');
+        return;
+      }
+
+      hide('track-section');
+      show('gen-progress');
+
+      try {
+        await generateCards(selected);
+        const COLS = 3;
+
+        // Build front cards
+        const frontEls  = generatedCards.map((c, i) => buildFrontCard(c, i));
+        const backEls   = mirrorRow(generatedCards, COLS).map((c, i) => buildBackCard(c, i));
+
+        // Populate screen preview
+        populateGrid($('preview-fronts'), frontEls.map(el => el.cloneNode(true) as HTMLElement));
+        populateGrid($('preview-backs'),  backEls.map(el  => el.cloneNode(true) as HTMLElement));
+
+        // Populate hidden print sheet (used by window.print())
+        populateGrid($('print-fronts'), frontEls);
+        populateGrid($('print-backs'),  backEls);
+
+        // Show print sheet in print mode
+        $('print-sheet').style.display = '';
+
+        hide('gen-progress');
+        show('preview-section');
+      } catch (err) {
+        hide('gen-progress');
+        $('load-error').textContent = err instanceof Error ? err.message : String(err);
+        show('load-error', 'track-section');
+      }
+    });
+
+    $('btn-print').addEventListener('click', () => window.print());
+
+    $('btn-back').addEventListener('click', () => {
+      hide('preview-section');
+      show('track-section');
+    });
+
+    // ── Logout ─────────────────────────────────────────────────────────────
+    $('btn-logout').addEventListener('click', () => { logout(); location.href = '/games/hitster/'; });
+
+    // ── Init ───────────────────────────────────────────────────────────────
+    if (isAuthenticated()) {
+      show('screen-admin', 'btn-logout');
+    } else {
+      show('screen-unauthed');
+    }
+
+    // Also load playlist immediately if URL has ?playlist= param
+    const params = new URLSearchParams(location.search);
+    const preload = params.get('playlist');
+    if (preload && isAuthenticated()) {
+      ($('playlist-input') as HTMLInputElement).value = preload;
+      $('btn-load').click();
+    }
+  </script>
+
+</body>
+</html>
