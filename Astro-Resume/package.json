@@ -9,6 +9,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.15.9"
+    "astro": "^5.15.9",
+    "html5-qrcode": "^2.3.8"
   }
 }

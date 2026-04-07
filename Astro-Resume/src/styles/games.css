@@ -1,0 +1,351 @@
+/* =========================================
+   Games — Mobile-first dark theme
+   ========================================= */
+
+:root {
+  --g-bg: #0d0d1a;
+  --g-surface: #16213e;
+  --g-surface2: #1a2a50;
+  --g-accent: #e94560;
+  --g-accent2: #f5a623;
+  --g-green: #1db954;
+  --g-text: #eaeaea;
+  --g-muted: #8892a4;
+  --g-border: #2a3a60;
+  --g-radius: 12px;
+  --g-radius-sm: 8px;
+}
+
+/* ── Layout ─────────────────────────────── */
+.game-page {
+  background: var(--g-bg);
+  color: var(--g-text);
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+}
+
+.game-header {
+  width: 100%;
+  background: var(--g-surface);
+  border-bottom: 1px solid var(--g-border);
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.game-header .brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: var(--g-text);
+  font-weight: bold;
+}
+
+.game-header nav a {
+  color: var(--g-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.game-content {
+  width: 100%;
+  max-width: 480px;
+  padding: 1.5rem 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* ── Cards ──────────────────────────────── */
+.g-card {
+  background: var(--g-surface);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius);
+  padding: 1.5rem;
+  width: 100%;
+}
+
+/* ── Buttons ─────────────────────────────── */
+.g-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.5rem;
+  border-radius: var(--g-radius);
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+  text-decoration: none;
+  color: white;
+  width: 100%;
+}
+
+.g-btn:active {
+  transform: scale(0.97);
+}
+
+.g-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.g-btn.primary   { background: var(--g-accent); }
+.g-btn.green     { background: var(--g-green); }
+.g-btn.secondary { background: var(--g-surface2); border: 1px solid var(--g-border); }
+.g-btn.outline   { background: transparent; border: 2px solid var(--g-accent); color: var(--g-accent); }
+.g-btn.small     { padding: 0.5rem 1rem; font-size: 0.85rem; width: auto; }
+
+/* ── Typography ──────────────────────────── */
+.g-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--g-text);
+  text-align: center;
+}
+
+.g-subtitle {
+  font-size: 1rem;
+  color: var(--g-muted);
+  text-align: center;
+}
+
+.g-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--g-muted);
+}
+
+/* ── Hitster-specific ────────────────────── */
+.hitster-logo {
+  font-size: 2.5rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--g-accent), var(--g-accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -1px;
+}
+
+.scan-zone {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: var(--g-radius);
+  overflow: hidden;
+  background: #000;
+  position: relative;
+}
+
+#qr-reader {
+  width: 100% !important;
+  border-radius: var(--g-radius);
+  overflow: hidden;
+}
+
+#qr-reader video {
+  width: 100% !important;
+  border-radius: var(--g-radius);
+}
+
+.scan-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.scan-frame {
+  width: 200px;
+  height: 200px;
+  border: 3px solid var(--g-accent);
+  border-radius: 12px;
+  box-shadow: 0 0 0 2000px rgba(0,0,0,0.45);
+}
+
+/* ── Now Playing ─────────────────────────── */
+.now-playing-card {
+  background: linear-gradient(135deg, var(--g-surface) 0%, var(--g-surface2) 100%);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius);
+  padding: 1.5rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.playing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--g-green);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.playing-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 16px;
+}
+
+.playing-bars span {
+  width: 3px;
+  background: var(--g-green);
+  border-radius: 2px;
+  animation: bounce-bar 0.8s ease infinite;
+}
+
+.playing-bars span:nth-child(1) { height: 8px;  animation-delay: 0s; }
+.playing-bars span:nth-child(2) { height: 14px; animation-delay: 0.15s; }
+.playing-bars span:nth-child(3) { height: 10px; animation-delay: 0.3s; }
+.playing-bars span:nth-child(4) { height: 16px; animation-delay: 0.1s; }
+.playing-bars span:nth-child(5) { height: 6px;  animation-delay: 0.25s; }
+
+@keyframes bounce-bar {
+  0%, 100% { transform: scaleY(0.5); }
+  50%       { transform: scaleY(1.2); }
+}
+
+.album-art {
+  width: 140px;
+  height: 140px;
+  border-radius: var(--g-radius);
+  object-fit: cover;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+
+.album-art-placeholder {
+  width: 140px;
+  height: 140px;
+  border-radius: var(--g-radius);
+  background: var(--g-surface2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+}
+
+.player-controls {
+  display: flex;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+/* ── Reveal card ─────────────────────────── */
+.reveal-card {
+  background: linear-gradient(135deg, #1a0a20, #0d1a2e);
+  border: 2px solid var(--g-accent);
+  border-radius: var(--g-radius);
+  padding: 1.5rem;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+  animation: reveal-pop 0.3s ease;
+}
+
+@keyframes reveal-pop {
+  from { transform: scale(0.95); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+.reveal-year {
+  font-size: 4rem;
+  font-weight: 900;
+  color: var(--g-accent2);
+  line-height: 1;
+}
+
+.reveal-song {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--g-text);
+}
+
+.reveal-artist {
+  font-size: 1rem;
+  color: var(--g-muted);
+}
+
+/* ── Games Hub ───────────────────────────── */
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
+  width: 100%;
+}
+
+.game-tile {
+  background: var(--g-surface);
+  border: 1px solid var(--g-border);
+  border-radius: var(--g-radius);
+  padding: 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: var(--g-text);
+  transition: border-color 0.15s, background 0.15s;
+  text-align: center;
+}
+
+.game-tile:hover {
+  border-color: var(--g-accent);
+  background: var(--g-surface2);
+}
+
+.game-tile .icon  { font-size: 2.5rem; }
+.game-tile .name  { font-weight: 700; font-size: 0.95rem; }
+.game-tile .badge { font-size: 0.7rem; background: var(--g-accent); color: white; padding: 2px 6px; border-radius: 999px; }
+.game-tile .badge.coming { background: var(--g-surface2); color: var(--g-muted); border: 1px solid var(--g-border); }
+
+/* ── Status / Alerts ─────────────────────── */
+.g-alert {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border-radius: var(--g-radius-sm);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.g-alert.error   { background: rgba(233,69,96,0.15);  border: 1px solid var(--g-accent);  color: var(--g-accent); }
+.g-alert.success { background: rgba(29,185,84,0.15);  border: 1px solid var(--g-green);   color: var(--g-green); }
+.g-alert.info    { background: rgba(88,130,255,0.15); border: 1px solid #5882ff;          color: #a0b4ff; }
+
+/* ── Spotify branding ─────────────────────── */
+.spotify-logo {
+  color: var(--g-green);
+  font-weight: 700;
+}
+
+/* ── Utility ──────────────────────────────── */
+.hidden { display: none !important; }
+.center { text-align: center; }
+.w-full { width: 100%; }

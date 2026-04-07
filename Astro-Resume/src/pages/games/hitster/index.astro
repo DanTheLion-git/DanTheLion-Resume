@@ -1,0 +1,391 @@
+---
+import '../../../styles/games.css';
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Hitster — The Lions Alliance</title>
+
+  <!--
+    Define the SDK-ready promise BEFORE loading the SDK script so the
+    callback is always captured, regardless of script load timing.
+  -->
+  <script is:inline>
+    window.__spotifySDKReady = new Promise(function(resolve) {
+      window.onSpotifyWebPlaybackSDKReady = resolve;
+    });
+  </script>
+  <script is:inline src="https://sdk.scdn.co/spotify-player.js"></script>
+</head>
+<body class="game-page">
+
+  <header class="game-header">
+    <a href="/games/" class="brand">🦁 Games</a>
+    <button id="btn-logout" class="g-btn outline small hidden" style="width:auto;">Disconnect</button>
+  </header>
+
+  <!-- ══ AUTH SCREEN ══════════════════════════════════════════════════════ -->
+  <div id="screen-auth" class="game-content hidden">
+    <div style="text-align:center;">
+      <div class="hitster-logo">HITSTER</div>
+      <p class="g-subtitle" style="margin-top:0.5rem;">
+        Guess the year — beat your friends' timelines
+      </p>
+    </div>
+
+    <div class="g-card" style="display:flex;flex-direction:column;gap:1rem;align-items:center;text-align:center;">
+      <p style="font-size:0.9rem;color:var(--g-muted);">
+        Connect your <span class="spotify-logo">Spotify Premium</span> account to play.
+        Music streams directly in the browser — no app switching.
+      </p>
+      <button id="btn-connect" class="g-btn green" style="max-width:280px;">
+        🎵 Connect Spotify
+      </button>
+      <p id="auth-error" class="g-alert error hidden"></p>
+    </div>
+
+    <div class="g-alert info" style="font-size:0.82rem;">
+      ℹ️ Requires <strong>Spotify Premium</strong>. Works on Chrome, Firefox &amp; Edge.
+      iOS Safari is not supported by Spotify's browser SDK.
+    </div>
+  </div>
+
+  <!-- ══ GAME SCREEN ══════════════════════════════════════════════════════ -->
+  <div id="screen-game" class="game-content hidden">
+
+    <!-- SDK / Player init message -->
+    <div id="player-status" class="g-alert info hidden"></div>
+    <div id="player-error"  class="g-alert error hidden"></div>
+
+    <!-- ── IDLE: waiting to scan ──────────────────────────────────────── -->
+    <div id="state-idle">
+      <div style="text-align:center;margin-bottom:1rem;">
+        <div class="hitster-logo">HITSTER</div>
+        <p class="g-subtitle">Scan the QR code on a card to play the song</p>
+      </div>
+      <button id="btn-scan" class="g-btn primary" style="font-size:1.2rem;padding:1.2rem;">
+        📷 Scan Card
+      </button>
+    </div>
+
+    <!-- ── SCANNING: camera active ────────────────────────────────────── -->
+    <div id="state-scanning" class="hidden" style="width:100%;">
+      <div class="scan-zone">
+        <div id="qr-reader"></div>
+      </div>
+      <button id="btn-cancel-scan" class="g-btn secondary" style="margin-top:0.75rem;">
+        ✕ Cancel
+      </button>
+    </div>
+
+    <!-- ── LOADING: fetching track / initialising player ──────────────── -->
+    <div id="state-loading" class="hidden" style="text-align:center;padding:2rem 0;">
+      <p class="g-subtitle">Loading…</p>
+    </div>
+
+    <!-- ── PLAYING: music is playing ─────────────────────────────────── -->
+    <div id="state-playing" class="hidden" style="width:100%;display:flex;flex-direction:column;gap:1rem;">
+      <div class="now-playing-card">
+        <div class="playing-indicator">
+          <div class="playing-bars">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+          Now Playing…
+        </div>
+
+        <!-- Album art is hidden until Reveal -->
+        <div class="album-art-placeholder" id="art-placeholder">🎵</div>
+        <img id="album-art" class="album-art hidden" src="" alt="Album art" />
+
+        <div class="player-controls">
+          <button id="btn-toggle-play" class="g-btn secondary" style="flex:1;">⏸ Pause</button>
+          <button id="btn-restart"     class="g-btn secondary small">↩ Restart</button>
+        </div>
+      </div>
+
+      <button id="btn-reveal" class="g-btn primary" style="font-size:1.1rem;">
+        👁 Reveal Song
+      </button>
+    </div>
+
+    <!-- ── REVEALED: show song info ───────────────────────────────────── -->
+    <div id="state-revealed" class="hidden" style="width:100%;display:flex;flex-direction:column;gap:1rem;">
+      <div class="reveal-card">
+        <img id="reveal-art" class="album-art" src="" alt="Album art"
+             style="display:none;" />
+        <div class="reveal-year" id="reveal-year">????</div>
+        <div class="reveal-song" id="reveal-song">Unknown Song</div>
+        <div class="reveal-artist" id="reveal-artist">Unknown Artist</div>
+      </div>
+
+      <div class="player-controls">
+        <button id="btn-keep-playing" class="g-btn secondary" style="flex:1;">▶ Keep Playing</button>
+        <button id="btn-next-card"    class="g-btn primary"   style="flex:1;">📷 Next Card</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ SCRIPTS ══════════════════════════════════════════════════════════ -->
+  <script>
+    import { startSpotifyAuth, getValidToken, isAuthenticated, logout, playTrack } from '../../../lib/spotify';
+    import { parseQRToTrackUri, fetchTrackInfo } from '../../../lib/hitster';
+    import { Html5Qrcode } from 'html5-qrcode';
+
+    // ── State ──────────────────────────────────────────────────────────────
+    type GameState = 'idle' | 'scanning' | 'loading' | 'playing' | 'revealed';
+
+    let spotifyPlayer: Spotify.Player | null = null;
+    let deviceId: string | null             = null;
+    let currentTrackUri: string | null      = null;
+    let isPlaying                            = false;
+    let qrScanner: Html5Qrcode | null       = null;
+
+    // ── DOM helpers ────────────────────────────────────────────────────────
+    const $  = (id: string) => document.getElementById(id)!;
+    const show = (...ids: string[]) => ids.forEach(id => $( id).classList.remove('hidden'));
+    const hide = (...ids: string[]) => ids.forEach(id => $( id).classList.add('hidden'));
+
+    function setState(s: GameState) {
+      ['state-idle','state-scanning','state-loading','state-playing','state-revealed'].forEach(
+        id => hide(id)
+      );
+      show(`state-${s}`);
+    }
+
+    function showScreen(screen: 'auth' | 'game') {
+      hide('screen-auth', 'screen-game');
+      show(`screen-${screen}`);
+    }
+
+    function setPlayerStatus(msg: string, type: 'info' | 'error' = 'info') {
+      const el = $(type === 'error' ? 'player-error' : 'player-status');
+      el.textContent = msg;
+      el.classList.remove('hidden');
+      // auto-hide info after 4 s
+      if (type === 'info') setTimeout(() => el.classList.add('hidden'), 4000);
+    }
+
+    // ── Spotify Web Playback SDK init ──────────────────────────────────────
+    async function initPlayer(token: string): Promise<void> {
+      setPlayerStatus('Initialising Spotify player…');
+
+      // Wait for SDK ready (defined in <head> before SDK script loads)
+      await (window as unknown as { __spotifySDKReady: Promise<void> }).__spotifySDKReady;
+
+      spotifyPlayer = new Spotify.Player({
+        name: 'Hitster Web Player',
+        getOAuthToken: async (cb) => {
+          const t = await getValidToken();
+          if (t) cb(t);
+        },
+        volume: 0.8,
+      });
+
+      spotifyPlayer.addListener('ready', ({ device_id }) => {
+        deviceId = device_id;
+        hide('player-status');
+        setState('idle');
+        show('state-idle');
+      });
+
+      spotifyPlayer.addListener('not_ready', () => {
+        setPlayerStatus('Player went offline. Reconnecting…');
+        deviceId = null;
+      });
+
+      spotifyPlayer.addListener('initialization_error', ({ message }) => {
+        setPlayerStatus(`Player init error: ${message}`, 'error');
+      });
+
+      spotifyPlayer.addListener('authentication_error', ({ message }) => {
+        setPlayerStatus(`Auth error: ${message}. Please reconnect.`, 'error');
+        logout();
+        showScreen('auth');
+      });
+
+      spotifyPlayer.addListener('account_error', ({ message }) => {
+        setPlayerStatus(`Account error: ${message} — Spotify Premium is required.`, 'error');
+      });
+
+      spotifyPlayer.addListener('player_state_changed', (state) => {
+        if (!state) return;
+        isPlaying = !state.paused;
+        $('btn-toggle-play').textContent = isPlaying ? '⏸ Pause' : '▶ Resume';
+      });
+
+      const ok = await spotifyPlayer.connect();
+      if (!ok) setPlayerStatus('Could not connect player. Try refreshing.', 'error');
+    }
+
+    // ── QR Scanning ────────────────────────────────────────────────────────
+    async function startScan() {
+      setState('scanning');
+      qrScanner = new Html5Qrcode('qr-reader');
+
+      try {
+        await qrScanner.start(
+          { facingMode: 'environment' },
+          { fps: 10, qrbox: { width: 220, height: 220 } },
+          async (raw) => {
+            await stopScan();
+            await handleQRCode(raw);
+          },
+          () => { /* scan errors on every empty frame — ignore */ }
+        );
+      } catch (err) {
+        await stopScan();
+        setPlayerStatus(`Camera error: ${err instanceof Error ? err.message : err}`, 'error');
+        setState('idle');
+      }
+    }
+
+    async function stopScan() {
+      if (qrScanner) {
+        try { await qrScanner.stop(); } catch { /* already stopped */ }
+        qrScanner = null;
+      }
+    }
+
+    // ── Handle scanned QR ──────────────────────────────────────────────────
+    async function handleQRCode(raw: string) {
+      setState('loading');
+
+      const uri = parseQRToTrackUri(raw);
+      if (!uri) {
+        setPlayerStatus('QR code not recognised as a Spotify track.', 'error');
+        setState('idle');
+        return;
+      }
+
+      currentTrackUri = uri;
+
+      if (!deviceId) {
+        setPlayerStatus('Player not ready yet. Please wait a moment and try again.', 'error');
+        setState('idle');
+        return;
+      }
+
+      const token = await getValidToken();
+      if (!token) {
+        logout();
+        showScreen('auth');
+        return;
+      }
+
+      try {
+        await playTrack(uri, deviceId, token);
+        isPlaying = true;
+        $('btn-toggle-play').textContent = '⏸ Pause';
+
+        // Reset reveal UI
+        hide('album-art');
+        show('art-placeholder');
+
+        setState('playing');
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        setPlayerStatus(`Playback failed: ${msg}`, 'error');
+        setState('idle');
+      }
+    }
+
+    // ── Reveal ─────────────────────────────────────────────────────────────
+    async function revealSong() {
+      if (!currentTrackUri) return;
+
+      const token = await getValidToken();
+      if (!token) return;
+
+      const info = await fetchTrackInfo(currentTrackUri, token);
+
+      $('reveal-year').textContent   = info ? String(info.year)   : '????';
+      $('reveal-song').textContent   = info ? info.name           : 'Unknown Song';
+      $('reveal-artist').textContent = info ? info.artist         : 'Unknown Artist';
+
+      const artEl = $('reveal-art') as HTMLImageElement;
+      if (info?.albumArt) {
+        artEl.src = info.albumArt;
+        artEl.style.display = '';
+      } else {
+        artEl.style.display = 'none';
+      }
+
+      // Also update the album art in the playing state (for "keep playing")
+      const playArt = $('album-art') as HTMLImageElement;
+      if (info?.albumArt) {
+        playArt.src = info.albumArt;
+        show('album-art');
+        hide('art-placeholder');
+      }
+
+      setState('revealed');
+    }
+
+    // ── Entry point ────────────────────────────────────────────────────────
+    async function init() {
+      if (isAuthenticated()) {
+        showScreen('game');
+        show('btn-logout');
+        setState('loading');
+        setPlayerStatus('Connecting to Spotify…');
+
+        const token = await getValidToken();
+        if (!token) {
+          logout();
+          showScreen('auth');
+          return;
+        }
+
+        await initPlayer(token);
+      } else {
+        showScreen('auth');
+      }
+    }
+
+    // ── Button wiring ──────────────────────────────────────────────────────
+    $('btn-connect').addEventListener('click', () => {
+      hide('auth-error');
+      startSpotifyAuth();
+    });
+
+    $('btn-logout').addEventListener('click', () => {
+      spotifyPlayer?.disconnect();
+      logout();
+      showScreen('auth');
+      hide('btn-logout');
+    });
+
+    $('btn-scan').addEventListener('click', startScan);
+
+    $('btn-cancel-scan').addEventListener('click', async () => {
+      await stopScan();
+      setState('idle');
+    });
+
+    $('btn-toggle-play').addEventListener('click', () => spotifyPlayer?.togglePlay());
+
+    $('btn-restart').addEventListener('click', async () => {
+      if (currentTrackUri && deviceId) {
+        const token = await getValidToken();
+        if (token) await playTrack(currentTrackUri, deviceId, token);
+      }
+    });
+
+    $('btn-reveal').addEventListener('click', revealSong);
+
+    $('btn-keep-playing').addEventListener('click', () => setState('playing'));
+
+    $('btn-next-card').addEventListener('click', () => {
+      currentTrackUri = null;
+      setState('idle');
+    });
+
+    // ── Start ──────────────────────────────────────────────────────────────
+    init();
+  </script>
+
+</body>
+</html>
