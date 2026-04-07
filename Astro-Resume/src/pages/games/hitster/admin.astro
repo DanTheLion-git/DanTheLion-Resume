@@ -277,6 +277,8 @@ import '../../../styles/games.css';
       color: var(--g-text);
     }
     .playlist-tile-count { font-size: 0.7rem; color: var(--g-muted); margin-top: 0.15rem; }
+    .pl-private { opacity: 0.5; cursor: default; }
+    .pl-private:hover { border-color: var(--g-border); transform: none; }
   </style>
 </head>
 
@@ -637,8 +639,9 @@ import '../../../styles/games.css';
     interface SpotifyPlaylist {
       id: string;
       name: string;
+      public: boolean | null;
       images: Array<{ url: string }>;
-      tracks: { total: number };
+      tracks: { href: string; total: number } | null;
     }
 
     async function fetchUserPlaylists(token: string): Promise<SpotifyPlaylist[]> {
@@ -646,18 +649,9 @@ import '../../../styles/games.css';
       let url: string | null = 'https://api.spotify.com/v1/me/playlists?limit=50';
       while (url) {
         const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
-        if (!res.ok) {
-          if (res.status === 403) {
-            show('btn-reauth');
-            throw new Error(
-              'Access denied (403) — missing playlist permissions. ' +
-              'Click "Reconnect Spotify" below to re-authorise.'
-            );
-          }
-          throw new Error(`Could not load playlists (${res.status})`);
-        }
+        if (!res.ok) throw new Error(`Could not load your Spotify playlists (${res.status})`);
         const data = await res.json();
-        playlists.push(...(data.items as SpotifyPlaylist[]).filter(p => p));
+        playlists.push(...(data.items as SpotifyPlaylist[]).filter(p => p && p.id));
         url = data.next as string | null;
       }
       return playlists;
@@ -667,23 +661,40 @@ import '../../../styles/games.css';
       const grid = $('playlist-grid');
       grid.innerHTML = '';
       if (playlists.length === 0) {
-        grid.innerHTML = '<p style="color:var(--g-muted);font-size:0.88rem;">No playlists found in your Spotify library.</p>';
+        grid.innerHTML = '<p style="color:var(--g-muted);font-size:0.88rem;">No playlists found.</p>';
         return;
       }
+
+      // Info banner
+      const info = document.createElement('p');
+      info.style.cssText = 'font-size:0.8rem;color:var(--g-muted);margin:0 0 0.5rem;grid-column:1/-1;';
+      info.textContent = '🔓 Click a public playlist to load it. 🔒 Private playlists need to be made public in Spotify first.';
+      grid.appendChild(info);
+
       for (const pl of playlists) {
+        const isPublic = pl.public === true;
         const btn = document.createElement('button');
-        btn.className = 'playlist-tile';
+        btn.className = 'playlist-tile' + (isPublic ? '' : ' pl-private');
         const artUrl = pl.images?.[0]?.url;
-        // Use a square wrapper div so the image is always 1:1 regardless of natural dimensions
         const artHtml = artUrl
           ? `<div style="width:100%;aspect-ratio:1/1;overflow:hidden;background:var(--g-surface2)"><img src="${artUrl}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" /></div>`
-          : `<div class="pl-art-placeholder">🎵</div>`;
+          : `<div class="pl-art-placeholder">${isPublic ? '🎵' : '🔒'}</div>`;
+        const total = pl.tracks?.total;
         btn.innerHTML = artHtml + `
           <div class="playlist-tile-info">
-            <div class="playlist-tile-name" title="${pl.name}">${pl.name}</div>
-            <div class="playlist-tile-count">${pl.tracks?.total ?? '?'} tracks</div>
+            <div class="playlist-tile-name" title="${pl.name}">${isPublic ? '' : '🔒 '}${pl.name}</div>
+            <div class="playlist-tile-count">${total != null ? total + ' tracks' : isPublic ? 'public' : 'private'}</div>
           </div>`;
-        btn.addEventListener('click', () => loadPlaylist(pl.id, pl.name, pl.tracks?.total ?? 0));
+
+        if (isPublic) {
+          btn.addEventListener('click', () => loadPlaylist(pl.id, pl.name, total ?? 0));
+        } else {
+          btn.title = 'Make this playlist public in Spotify to use it here';
+          btn.addEventListener('click', () => {
+            $('pl-error').textContent = `"${pl.name}" is private. In Spotify: open the playlist → ··· menu → Edit details → enable Public, then refresh.`;
+            show('pl-error');
+          });
+        }
         grid.appendChild(btn);
       }
     }
@@ -695,16 +706,6 @@ import '../../../styles/games.css';
       try {
         const token = await getValidToken();
         if (!token) { logout(); location.href = '/games/hitster/'; return; }
-
-        // Proactively check scope — stored from the token exchange response
-        if (!hasScope('playlist-read-private')) {
-          show('btn-reauth');
-          throw new Error(
-            `Your Spotify connection is missing playlist permissions (granted: ${grantedScopes()}). ` +
-            'Please click "Reconnect Spotify with playlist access" below — make sure to click Agree on the consent screen.'
-          );
-        }
-
         const playlists = await fetchUserPlaylists(token);
         renderPlaylistGrid(playlists);
       } catch (err) {
@@ -718,21 +719,13 @@ import '../../../styles/games.css';
     async function loadPlaylist(playlistId: string, name: string, total: number) {
       hide('pl-error');
       $('playlist-name').textContent = name;
-      $('playlist-meta').textContent = `Loading ${total} tracks…`;
+      $('playlist-meta').textContent = total ? `Loading ${total} tracks…` : 'Loading tracks…';
       hide('playlist-section');
       show('track-section');
 
       try {
         const token = await getValidToken();
         if (!token) { logout(); location.href = '/games/hitster/'; return; }
-
-        if (!hasScope('playlist-read-private')) {
-          hide('track-section');
-          show('playlist-section', 'btn-reauth');
-          $('pl-error').textContent = 'Missing playlist-read-private scope. Please reconnect Spotify below.';
-          show('pl-error');
-          return;
-        }
 
         const tracks = await fetchAllTracks(playlistId, token);
         allTracks = tracks;
@@ -741,15 +734,12 @@ import '../../../styles/games.css';
         renderTrackList(tracks);
       } catch (err) {
         $('playlist-meta').textContent = 'Failed to load tracks';
-        // Fall back to playlist picker on error
         hide('track-section');
         show('playlist-section');
         $('pl-error').textContent = err instanceof Error ? err.message : String(err);
         show('pl-error');
       }
     }
-
-    // ── Load playlist flow (back-compat removed; replaced by playlist picker) ─
 
     // ── Select all / none ──────────────────────────────────────────────────
     $('btn-select-all').addEventListener('click', () => {
