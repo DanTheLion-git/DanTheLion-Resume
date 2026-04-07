@@ -476,23 +476,21 @@ import '../../../styles/games.css';
 
     async function fetchAllTracks(playlistId: string, token: string): Promise<Track[]> {
       const tracks: Track[] = [];
+      // No `fields` filter — send the simplest possible request to Spotify
       let url: string | null =
-        `https://api.spotify.com/v1/playlists/${playlistId}/tracks` +
-        `?limit=100&fields=next,items(track(id,name,artists(name),album(release_date,images)))`;
+        `https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=100`;
 
       while (url) {
         const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
         if (!res.ok) {
-          const body = await res.json().catch(() => ({})) as { error?: { message?: string } };
+          const body = await res.json().catch(() => ({})) as { error?: { message?: string; status?: number } };
           const detail = body?.error?.message ?? '';
-          if (res.status === 403) {
-            show('btn-reauth');
-            throw new Error(
-              `Access denied (403)${detail ? ': ' + detail : ''} — your Spotify token is missing playlist permissions. ` +
-              'Click "Reconnect Spotify with playlist access" below to re-authorise.'
-            );
-          }
-          throw new Error(`Track fetch failed (${res.status})${detail ? ': ' + detail : ''}`);
+          throw new Error(
+            `Could not load tracks (${res.status}${detail ? ': ' + detail : ''}). ` +
+            (res.status === 403
+              ? 'Make sure the playlist is set to Public in Spotify.'
+              : 'Please try again.')
+          );
         }
         const data = await res.json();
 
