@@ -7,7 +7,7 @@ import '../../../styles/games.css';
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hitster — The Lions Alliance</title>
+  <title>Songs with Friends — The Lions Alliance</title>
 
   <script is:inline>
     (function () {
@@ -56,7 +56,7 @@ import '../../../styles/games.css';
   <!-- ══ AUTH SCREEN ══════════════════════════════════════════════════════ -->
   <div id="screen-auth" class="game-content hidden">
     <div style="text-align:center;">
-      <div class="hitster-logo">HITSTER</div>
+      <div class="hitster-logo">SONGS WITH FRIENDS</div>
       <p class="g-subtitle" style="margin-top:0.5rem;">
         Guess the year — beat your friends' timelines
       </p>
@@ -89,7 +89,7 @@ import '../../../styles/games.css';
     <!-- ── IDLE: waiting to scan ──────────────────────────────────────── -->
     <div id="state-idle">
       <div style="text-align:center;margin-bottom:1rem;">
-        <div class="hitster-logo">HITSTER</div>
+        <div class="hitster-logo">SONGS WITH FRIENDS</div>
         <p class="g-subtitle">Scan the QR code on a card to play the song</p>
       </div>
       <button id="btn-scan" class="g-btn primary" style="font-size:1.2rem;padding:1.2rem;">
@@ -203,7 +203,7 @@ import '../../../styles/games.css';
       await (window as unknown as { __spotifySDKReady: Promise<void> }).__spotifySDKReady;
 
       spotifyPlayer = new Spotify.Player({
-        name: 'Hitster Web Player',
+        name: 'Songs with Friends Web Player',
         getOAuthToken: async (cb) => {
           const t = await getValidToken();
           if (t) cb(t);

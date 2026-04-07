@@ -1,31 +1,32 @@
 ---
 /**
- * Standalone Hitster print page — zero site CSS, zero navigation.
+ * Standalone "Songs with Friends" print page — zero site CSS, zero navigation.
  *
  * All 60 card slots are pre-built as static HTML at Astro build time.
  * JavaScript only fills in QR images and text; the grid is always present
  * even if print fires before JS completes.
  *
  * Layout: 5 sheets × 12 cards (3 cols × 4 rows) = 60 cards max.
- * Double-sided: SHORT-EDGE flip (flip top/bottom like a notepad).
- *   Back row order = front rows reversed so they align after the flip.
+ * Double-sided: LONG-EDGE flip (flip left/right like a book).
+ *   Back column order = front columns mirrored per row so they align after the flip.
  */
 const SHEETS    = 5;
 const COLS      = 3;
 const ROWS      = 4;
 const PER_PAGE  = COLS * ROWS; // 12
 
-function reverseRows(front: number[]): number[] {
+function mirrorColumns(front: number[]): number[] {
   const out: number[] = [];
-  for (let r = ROWS - 1; r >= 0; r--)
-    for (let c = 0; c < COLS; c++)
-      out.push(front[r * COLS + c]);
+  for (let r = 0; r < ROWS; r++) {
+    const row = front.slice(r * COLS, (r + 1) * COLS);
+    out.push(...[...row].reverse());
+  }
   return out;
 }
 
 const sheets = Array.from({ length: SHEETS }, (_, s) => {
   const front = Array.from({ length: PER_PAGE }, (_, i) => s * PER_PAGE + i + 1);
-  return { front, back: reverseRows(front), num: s + 1 };
+  return { front, back: mirrorColumns(front), num: s + 1 };
 });
 ---
 <!DOCTYPE html>
@@ -33,7 +34,7 @@ const sheets = Array.from({ length: SHEETS }, (_, s) => {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hitster — Print Sheet</title>
+  <title>Songs with Friends — Print Sheet</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: Arial, Helvetica, sans-serif; color: #000; }
@@ -180,12 +181,10 @@ const sheets = Array.from({ length: SHEETS }, (_, s) => {
 
     {/* Front page */}
     <div class="page-wrapper" data-sheet={sheet.num} data-side="front">
-      <div class="page-label">Sheet {sheet.num} / {SHEETS} — FRONT (QR codes)</div>
       <div class="cards-grid"
            style="display:grid;grid-template-columns:repeat(3,61.33mm);grid-template-rows:repeat(4,67mm);gap:3mm;">
         {sheet.front.map(n => (
           <div class="print-card qr-card empty" data-card={n}>
-            <div class="card-brand">HITSTER</div>
             <div class="qr-ph"></div>
             <img class="qr-img" alt="QR" />
           </div>
@@ -195,7 +194,6 @@ const sheets = Array.from({ length: SHEETS }, (_, s) => {
 
     {/* Back page */}
     <div class="page-wrapper" data-sheet={sheet.num} data-side="back">
-      <div class="page-label">Sheet {sheet.num} / {SHEETS} — BACK · flip on short edge ↕</div>
       <div class="cards-grid"
            style="display:grid;grid-template-columns:repeat(3,61.33mm);grid-template-rows:repeat(4,67mm);gap:3mm;">
         {sheet.back.map(n => (
@@ -291,298 +289,8 @@ const sheets = Array.from({ length: SHEETS }, (_, s) => {
   const totalSheets = Math.ceil(tracks.length / 12);
   statusEl.style.display = 'none';
   infoEl.textContent =
-    `${tracks.length} tracks · ${totalSheets} sheet${totalSheets !== 1 ? 's' : ''} · flip on SHORT edge ↕`;
+    `${tracks.length} tracks · ${totalSheets} sheet${totalSheets !== 1 ? 's' : ''} · flip on LONG edge ↔`;
   btnPrint.disabled = false;
-</script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hitster — Print Sheet</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Arial, Helvetica, sans-serif; color: #000; }
-
-    /*
-     * ── CARD DIMENSIONS ────────────────────────────────────────────────────
-     * A4 with 10 mm @page margins → printable area: 190 mm × 277 mm
-     *   col width  = (190 - 2 gaps × 3 mm) / 3 cols = 61.33 mm
-     *   row height = (277 - 3 gaps × 3 mm) / 4 rows = 67.00 mm
-     *
-     * The .cards-grid therefore fills 190 × 277 mm exactly — one full page.
-     * page-break-after is placed on the grid itself (no wrapper needed for
-     * print), which is the most reliable way to trigger a page break.
-     */
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 61.33mm);
-      grid-template-rows: repeat(4, 67mm);
-      gap: 3mm;
-    }
-
-    .print-card {
-      width:  61.33mm;
-      height: 67mm;
-      border: 0.35mm solid #c8c8c8;
-      border-radius: 1.5mm;
-      background: #fff;
-      color: #000;
-      overflow: hidden;
-    }
-
-    /* ── QR front card ── */
-    .qr-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 3mm;
-      gap: 1mm;
-    }
-    .card-brand {
-      font-size: 6pt;
-      font-weight: 900;
-      letter-spacing: 2px;
-      color: #555;
-      text-transform: uppercase;
-    }
-    .qr-card img { width: 82%; height: auto; display: block; }
-
-    /* ── Info back card ── */
-    .info-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      padding: 5mm 3mm;
-      text-align: center;
-    }
-    .info-artist { font-size: 8pt; font-weight: 400; line-height: 1.3; width: 100%; }
-    .info-year   { font-size: 72pt; font-weight: 900; line-height: 1; }
-    .info-song   { font-size: 8pt; font-weight: 700; line-height: 1.3; width: 100%; }
-
-    /* ── Screen preview ── */
-    @media screen {
-      body { background: #666; }
-
-      #controls {
-        position: sticky;
-        top: 0;
-        z-index: 99;
-        background: #111;
-        color: #fff;
-        display: flex;
-        align-items: center;
-        gap: 0.8rem;
-        padding: 0.6rem 1rem;
-        font-size: 0.85rem;
-      }
-      #controls button {
-        background: #fff;
-        color: #111;
-        border: none;
-        border-radius: 4px;
-        padding: 0.35rem 0.9rem;
-        font-size: 0.82rem;
-        font-weight: 700;
-        cursor: pointer;
-      }
-      #controls button:hover { background: #ddd; }
-      #info { opacity: 0.7; font-size: 0.78rem; }
-
-      #status {
-        padding: 3rem;
-        text-align: center;
-        color: #ddd;
-        font-size: 0.95rem;
-      }
-
-      /*
-       * On screen each .page-wrapper shows as a white A4 card so you can
-       * verify the layout before printing.
-       */
-      .page-wrapper {
-        width: 210mm;
-        background: #fff;
-        padding: 10mm;
-        margin: 8mm auto;
-        box-shadow: 0 2px 14px rgba(0,0,0,.45);
-      }
-      .page-label {
-        font-size: 0.7rem;
-        color: #888;
-        margin-bottom: 4mm;
-        font-family: Arial, sans-serif;
-      }
-    }
-
-    /* ── Print output ── */
-    @media print {
-      #controls { display: none !important; }
-      #status    { display: none !important; }
-
-      /* The wrapper adds zero size in print — @page margin is the margin */
-      .page-wrapper {
-        display: block;
-        margin: 0;
-        padding: 0;
-      }
-      .page-label { display: none; }
-
-      /*
-       * Each grid = exactly one A4 page.
-       * page-break-after on the grid is reliable because the grid itself has
-       * a fixed size (190 × 277 mm) matching the @page content area.
-       */
-      .cards-grid {
-        page-break-after: always;
-        break-after: page;
-      }
-      /* No trailing blank page after the last grid */
-      .page-wrapper:last-child .cards-grid {
-        page-break-after: avoid;
-        break-after: auto;
-      }
-
-      @page {
-        size: A4 portrait;
-        margin: 10mm;
-      }
-    }
-  </style>
-</head>
-<body>
-
-<div id="controls">
-  <button onclick="window.print()">🖨 Print / Save PDF</button>
-  <button onclick="window.close()">✕ Close</button>
-  <span id="info"></span>
-</div>
-
-<div id="status">Loading print data…</div>
-<div id="pages"></div>
-
-<script type="module">
-  const { default: QRCode } = await import('https://cdn.jsdelivr.net/npm/qrcode@1.5.4/+esm');
-
-  function esc(s) {
-    return String(s)
-      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  /*
-   * SHORT-EDGE FLIP alignment (flip paper over top/bottom edge like a notepad):
-   *
-   *   Front:          Back (printed):    After flip:
-   *   [1][2][3]       [10][11][12]       [10][11][12]  ← now at bottom = aligns with front row 4
-   *   [4][5][6]  →    [7][8][9]      →   [7][8][9]
-   *   [7][8][9]       [4][5][6]          [4][5][6]
-   *   [10][11][12]    [1][2][3]          [1][2][3]   ← now at top = aligns with front row 1
-   *
-   * Rows are reversed; columns keep their left-right order.
-   */
-  function reverseRows(arr, cols) {
-    const chunks = [];
-    for (let r = 0; r < Math.ceil(arr.length / cols); r++) {
-      chunks.push(arr.slice(r * cols, (r + 1) * cols));
-    }
-    return chunks.reverse().flat();
-  }
-
-  // ── Load track data ───────────────────────────────────────────────────────
-  const raw    = localStorage.getItem('hitster_print_job');
-  const status = document.getElementById('status');
-  const pages  = document.getElementById('pages');
-
-  if (!raw) {
-    status.textContent = 'No print data found — go back to the admin page and click "Open Print Sheet".';
-    throw new Error('missing hitster_print_job');
-  }
-
-  let tracks;
-  try { tracks = JSON.parse(raw); }
-  catch { status.textContent = 'Print data corrupted — please regenerate.'; throw new Error('parse'); }
-
-  if (!Array.isArray(tracks) || tracks.length === 0) {
-    status.textContent = 'No tracks to print.';
-    throw new Error('empty');
-  }
-
-  // ── Generate QR codes ─────────────────────────────────────────────────────
-  const cards = [];
-  for (let i = 0; i < tracks.length; i++) {
-    status.textContent = `Generating QR code ${i + 1} of ${tracks.length}…`;
-    const qrDataUrl = await QRCode.toDataURL(tracks[i].uri, {
-      width: 300, margin: 2,
-      color: { dark: '#000000', light: '#ffffff' },
-      errorCorrectionLevel: 'M',
-    });
-    cards.push({ track: tracks[i], qrDataUrl });
-  }
-
-  // ── Build pages ───────────────────────────────────────────────────────────
-  const COLS     = 3;
-  const PER_PAGE = 12;
-  const totalSheets = Math.ceil(cards.length / PER_PAGE);
-
-  for (let p = 0; p < totalSheets; p++) {
-    const slice = cards.slice(p * PER_PAGE, (p + 1) * PER_PAGE);
-    const back  = reverseRows(slice, COLS);  // short-edge flip: rows reversed
-
-    // ── Front page ──────────────────────────────────────────────────────────
-    const frontWrap  = document.createElement('div');
-    frontWrap.className = 'page-wrapper';
-    const frontLabel = document.createElement('div');
-    frontLabel.className = 'page-label';
-    frontLabel.textContent = `Sheet ${p + 1} / ${totalSheets} — FRONT (QR codes)`;
-    const frontGrid  = document.createElement('div');
-    frontGrid.className = 'cards-grid';
-
-    slice.forEach(c => {
-      const el = document.createElement('div');
-      el.className = 'print-card qr-card';
-      el.innerHTML = `<div class="card-brand">HITSTER</div><img src="${c.qrDataUrl}" alt="QR" />`;
-      frontGrid.appendChild(el);
-    });
-
-    frontWrap.appendChild(frontLabel);
-    frontWrap.appendChild(frontGrid);
-    pages.appendChild(frontWrap);
-
-    // ── Back page ───────────────────────────────────────────────────────────
-    const backWrap  = document.createElement('div');
-    backWrap.className = 'page-wrapper';
-    const backLabel = document.createElement('div');
-    backLabel.className = 'page-label';
-    backLabel.textContent = `Sheet ${p + 1} / ${totalSheets} — BACK (artist / year / song) · flip on short edge`;
-    const backGrid  = document.createElement('div');
-    backGrid.className = 'cards-grid';
-
-    back.forEach(c => {
-      const el = document.createElement('div');
-      el.className = 'print-card info-card';
-      el.innerHTML = `
-        <div class="info-artist">${esc(c.track.artist)}</div>
-        <div class="info-year">${c.track.year || '?'}</div>
-        <div class="info-song">${esc(c.track.name)}</div>
-      `;
-      backGrid.appendChild(el);
-    });
-
-    backWrap.appendChild(backLabel);
-    backWrap.appendChild(backGrid);
-    pages.appendChild(backWrap);
-  }
-
-  status.style.display = 'none';
-  document.getElementById('info').textContent =
-    `${tracks.length} tracks · ${totalSheets} sheet${totalSheets !== 1 ? 's' : ''} · ${totalSheets * 2} pages · flip on SHORT edge`;
-
-  localStorage.removeItem('hitster_print_job');
 </script>
 </body>
 </html>
