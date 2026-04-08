@@ -75,8 +75,8 @@
     .page-heading p { color: #a7aaad; font-size: .875rem; margin-top: .25rem; }
     /* ── Projects grid ───────────────────────────────────────── */
     .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      display: flex;
+      flex-wrap: wrap;
       gap: 1.25rem;
     }
     /* ── Project card ────────────────────────────────────────── */
@@ -90,6 +90,8 @@
       transition: transform .15s, box-shadow .15s, background .15s;
       position: relative;
       overflow: hidden;
+      width: 310px;
+      flex-shrink: 0;
     }
     .project-card:hover {
       background: #323a40;
@@ -259,10 +261,30 @@
     }
     .progress-fill.complete { background: linear-gradient(90deg, #1db954, #22c55e); }
     .progress-label { font-size: .7rem; color: #a7aaad; font-weight: 500; }
-    /* ── Project card header ─────────────────────────────── */
-    .project-card-header {
-      display: flex; align-items: flex-start;
-      justify-content: space-between; margin-bottom: -.1rem;
+    /* ── Drag handle on project cards ───────────────────────── */
+    .drag-handle {
+      display: flex; align-items: center; justify-content: center;
+      width: 26px; height: 26px;
+      color: #3c434a;
+      cursor: grab;
+      border-radius: 6px;
+      transition: color .15s, background .15s;
+      font-size: .85rem;
+      flex-shrink: 0;
+    }
+    .project-card:hover .drag-handle { color: #a7aaad; }
+    .drag-handle:hover { background: rgba(255,255,255,0.07); color: #f0f0f1 !important; }
+    .drag-handle:active { cursor: grabbing; }
+    /* Sortable ghost / chosen */
+    .proj-ghost {
+      opacity: .35;
+      border: 2px dashed #5fa8d3 !important;
+      background: rgba(95,168,211,0.07) !important;
+      border-radius: 14px;
+    }
+    .proj-chosen {
+      box-shadow: 0 12px 36px rgba(0,0,0,0.45) !important;
+      transform: rotate(1deg) scale(1.02);
     }
   </style>
 </head>
@@ -323,6 +345,7 @@
 
   <script>
     import { supabase } from '../../lib/supabase.ts'
+    import Sortable from 'sortablejs'
 
     type Project = {
       id: string
@@ -330,6 +353,7 @@
       description: string
       color: string
       created_at: string
+      sort_order: number
     }
 
     type TaskCount = {
@@ -356,7 +380,7 @@
       const { data: projects, error } = await supabase
         .from('projects')
         .select('*')
-        .order('created_at', { ascending: true })
+        .order('sort_order', { ascending: true })
 
       if (error) {
         showToast('Failed to load projects', true)
@@ -399,6 +423,7 @@
       for (const project of projects as Project[]) {
         grid.appendChild(createProjectCard(project, countMap[project.id]))
       }
+      setupProjectSort()
     }
 
     function createProjectCard(project: Project, counts: TaskCount): HTMLElement {
@@ -422,7 +447,10 @@
                style="background:rgba(${r},${g},${b},0.18);color:${project.color}">
             ${initial}
           </div>
-          <button class="delete-btn" data-id="${project.id}" title="Delete project">×</button>
+          <div style="display:flex;align-items:center;gap:.3rem">
+            <span class="drag-handle" title="Drag to reorder">⠿</span>
+            <button class="delete-btn" data-id="${project.id}" title="Delete project">×</button>
+          </div>
         </div>
         <div class="project-name">${escHtml(project.name)}</div>
         <div class="project-desc">${escHtml(project.description || 'No description')}</div>
@@ -503,7 +531,11 @@
         const name = (document.getElementById('proj-name') as HTMLInputElement).value.trim()
         const description = (document.getElementById('proj-desc') as HTMLTextAreaElement).value.trim()
 
-        const { error } = await supabase.from('projects').insert({ name, description, color: selectedColor })
+        // Get current max sort_order so new project goes to end
+        const { data: existing } = await supabase.from('projects').select('sort_order').order('sort_order', { ascending: false }).limit(1)
+        const nextOrder = existing && existing.length > 0 ? (existing[0].sort_order ?? 0) + 1 : 0
+
+        const { error } = await supabase.from('projects').insert({ name, description, color: selectedColor, sort_order: nextOrder })
 
         submitBtn.disabled = false
         submitBtn.textContent = 'Create Project'
@@ -513,6 +545,29 @@
         overlay.classList.remove('show')
         showToast(`Project "${name}" created!`)
         await loadProjects()
+      })
+    }
+
+    function setupProjectSort() {
+      const grid = document.getElementById('projects-grid') as HTMLElement
+      new Sortable(grid, {
+        handle: '.drag-handle',
+        animation: 200,
+        ghostClass: 'proj-ghost',
+        chosenClass: 'proj-chosen',
+        onEnd: async () => {
+          const cards = grid.querySelectorAll('.project-card')
+          const updates = Array.from(cards).map((card, index) => ({
+            id: (card as HTMLElement).dataset.id!,
+            sort_order: index
+          }))
+          const results = await Promise.all(
+            updates.map(({ id, sort_order }) =>
+              supabase.from('projects').update({ sort_order }).eq('id', id)
+            )
+          )
+          if (results.some(r => r.error)) showToast('Failed to save order', true)
+        }
       })
     }
 
