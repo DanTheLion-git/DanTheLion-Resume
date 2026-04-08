@@ -4,7 +4,32 @@ All changes are listed newest-first.
 
 ---
 
-## [2026-04-08] — Notes redesign: always-visible preview with Edit / Save & Close
+## [2026-04-08] — Project card: edit button + controls layout redesign
+
+**Request:** Move drag handle to top-right below the delete button. Add an edit button to the left of the delete button. Edit button opens the project name/description/colour modal pre-filled.
+
+**Changes:**
+
+- `Astro-Resume/src/pages/planner/index.astro`:
+  - Removed `.delete-btn { position: absolute }` and the inline flex row in the card header containing drag-handle + delete-btn
+  - Added `.card-controls` block (`position: absolute; top: .75rem; right: .75rem; flex-direction: column; align-items: flex-end`) — fades in as a unit on card hover
+  - `.card-controls` layout:
+    - Row 1 (`.card-controls-row`): `[✏ edit-btn]` (ghost blue hover) + `[× delete-btn]` (red)
+    - Row 2: `[⠿ drag-handle]` right-aligned, under the delete button
+  - `.project-card-header` removed; avatar now sits directly in the card flow
+  - `padding-right` on `.project-name` increased from `2.2rem` → `4.5rem` to avoid text clipping under the controls
+  - Added `let editingProjectId: string | null = null` module-level variable
+  - Added `openEditModal(project: Project)` function: sets `editingProjectId`, pre-fills form fields (name, desc), selects matching colour swatch, changes modal title to "Edit Project" and submit button to "Save Changes"
+  - `setupModal()` updated:
+    - `newBtn` click resets `editingProjectId = null` and restores modal to create mode
+    - `cancelBtn` / overlay click both call `closeModal()` which resets `editingProjectId` and restores title/button text
+    - Form submit checks `editingProjectId`: if set → `supabase.projects.update()`; if null → `supabase.projects.insert()`
+    - Toast message says "updated" or "created" accordingly
+  - Card click guard updated to also ignore `.edit-btn` and `.drag-handle` clicks
+
+---
+
+
 
 **Request:** Always show rendered markdown notes (no collapse). Add an Edit button that turns the view into the editor. Add Save & Close that saves and returns to the preview.
 

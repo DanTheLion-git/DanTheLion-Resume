@@ -157,7 +157,7 @@ In the planner UI:
 
 The new project card appears at the end of the grid and gets `sort_order = max + 1` automatically.
 
-To **edit** a project, click the ✏ (edit) icon on the project card. To **delete**, click the 🗑 (delete) icon — this also deletes all tasks in that project (cascades via the foreign key).
+To **edit** a project, click the **✏** (edit) icon on the project card — it opens the same modal pre-filled with current name, description, and colour. To **delete**, click the **×** (delete) icon — this also deletes all tasks in that project (cascades via the foreign key).
 
 ---
 
