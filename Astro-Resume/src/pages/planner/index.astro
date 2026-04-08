@@ -42,6 +42,15 @@
       letter-spacing: .02em;
       color: #f0f0f1;
     }
+    .header-logo {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #f0f0f1;
+      text-decoration: none;
+      letter-spacing: .02em;
+      transition: color .15s;
+    }
+    .header-logo:hover { color: #5fa8d3; }
     .header-actions { display: flex; gap: .75rem; }
     /* ── Buttons ─────────────────────────────────────────────── */
     .btn {
@@ -290,7 +299,7 @@
 </head>
 <body>
   <header class="header">
-    <div class="header-title">🦁 Lions Planner</div>
+    <a href="/" class="header-logo">Lions Planner</a>
     <div class="header-actions">
       <button class="btn btn-primary" id="new-project-btn">+ New Project</button>
       <button class="btn btn-ghost" id="signout-btn">Sign out</button>
