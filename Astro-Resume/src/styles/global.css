@@ -205,8 +205,8 @@ html.theme-light .theme-icon--moon { display: block; }
   gap: 0.4rem;
   padding: 0.18rem 0.7rem;
   border-radius: 999px;
-  border: 1px solid rgba(76, 123, 76, 0.6);
-  background: radial-gradient(circle at top left, rgba(76, 123, 76, 0.12), transparent);
+  border: 1px solid var(--border);
+  background: var(--bg-alt);
   font-size: 0.75rem;
   color: var(--fg-muted);
   margin-bottom: 0.65rem;
@@ -321,10 +321,9 @@ html.theme-light .btn-social {
 
 .hero-side {
   flex: 1.2;
-  background: radial-gradient(circle at top, rgba(60, 94, 60, 0.25), transparent),
-              radial-gradient(circle at bottom, rgba(92, 68, 51, 0.25), transparent);
+  background: var(--card-bg);
   border-radius: var(--radius);
-  border: 1px solid rgba(48, 63, 48, 0.8);
+  border: 1px solid var(--border);
   padding: 1rem;
   font-size: 0.85rem;
   color: var(--fg-muted);
