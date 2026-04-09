@@ -1,0 +1,85 @@
+---
+import Layout from "../../../layouts/ResumeLayout.astro";
+---
+
+<Layout title="Python Autorigger — Daniël van Leeuwen" theme="light">
+
+  <div class="project-page">
+
+    <a href="/resume/" class="project-back">← Back to Resume</a>
+
+    <div class="project-hero">
+      <p class="hero-tagline">Graduation Project · Het Nieuwe Kader</p>
+      <h1 class="project-title">Python Autorigger</h1>
+      <p class="project-subtitle">Web-based automatic rigging system for remote motion-capture</p>
+      <div class="project-tags">
+        <span class="project-tag">Python</span>
+        <span class="project-tag">Flask</span>
+        <span class="project-tag">Three.js</span>
+        <span class="project-tag">MayaPy</span>
+        <span class="project-tag">Waitress</span>
+      </div>
+    </div>
+
+    <div class="project-video-wrap">
+      <iframe
+        src="https://www.youtube.com/embed/zupK9LBxZwk"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        loading="lazy"
+      ></iframe>
+    </div>
+
+    <div class="project-grid">
+
+      <section class="project-section">
+        <h2>Project Overview</h2>
+        <p>The TPose Autorigger was built as part of my graduation project. The goal was to make it easier to prepare characters for use in remote mocap sessions. The tool takes in a character mesh, places the required joints automatically, and produces a rig that can be used inside the TPose platform. By running this through a web server and connecting it to MayaPy, the process becomes accessible without needing a full local setup.</p>
+      </section>
+
+      <section class="project-section">
+        <img src="/images/python-autorigger/BrandingPage.png" alt="Python Autorigger branding overview" class="project-image" />
+      </section>
+
+      <section class="project-section">
+        <h2>Client &amp; Context</h2>
+        <p>The project was developed together with Het Nieuwe Kader, a creative studio in Arnhem. They recently started a new branch called TPose, which focuses on remote motion capture and character animation. The aim of TPose is to make motion capture available without the need for complex studio setups. For that pipeline, a tool was needed that could handle the rigging of characters automatically so that the captured animations could be applied more directly.</p>
+      </section>
+
+      <section class="project-section">
+        <h2>Goals &amp; Challenges</h2>
+        <p>The main goal of the project was to create an autorigger that could prepare a character for use in TPose's mocap workflow. This meant reducing the manual work normally involved in placing joints and skinning a mesh. The challenge was to make this process reliable for different kinds of characters while keeping the workflow simple for the end user. Another difficulty was making sure the system could run as part of a web-based platform while still producing rigs of good quality.</p>
+      </section>
+
+      <section class="project-section">
+        <img src="/images/python-autorigger/ExplanationImage6.png" alt="Autorigger pipeline diagram" class="project-image" />
+      </section>
+
+      <section class="project-section">
+        <img src="/images/python-autorigger/ExplanationImage5.png" alt="Autorigger UI screenshot" class="project-image" />
+      </section>
+
+      <section class="project-section">
+        <h2>Solution Overview</h2>
+        <p>The diagram shows the full pipeline of the Autorigger. The client starts by uploading an FBX character to a Flask server, which is hosted with Waitress. After upload, the character can be inspected and adjusted on a Three.js page, where user input is collected. Both the FBX and the input data are then sent to MayaPy, where the Autorigger runs. The resulting rigged character is exported and returned to the TPose platform, making it available for further use in remote mocap workflows.</p>
+      </section>
+
+      <section class="project-section">
+        <h2>Technical Details</h2>
+        <p>On the technical side, a Flask server (served through Waitress) handles file uploads and routes data between the front-end and the backend. A Three.js page was connected to the server so users could preview the character and give input. That input, together with the uploaded FBX, was passed on as JSON and processed in MayaPy, where Python scripts generate the rig automatically. This taught me how to structure a small web service, handle data exchange between different formats, and script in Maya's Python environment to automate tasks that would normally be done by hand.</p>
+        <p><a href="https://github.com/DanTheLion-LA/Maya-Python-Autorigger" target="_blank" rel="noopener">View source on GitHub →</a></p>
+      </section>
+
+      <section class="project-section">
+        <img src="/images/python-autorigger/ExplanationImage1.png" alt="Autorigger joint placement" class="project-image" />
+      </section>
+
+      <section class="project-section">
+        <h2>Reflection</h2>
+        <p>Through this project I learned a lot about combining different parts of a pipeline into one working system. I had to think about both the technical side of rigging and the usability for people who would be using the platform. It showed me the importance of testing with real users and of keeping the workflow as simple as possible while still producing good results. For future versions, there is room to expand the system to support more character types and to refine the quality of the generated rigs.</p>
+      </section>
+
+    </div>
+  </div>
+
+</Layout>

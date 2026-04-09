@@ -18,17 +18,18 @@ across both the **live resume website** and the **local 3D portfolio project**.
 7. [Theme system (light / dark / auto)](#7-theme-system)
 8. [Deployment pipeline](#8-deployment-pipeline)
 9. [File map — resume site](#9-file-map--resume-site)
+10. [Project detail pages](#10-project-detail-pages)
 
 ### Local 3D Portfolio Project — `CopilotedProject`
 
-10. [Adding a project (local scene)](#10-adding-a-project-local-scene)
-11. [Camera settings (local scene)](#11-camera-settings-local-scene)
-12. [Tree models](#12-tree-models)
-13. [Podium rotation speed](#13-podium-rotation-speed)
-14. [Project panel HTML](#14-project-panel-html)
-15. [Volumetric lighting](#15-volumetric-lighting)
-16. [Dev commands](#16-dev-commands)
-17. [File map — local project](#17-file-map--local-project)
+11. [Adding a project (local scene)](#10-adding-a-project-local-scene)
+12. [Camera settings (local scene)](#11-camera-settings-local-scene)
+13. [Tree models](#12-tree-models)
+14. [Podium rotation speed](#13-podium-rotation-speed)
+15. [Project panel HTML](#14-project-panel-html)
+16. [Volumetric lighting](#15-volumetric-lighting)
+17. [Dev commands](#16-dev-commands)
+18. [File map — local project](#17-file-map--local-project)
 
 ---
 
@@ -284,8 +285,18 @@ Commit → push to DanTheLion-git/DanTheLion-Resume
 Astro-Resume/
 ├── src/
 │   ├── pages/
-│   │   ├── resume.astro           ← CV page + inline Three.js script
+│   │   ├── resume.astro           ← CV page + carousel + inline script
 │   │   ├── index.astro            ← public homepage (Creative Craft Tech Light)
+│   │   ├── resume/
+│   │   │   └── projects/          ← project detail pages (one per card)
+│   │   │       ├── amsterdam-rederij.astro
+│   │   │       ├── martens-beton.astro
+│   │   │       ├── werken-bij-schiphol.astro
+│   │   │       ├── lucardi.astro
+│   │   │       ├── oosterschelde.astro
+│   │   │       ├── garbage-gary.astro
+│   │   │       ├── meijel-museum.astro
+│   │   │       └── python-autorigger.astro
 │   │   └── admin/
 │   │       ├── index.astro        ← protected home-server dashboard
 │   │       └── login.astro        ← SHA-256 client-side login
@@ -299,6 +310,8 @@ Astro-Resume/
 └── public/
     ├── hdri/
     │   └── scene.hdr              ← HDRI environment (optional, has CDN fallback)
+    ├── images/
+    │   └── python-autorigger/     ← BrandingPage.png + ExplanationImage1–6.png
     └── models/
         └── projects/
             ├── amsterdam-rederij/
@@ -316,6 +329,82 @@ Astro-Resume/
 { "three": "https://cdn.jsdelivr.net/.../three@0.167.1/..." }
 ```
 To upgrade Three.js, update the version number in both `three` and `three/addons/` URLs.
+
+---
+
+## 10. Project detail pages
+
+Each project card on `/resume` links to a detail page at
+`/resume/projects/[slug]/`. Pages are Astro files in
+`Astro-Resume/src/pages/resume/projects/`.
+
+### URL → file mapping
+
+| URL slug | File |
+|---|---|
+| `amsterdam-rederij` | `amsterdam-rederij.astro` |
+| `martens-beton` | `martens-beton.astro` |
+| `werken-bij-schiphol` | `werken-bij-schiphol.astro` |
+| `lucardi` | `lucardi.astro` |
+| `oosterschelde` | `oosterschelde.astro` |
+| `garbage-gary` | `garbage-gary.astro` |
+| `meijel-museum` | `meijel-museum.astro` |
+| `python-autorigger` | `python-autorigger.astro` |
+
+### Adding a new project detail page
+
+1. Create `Astro-Resume/src/pages/resume/projects/my-project.astro`
+   (copy any existing page as a template).
+2. Set `page: '/resume/projects/my-project/'` on the matching entry in
+   the `PROJECTS` array in `resume.astro`. The carousel will automatically
+   render a "Learn more →" button.
+
+### Page structure
+
+Each page uses `ResumeLayout` and contains:
+
+```html
+<div class="project-page">
+  <a href="/resume/" class="project-back">← Back to Resume</a>
+
+  <div class="project-hero">
+    <p class="hero-tagline">Client · Studio</p>
+    <h1 class="project-title">Project Name</h1>
+    <p class="project-subtitle">One-line summary</p>
+    <div class="project-tags">
+      <span class="project-tag">Tool</span>
+    </div>
+  </div>
+
+  <!-- Optional video embed -->
+  <div class="project-video-wrap">
+    <iframe src="https://www.youtube.com/embed/VIDEO_ID" allowfullscreen></iframe>
+  </div>
+
+  <!-- Two-column grid on desktop -->
+  <div class="project-grid">
+    <section class="project-section">
+      <h2>Section Title</h2>
+      <p>Content goes here.</p>
+    </section>
+
+    <!-- Full-width image -->
+    <section class="project-section">
+      <img src="/images/my-project/image.png" alt="…" class="project-image" />
+    </section>
+
+    <!-- Full-width link row (spans both columns on desktop) -->
+    <section class="project-section project-section--links">
+      <a href="https://…" class="button-ghost" target="_blank" rel="noopener">Label →</a>
+    </section>
+  </div>
+</div>
+```
+
+### Adding images
+
+1. Place images in `Astro-Resume/public/images/[project-slug]/`.
+2. Reference them with an absolute path: `src="/images/[project-slug]/image.png"`.
 
 ---
 

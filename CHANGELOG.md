@@ -5,6 +5,27 @@ Timestamps without a known exact time are marked as the date only.
 
 ---
 
+## [2026-04-09] — Project detail pages + Python Autorigger card
+
+**Request:** Create individual project pages accessible by clicking project cards on the resume. Convert Oosterschelde.html, PythonAutorigger.html, and VRVoyage.html (VR Voyage = Amsterdam Rederij) to Astro pages. Add placeholder pages for the remaining projects. Add Python Autorigger to the project carousel.
+
+**Changes (live repo — DanTheLion-git/DanTheLion-Resume):**
+
+- `Astro-Resume/src/pages/resume/projects/` *(new directory)* — 8 project detail pages, each using `ResumeLayout`, accessible at `/resume/projects/[slug]/`:
+  - `amsterdam-rederij.astro` — VR Voyage / Amsterdam Rederij page; content scaffolded from `VRVoyage.html`; placeholder sections for manual fill-in
+  - `oosterschelde.astro` — content from `Oosterschelde.html`; Project Overview section populated; remaining sections placeholder
+  - `python-autorigger.astro` — fully populated from `PythonAutorigger.html`; all 6 sections + 4 images from `public/images/python-autorigger/`
+  - `martens-beton.astro`, `werken-bij-schiphol.astro`, `lucardi.astro`, `garbage-gary.astro`, `meijel-museum.astro` — placeholder structure with standard sections for manual fill-in
+- `Astro-Resume/public/images/python-autorigger/` *(new)* — BrandingPage.png + ExplanationImage1–6.png copied from `Images/PythonAutoRigger/`
+- `Astro-Resume/src/pages/resume.astro` — PROJECTS array updated:
+  - Added `page` field to all 7 existing projects (path to their detail page)
+  - Added Python Autorigger as an 8th project entry
+  - Fixed Lucardi `link` field (was a bare string, now a proper `{ label, href }` object)
+  - Card generation updated: renders a `"Learn more →"` button when `p.page` is set, plus the existing external link button; both wrapped in `.proj-card-btns` flex container
+- `Astro-Resume/src/styles/global.css` — added `.proj-card-btns` flex container; added full project detail page styles: `.project-page`, `.project-back`, `.project-hero`, `.project-title`, `.project-subtitle`, `.project-tags`, `.project-tag`, `.project-video-wrap`, `.project-grid` (2-col at ≥720 px), `.project-section`, `.project-image`, `.project-section--links`
+
+---
+
 ## [2026-04-03T18:19] — Floating 3D canvas + side panel layout
 
 **Request:** Make the Three.js object float on the page background (no container box). When a project is clicked, show the info panel to the side on desktop and below on mobile.

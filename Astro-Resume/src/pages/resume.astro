@@ -183,6 +183,7 @@ var PROJECTS = [
     youtube: 'https://youtu.be/sfveQ_2cajM?si=3svZRFPYH1WRLxwk',
     desc:    'Interactive 3D web experience created for Amsterdam Rederij.',
     link:    { label: 'Watch Playlist', href: 'https://www.youtube.com/playlist?list=PLh7EOh1n0_buBScK2L7dAFNsPW2xpWRCT' },
+    page:    '/resume/projects/amsterdam-rederij/',
   },
   {
     title:   'Martens Beton',
@@ -191,6 +192,7 @@ var PROJECTS = [
     youtube: 'https://youtu.be/AVFDtIFl_yc',
     desc:    'Animated video to showcase the new product line of Martens Beton, created using Blender and After Effects.',
     link:    null,
+    page:    '/resume/projects/martens-beton/',
   },
   {
     title:   'Werken bij Schiphol',
@@ -199,14 +201,16 @@ var PROJECTS = [
     youtube: null,
     desc:    'Interactive recruitment experience for Werken bij Schiphol.',
     link:    null,
+    page:    '/resume/projects/werken-bij-schiphol/',
   },
   {
     title:   'Lucardi',
     meta:    'Product Showcase · Blender 3D',
     image:   'https://i9.ytimg.com/vi_webp/bbm4KqhNv1E/mq2.webp?sqp=CJi9wM4G-oaymwEoCMACELQB8quKqQMcGADwAQH4AbYIgAK4CIoCDAgAEAEYZSBlKGUwDw==&rs=AOn4CLAg_IDQMhBgqI6J9mGK5QTTxAtOGg',
     youtube: null,
-    desc:    'A 3D product showcase for Lucardi, created using Blender',
-    link:    'https://youtube.com/shorts/bbm4KqhNv1E',
+    desc:    'A 3D product showcase for Lucardi, created using Blender.',
+    link:    { label: 'Watch on YouTube', href: 'https://youtube.com/shorts/bbm4KqhNv1E' },
+    page:    '/resume/projects/lucardi/',
   },
   {
     title:   'Oosterschelde',
@@ -215,6 +219,7 @@ var PROJECTS = [
     youtube: 'https://youtu.be/VprojdpSWek',
     desc:    'Immersive 360° underwater VR experience for the Oosterschelde nature reserve.',
     link:    null,
+    page:    '/resume/projects/oosterschelde/',
   },
   {
     title:   'Garbage Gary',
@@ -223,6 +228,7 @@ var PROJECTS = [
     youtube: 'https://youtu.be/Nn0hLqFrPOk',
     desc:    'A game project created with other students for the Oyfo museum using Unity 3D, my responsibility was product lead and engine development.',
     link:    { label: 'Play Game', href: 'https://daanvanleeuwen.itch.io/viktor-vuilnis' },
+    page:    '/resume/projects/garbage-gary/',
   },
   {
     title:   'Meijel Museum',
@@ -231,6 +237,16 @@ var PROJECTS = [
     youtube: null,
     desc:    'Interactive digital experience developed for Meijel Museum.',
     link:    null,
+    page:    '/resume/projects/meijel-museum/',
+  },
+  {
+    title:   'Python Autorigger',
+    meta:    'Graduation Project · Python · Flask · MayaPy',
+    image:   null,
+    youtube: 'https://youtu.be/zupK9LBxZwk',
+    desc:    'Web-based automatic rigging tool for remote motion-capture sessions, built as a graduation project at Het Nieuwe Kader / TPose.',
+    link:    { label: 'View on GitHub', href: 'https://github.com/DanTheLion-LA/Maya-Python-Autorigger' },
+    page:    '/resume/projects/python-autorigger/',
   },
 ];
 
@@ -261,17 +277,22 @@ PROJECTS.forEach(function (p) {
     heroHtml = '<div class="project-card-hero project-card-hero--empty"><span>' + p.title + '</span></div>';
   }
 
-  var linkHtml = p.link
-    ? '<a href="' + p.link.href + '" class="button-ghost proj-card-btn" target="_blank" rel="noopener noreferrer">'
-      + p.link.label + '</a>'
-    : '';
+  var btns = '';
+  if (p.page) {
+    btns += '<a href="' + p.page + '" class="button-ghost proj-card-btn">Learn more →</a>';
+  }
+  if (p.link) {
+    btns += '<a href="' + p.link.href + '" class="button-ghost proj-card-btn" target="_blank" rel="noopener noreferrer">'
+      + p.link.label + '</a>';
+  }
 
   card.innerHTML = heroHtml
     + '<div class="project-card-body">'
     + '<h3 class="project-card-title">' + p.title + '</h3>'
     + '<p class="project-card-meta">' + p.meta + '</p>'
     + '<p class="project-card-desc">' + p.desc + '</p>'
-    + linkHtml + '</div>';
+    + (btns ? '<div class="proj-card-btns">' + btns + '</div>' : '')
+    + '</div>';
 
   track.appendChild(card);
 });
