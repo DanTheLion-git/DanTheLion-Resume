@@ -34,32 +34,32 @@ import Layout from "../../../layouts/ResumeLayout.astro";
 
       <section class="project-section">
         <h2>Project Overview</h2>
-        <p><!-- TODO: Add project overview --></p>
+        <p>Amsterdam Rederij — VR Voyage is a 70-minute immersive VR experience that takes place aboard a real canal boat in Amsterdam. As the boat glides through the canals, passengers put on VR headsets and are transported back to the year 1600 — the Dutch Golden Age. They see the exact same streets and waterways they just passed in real life, but rebuilt in full 3D as they would have looked four centuries ago. Along the way, they are guided by a fictional boatman named Piet and encounter famous historical figures from Dutch history, with each scene bringing a different chapter of Amsterdam's past to life.</p>
       </section>
 
       <section class="project-section">
         <h2>Client &amp; Context</h2>
-        <p><!-- TODO: Describe the client and context --></p>
+        <p>The project was commissioned by Michiel, the owner of VR Voyage, a boat tour company based in Amsterdam. Michiel was deeply involved throughout development, providing detailed historical research and continuous feedback to ensure the experience was as accurate and engaging as possible. The project was developed at Enversed Studios, where it had already been in early development for four to five months before being taken over and driven to completion as a full-time effort.</p>
       </section>
 
       <section class="project-section">
         <h2>Goals &amp; Challenges</h2>
-        <p><!-- TODO: Describe goals and challenges --></p>
+        <p>The primary goal was to create a seamless, believable historical world that could be delivered as rendered 360° video — immersive enough to hold a passenger's attention for the full 70-minute boat ride. Two major challenges defined the project. The first was render time: the scenes were large and detailed, and both a switch to Unreal Engine and a move to render layers in Blender were explored but ultimately deemed too risky or too unsupported for scenes of that complexity at the time. The second was crowd simulation: Blender has no native NPC avoidance or interaction logic, making it extremely difficult to populate the streets of a living, breathing 17th-century Amsterdam in a way that felt natural and believable.</p>
       </section>
 
       <section class="project-section">
         <h2>Solution Overview</h2>
-        <p><!-- TODO: Describe the solution --></p>
+        <p>Geometry Nodes were used extensively to build all procedural systems, including the crowd animation pipeline. Rather than hand-animating every background character, Geometry Nodes were used to distribute and drive motion across large groups of people. Motion capture recordings were performed on-site at Het Nieuwe Kader in Arnhem using Xsens suits, capturing a library of natural walking, standing, and interacting animations. All captured data was cleaned and refined in Reallusion before being fed back into the Blender pipeline. Post-production effects were handled by a colleague, Sander, who applied final grade and atmospheric treatments to the rendered footage.</p>
       </section>
 
       <section class="project-section">
         <h2>Technical Details</h2>
-        <p><!-- TODO: Add technical details, tools, and architecture --></p>
+        <p>The entire production pipeline — 3D modelling, character creation, rigging, animation, motion capture integration, environment building, procedural crowd systems, lighting, and rendering — was handled as a one-person effort, with a colleague contributing during the early phase of the project. Everything was built and rendered in Blender as 360° stereoscopic video for VR playback. The project officially ran from December 2023 through to June 2025, making it a year-and-a-half production — significantly longer than originally planned, largely due to the scale of the work and the iterative nature of the historical reconstruction.</p>
       </section>
 
       <section class="project-section">
-        <h2>Results &amp; Reflection</h2>
-        <p><!-- TODO: Describe outcomes and what you learned --></p>
+        <h2>Reflection</h2>
+        <p>This project stands as the largest and most technically demanding work undertaken so far. The sheer breadth of the pipeline — from architectural modelling to motion capture to procedural crowds — gave enormous hands-on experience across every stage of 3D production. If approached again, the rendering engine would be switched to Unreal Engine from the start, primarily for its real-time rendering performance and, crucially, for its NPC behaviour and AI navigation tools which would have solved the crowd challenge outright. More importantly, a project of this scope should never be a solo effort: a dedicated team of three full-time people with clearly structured responsibilities would keep the timeline realistic and the work sustainable.</p>
       </section>
 
       <section class="project-section project-section--links">

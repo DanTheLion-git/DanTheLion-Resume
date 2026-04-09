@@ -28,32 +28,27 @@ import Layout from "../../../layouts/ResumeLayout.astro";
 
       <section class="project-section">
         <h2>Project Overview</h2>
-        <p><!-- TODO: Add project overview --></p>
+        <p>The Lucardi project was a set of three 20-second commercial videos produced for the jewellery retailer Lucardi. Each video featured a different product in an ultra-realistic close-up style: a ring set with three small diamonds, a solitaire ring featuring a single large diamond, and a gold necklace consisting of a delicate chain with two interlocking heart-shaped links. The aesthetic goal was flawless product photography translated into 3D — clean, close, and hyper-detailed, presenting each piece without imperfection to let the craftsmanship of the jewellery speak for itself.</p>
       </section>
 
       <section class="project-section">
         <h2>Client &amp; Context</h2>
-        <p><!-- TODO: Describe the client and context --></p>
+        <p>Lucardi is a Dutch jewellery chain with stores across the Netherlands. The videos were created for use as commercial content, requiring a presentation quality on par with high-end product photography. The brief called for realism above all else — the renders needed to look indistinguishable from a professional studio photograph, just in motion.</p>
       </section>
 
       <section class="project-section">
         <h2>Goals &amp; Challenges</h2>
-        <p><!-- TODO: Describe goals and challenges --></p>
-      </section>
-
-      <section class="project-section">
-        <h2>Solution Overview</h2>
-        <p><!-- TODO: Describe the solution --></p>
+        <p>The central technical challenge of this project was achieving photorealistic rendering of materials that are notoriously difficult in 3D: diamonds and polished metal. Diamonds require accurate light refraction — the way light bends, scatters, and creates fire inside the stone — to look convincing. Getting this right in a full render without prohibitively long render times required a careful balance between physical accuracy and practical compromises.</p>
       </section>
 
       <section class="project-section">
         <h2>Technical Details</h2>
-        <p><!-- TODO: Add technical details, tools, and architecture --></p>
+        <p>All three videos were modelled and rendered in Blender using Cycles for physically based rendering. To achieve the diamond effects the client wanted, a layered rendering approach was used: the diamonds were rendered separately from the rest of the scene, allowing specific light passes and adjustments to be composited in After Effects. Adjustment layers and blend modes were used in post to push the refraction, colour dispersion, and brilliance of the stones to a level that matched the client's vision, without having to rely entirely on brute-force render samples.</p>
       </section>
 
       <section class="project-section">
-        <h2>Results &amp; Reflection</h2>
-        <p><!-- TODO: Describe outcomes and what you learned --></p>
+        <h2>Reflection</h2>
+        <p>Lucardi was a good exercise in understanding the limits of physically correct rendering and knowing when post-production is the smarter tool to reach the desired result. The layered rendering workflow — rendering elements separately and compositing them — proved to be a flexible and efficient approach for achieving a look that would have been extremely costly to produce entirely within the renderer. It's a technique that carries over well to any project where materials or lighting effects need fine creative control.</p>
       </section>
 
       <section class="project-section project-section--links">

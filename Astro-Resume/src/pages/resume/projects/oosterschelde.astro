@@ -33,32 +33,32 @@ import Layout from "../../../layouts/ResumeLayout.astro";
 
       <section class="project-section">
         <h2>Project Overview</h2>
-        <p>The Oosterschelde VR project was set up to create an underwater experience that shows the unique ecosystem of the estuary. The goal was to build a 360° interactive video that could run on limited VR hardware while still feeling immersive. This meant working with strict technical limitations and finding ways to keep the visuals optimized without losing the atmosphere of being underwater. The project covered the whole process from early design choices to the final playable build.</p>
+        <p>Oosterschelde VR is an immersive 360° underwater experience designed for visitors to the Oosterschelde national park — one of the largest national parks in the Netherlands. The experience takes the form of an interactive video journey beneath the surface of the estuary, moving through different underwater scenes while receiving information about the unique marine ecosystem that makes the Oosterschelde so ecologically significant.</p>
       </section>
 
       <section class="project-section">
         <h2>Client &amp; Context</h2>
-        <p><!-- TODO: Describe the client and context --></p>
+        <p>The project was commissioned by the municipality of Kapelle, located near the Oosterschelde. The dike at Wemeldinge is home to a renowned five-star diving location, but for the vast majority of park visitors who are not divers, the experience of the national park is limited to looking out over open water. The municipality wanted to change that by placing VR binoculars on the dike — a dedicated hardware installation that would allow any visitor to peer over the railing and dive down into the underwater world they could not otherwise reach.</p>
       </section>
 
       <section class="project-section">
         <h2>Goals &amp; Challenges</h2>
-        <p><!-- TODO: Describe goals and technical limitations --></p>
+        <p>The primary goal was to create a visually convincing underwater environment that could run on constrained VR hardware while still feeling atmospheric and alive. Achieving a realistic underwater look in Blender involves a stack of technically demanding effects: caustic light patterns on the seabed, volumetric fluid scattering, the slow and fluid movement of marine life, floating particles of sand and sediment, and a wide cast of sea creatures — each requiring their own animation. Getting all of these elements working together without sending render times into an unmanageable range was the central challenge throughout the project.</p>
       </section>
 
       <section class="project-section">
         <h2>Solution Overview</h2>
-        <p><!-- TODO: Describe the final solution and pipeline --></p>
+        <p>After researching and testing a range of approaches to underwater rendering, the team settled on a combination of a fake-caustics effect and Blender's ocean modifier with refraction to achieve the appearance of underwater light behaviour. The fake-caustics approach — projecting animated light patterns rather than computing true caustic physics — delivered a look that read as convincingly real in the context of a 360° VR experience, while remaining manageable within the production's render budget.</p>
       </section>
 
       <section class="project-section">
         <h2>Technical Details</h2>
-        <p><!-- TODO: Hardware specs, software used, optimisation decisions --></p>
+        <p>All 3D environments, lighting, and animations were built and rendered in Blender. The role covered the full scope of 3D development: environment modelling and layout, marine animal rigging and animation, underwater lighting setup, and final rendering for 360° VR output. The project was developed at Enversed Studios and was still in progress at the time of departure from the company.</p>
       </section>
 
       <section class="project-section">
-        <h2>Results &amp; Reflection</h2>
-        <p><!-- TODO: Describe outcomes and what you learned --></p>
+        <h2>Reflection</h2>
+        <p>Oosterschelde was an exercise in creative problem-solving within tight technical constraints. The underwater rendering challenge had no off-the-shelf solution that fit the project's needs, so the right approach had to be assembled from multiple techniques. The fake-caustics and ocean modifier combination was a good example of pragmatic production thinking: prioritising what reads well to the viewer over what is technically purest. Leaving before the project was fully finished was a frustrating note to end on, but the groundwork laid — the rendering pipeline, the environment systems, the animation approach — was solid enough to be carried forward by the team.</p>
       </section>
 
     </div>
