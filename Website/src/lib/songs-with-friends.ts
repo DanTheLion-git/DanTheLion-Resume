@@ -39,11 +39,14 @@ export async function fetchTrackInfo(trackUri: string, accessToken: string): Pro
     if (!res.ok) return null;
 
     const d = await res.json();
+    const rawYear = d.album?.release_date
+      ? new Date(d.album.release_date as string).getFullYear()
+      : 0;
     return {
       name:     d.name,
       artist:   (d.artists as Array<{ name: string }>).map((a) => a.name).join(', '),
-      year:     new Date(d.album.release_date as string).getFullYear(),
-      albumArt: (d.album.images as Array<{ url: string }>)[0]?.url ?? '',
+      year:     Number.isFinite(rawYear) ? rawYear : 0,
+      albumArt: (d.album?.images as Array<{ url: string }>)?.[0]?.url ?? '',
     };
   } catch {
     return null;

@@ -368,16 +368,16 @@ import '../../../styles/games.css';
         row.dataset.id = t.id;
 
         row.innerHTML = `
-          <input type="checkbox" checked data-id="${t.id}" />
+          <input type="checkbox" checked data-id="${escHtml(t.id)}" />
           ${t.albumArt
-            ? `<img class="track-thumb" src="${t.albumArt}" alt="" />`
+            ? `<img class="track-thumb" src="${escHtml(t.albumArt)}" alt="" />`
             : `<div class="track-thumb" style="display:flex;align-items:center;justify-content:center;font-size:1.2rem;">🎵</div>`
           }
           <div class="track-info">
             <div class="track-name">${escHtml(t.name)}</div>
             <div class="track-meta">${escHtml(t.artist)}</div>
           </div>
-          <div class="track-year">${t.year}</div>
+          <div class="track-year">${t.year || '—'}</div>
         `;
 
         const cb = row.querySelector('input')!;
@@ -531,12 +531,12 @@ import '../../../styles/games.css';
         btn.className = 'playlist-tile' + (isPublic ? '' : ' pl-private');
         const artUrl = pl.images?.[0]?.url;
         const artHtml = artUrl
-          ? `<div style="width:100%;aspect-ratio:1/1;overflow:hidden;background:var(--g-surface2)"><img src="${artUrl}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" /></div>`
+          ? `<div style="width:100%;aspect-ratio:1/1;overflow:hidden;background:var(--g-surface2)"><img src="${escHtml(artUrl)}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" /></div>`
           : `<div class="pl-art-placeholder">${isPublic ? '🎵' : '🔒'}</div>`;
         const total = pl.tracks?.total;
         btn.innerHTML = artHtml + `
           <div class="playlist-tile-info">
-            <div class="playlist-tile-name" title="${pl.name}">${isPublic ? '' : '🔒 '}${pl.name}</div>
+            <div class="playlist-tile-name" title="${escHtml(pl.name)}">${isPublic ? '' : '🔒 '}${escHtml(pl.name)}</div>
             <div class="playlist-tile-count">${total != null ? total + ' tracks' : isPublic ? 'public' : 'private'}</div>
           </div>`;
 
@@ -618,26 +618,36 @@ import '../../../styles/games.css';
       updateSelectionCount();
     });
 
-    // ── Generate print sheet — open dedicated print tab ────────────────────
+    // ── Generate print sheet — split into sets of 60 ─────────────────────
+    const SET_SIZE = 60;
+    const MAX_TRACKS = 600;
+
     $('btn-generate').addEventListener('click', () => {
-      const selected = allTracks.filter(t => selectedIds.has(t.id));
+      let selected = allTracks.filter(t => selectedIds.has(t.id));
       if (selected.length === 0) {
         alert('Please select at least one track.');
         return;
       }
 
-      // Serialise tracks into localStorage so the print page can read them
-      const job = selected.map(t => ({
-        id:     t.id,
-        uri:    t.uri,
-        name:   t.name,
-        artist: t.artist,
-        year:   t.year,
-      }));
-      localStorage.setItem('swf_print_job', JSON.stringify(job));
+      if (selected.length > MAX_TRACKS) {
+        alert(`Maximum ${MAX_TRACKS} tracks supported. Only the first ${MAX_TRACKS} will be used.`);
+        selected = selected.slice(0, MAX_TRACKS);
+      }
 
-      // Open the clean, site-CSS-free print page in a new tab
-      window.open('/games/songs-with-friends/print/', '_blank');
+      // Split into sets of SET_SIZE
+      const sets: typeof selected[] = [];
+      for (let i = 0; i < selected.length; i += SET_SIZE) {
+        sets.push(selected.slice(i, i + SET_SIZE));
+      }
+
+      // Serialise each set
+      const serialisedSets = sets.map(set =>
+        set.map(t => ({ id: t.id, uri: t.uri, name: t.name, artist: t.artist, year: t.year }))
+      );
+      localStorage.setItem('swf_print_sets', JSON.stringify(serialisedSets));
+
+      // Open the print page — it will show set navigation if multiple sets
+      window.open('/games/songs-with-friends/print/?set=0', '_blank');
     });
 
     $('btn-back-to-playlists').addEventListener('click', () => {
