@@ -15,10 +15,10 @@ concurrency:
   group: "pages"
   cancel-in-progress: true
 
-# All commands will run from the Astro-Resume folder by default
+# All commands will run from the Website folder by default
 defaults:
   run:
-    working-directory: ./Astro-Resume
+    working-directory: ./Website
 
 jobs:
   build:
@@ -43,8 +43,7 @@ jobs:
       - name: Upload build output
         uses: actions/upload-pages-artifact@v3
         with:
-          # dist is inside Astro-Resume because of the working directory
-          path: Astro-Resume/dist
+          path: Website/dist
 
   deploy:
     needs: build

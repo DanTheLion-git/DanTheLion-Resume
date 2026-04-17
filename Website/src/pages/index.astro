@@ -1,0 +1,386 @@
+---
+import "../styles/homepage.css";
+const year = new Date().getFullYear();
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Lions Alliance — A Creative Experience Studio</title>
+    <meta name="description" content="The Lions Alliance creates immersive, story-driven experiences that people remember. From intimate wedding moments to large-scale interactive worlds." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body class="hp-page">
+
+    <!-- ── Navigation ─────────────────────────────────── -->
+    <nav class="hp-nav" id="hp-nav">
+      <div class="hp-nav__inner">
+        <a href="/" class="hp-nav__logo">The Lions <span>Alliance</span></a>
+        <ul class="hp-nav__links">
+          <li><a href="#studio">Studio</a></li>
+          <li><a href="#pillars">Our Work</a></li>
+          <li><a href="#roadmap">Roadmap</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <a href="/wedding/" class="hp-nav__cta">WeddingCamBox</a>
+      </div>
+    </nav>
+
+    <!-- ── Hero ───────────────────────────────────────── -->
+    <section class="hp-hero" id="home">
+      <div class="hp-hero-grain" aria-hidden="true"></div>
+      <div class="hp-hero__content hp-container">
+        <div class="hp-hero__eyebrow">The Lions Alliance</div>
+        <h1 class="hp-hero__title">
+          We craft experiences<br>
+          <em>worth remembering.</em>
+        </h1>
+        <p class="hp-hero__subtitle">
+          A creative studio building story-driven moments, interactive experiences, and immersive worlds.
+          Phase one is live. The rest is being built with care.
+        </p>
+        <div class="hp-hero__actions">
+          <a href="/wedding/" class="hp-btn hp-btn--gold">
+            Explore WeddingCamBox
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#pillars" class="hp-btn hp-btn--ghost">View our roadmap</a>
+        </div>
+      </div>
+      <a href="#studio" class="hp-hero__scroll" aria-label="Scroll to content">
+        <div class="hp-hero__scroll-line"></div>
+        <span>Scroll</span>
+      </a>
+    </section>
+
+    <!-- ── Studio Statement ───────────────────────────── -->
+    <section class="hp-studio" id="studio">
+      <div class="hp-studio__inner">
+        <div class="hp-fade">
+          <span class="hp-studio__label">About the studio</span>
+          <h2 class="hp-studio__heading">
+            Building around<br>three pillars
+          </h2>
+          <p class="hp-studio__text">
+            The Lions Alliance is a creative experience studio in deliberate development. We believe
+            the most memorable experiences share three qualities: they are personal, interactive,
+            and beautifully crafted.
+          </p>
+          <p class="hp-studio__text">
+            Our work is structured across three pillars &mdash; each at a different stage.
+            Phase one is live today. The next two are being built with the same care and conviction.
+          </p>
+        </div>
+        <div class="hp-phase-list hp-fade hp-d1">
+          <div class="hp-phase-item hp-phase-item--active">
+            <div class="hp-phase-item__num">01</div>
+            <div>
+              <div class="hp-phase-item__label">Live now</div>
+              <div class="hp-phase-item__name">Moments</div>
+            </div>
+          </div>
+          <div class="hp-phase-item">
+            <div class="hp-phase-item__num">02</div>
+            <div>
+              <div class="hp-phase-item__label">In development</div>
+              <div class="hp-phase-item__name">Experiences</div>
+            </div>
+          </div>
+          <div class="hp-phase-item">
+            <div class="hp-phase-item__num">03</div>
+            <div>
+              <div class="hp-phase-item__label">Future vision</div>
+              <div class="hp-phase-item__name">Immersive Worlds</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Three Pillars ──────────────────────────────── -->
+    <section class="hp-pillars" id="pillars">
+      <div class="hp-container">
+        <div class="hp-section-header hp-fade">
+          <span class="hp-overline">Three pillars</span>
+          <h2 style="font-size:clamp(2rem,4vw,3rem);font-weight:500;">What we&rsquo;re building</h2>
+          <p>Three connected pillars, each grounded in storytelling. One available now, two growing deliberately.</p>
+          <div class="hp-divider"></div>
+        </div>
+        <div class="hp-pillars__grid">
+
+          <!-- Moments -->
+          <div class="hp-pillar-card hp-pillar-card--live hp-fade">
+            <div class="hp-pillar-card__badge">
+              <span class="hp-badge hp-badge--live">Available Now</span>
+            </div>
+            <div class="hp-pillar-card__number">01</div>
+            <h3 class="hp-pillar-card__title">Moments</h3>
+            <div class="hp-pillar-card__tagline">Intimate &middot; Meaningful &middot; Shareable</div>
+            <p class="hp-pillar-card__desc">
+              Focused on the small-scale experiences that matter most &mdash; the kind that become stories
+              people tell for years. Moments lives at the intersection of craft, emotion, and memorable design.
+            </p>
+            <div class="hp-pillar-card__projects">
+              <div class="hp-project-mention">
+                <span class="hp-dot hp-dot--live"></span>WeddingCamBox &mdash; Live
+              </div>
+            </div>
+            <div class="hp-pillar-card__cta">
+              <a href="/wedding/" class="hp-btn hp-btn--primary hp-btn--sm">Visit WeddingCamBox</a>
+            </div>
+          </div>
+
+          <!-- Experiences -->
+          <div class="hp-pillar-card hp-fade hp-d1">
+            <div class="hp-pillar-card__badge">
+              <span class="hp-badge hp-badge--dev">In Development</span>
+            </div>
+            <div class="hp-pillar-card__number">02</div>
+            <h3 class="hp-pillar-card__title">Experiences</h3>
+            <div class="hp-pillar-card__tagline">Interactive &middot; Playful &middot; Story-Driven</div>
+            <p class="hp-pillar-card__desc">
+              Puzzle routes, interactive installations, and narrative games designed for real places.
+              Built for the curious &mdash; people who want to explore and leave with a sense of discovery.
+            </p>
+            <div class="hp-pillar-card__projects">
+              <div class="hp-project-mention">
+                <span class="hp-dot hp-dot--dev"></span>Puzzle Lanterns &mdash; Prototype
+              </div>
+            </div>
+            <div class="hp-pillar-card__cta">
+              <a href="#roadmap" class="hp-btn hp-btn--outline hp-btn--sm">See what&rsquo;s coming</a>
+            </div>
+          </div>
+
+          <!-- Immersive Worlds -->
+          <div class="hp-pillar-card hp-fade hp-d2">
+            <div class="hp-pillar-card__badge">
+              <span class="hp-badge hp-badge--future">Future Vision</span>
+            </div>
+            <div class="hp-pillar-card__number">03</div>
+            <h3 class="hp-pillar-card__title">Immersive Worlds</h3>
+            <div class="hp-pillar-card__tagline">Layered &middot; Spatial &middot; Unforgettable</div>
+            <p class="hp-pillar-card__desc">
+              Large-scale, location-based storytelling for cities, castles, heritage sites, and historic routes.
+              Experiences that transform a place into a living narrative &mdash; and stay with visitors long after they leave.
+            </p>
+            <div class="hp-pillar-card__projects">
+              <div class="hp-project-mention">
+                <span class="hp-dot hp-dot--future"></span>Concepts in development
+              </div>
+            </div>
+            <div class="hp-pillar-card__cta">
+              <span class="hp-btn hp-btn--muted hp-btn--sm" aria-disabled="true">The long horizon</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Featured Offering ──────────────────────────── -->
+    <section class="hp-featured" id="weddingcambox">
+      <div class="hp-featured__inner">
+        <div class="hp-featured__visual hp-fade">
+          <div class="hp-featured__visual-fill">
+            <span class="hp-featured__visual-mark">WCB</span>
+          </div>
+          <div class="hp-featured__tag">
+            <span class="hp-badge hp-badge--live">Live Now</span>
+          </div>
+        </div>
+        <div class="hp-fade hp-d1">
+          <span class="hp-featured__overline">Moments &mdash; Phase 1</span>
+          <h2 class="hp-featured__title">WeddingCamBox</h2>
+          <p class="hp-featured__desc">
+            Our first live offering under the Moments pillar. WeddingCamBox gives couples and guests
+            a meaningful, personal, and shareable way to capture their wedding day &mdash; thoughtfully designed
+            around the couple&rsquo;s story, not a template.
+          </p>
+          <div class="hp-feature-points">
+            <div class="hp-feature-point">Designed around the couple&rsquo;s story, not a template</div>
+            <div class="hp-feature-point">Simple for guests of any age to use on the day</div>
+            <div class="hp-feature-point">Produces something genuinely worth keeping</div>
+            <div class="hp-feature-point">Available now &mdash; no waitlist</div>
+          </div>
+          <div class="hp-featured__actions">
+            <a href="/wedding/" class="hp-btn hp-btn--primary">Explore WeddingCamBox</a>
+            <a href="#contact" class="hp-btn hp-btn--outline">Get in touch</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Roadmap ─────────────────────────────────────── -->
+    <section class="hp-roadmap" id="roadmap">
+      <div class="hp-container">
+        <div class="hp-section-header hp-fade">
+          <span class="hp-overline">Studio roadmap</span>
+          <h2 style="font-size:clamp(2rem,4vw,3rem);font-weight:500;color:var(--hp-text-light);">Where we&rsquo;re headed</h2>
+          <p>Every phase is built with the same intention: create something that earns its place in someone&rsquo;s memory.</p>
+          <div class="hp-divider"></div>
+        </div>
+        <div class="hp-roadmap__track">
+
+          <div class="hp-roadmap-item hp-fade">
+            <div class="hp-roadmap-item__node hp-roadmap-item__node--live">
+              <span class="hp-roadmap-item__phase-num">I</span>
+            </div>
+            <div class="hp-roadmap-item__content">
+              <div class="hp-roadmap-item__phase-label">
+                Phase 1 &nbsp;<span class="hp-badge hp-badge--live" style="font-size:0.68rem;padding:2px 10px;">Live Now</span>
+              </div>
+              <h3 class="hp-roadmap-item__title">Moments</h3>
+              <p class="hp-roadmap-item__desc">
+                Intimate, personal, well-crafted experiences for individuals and small groups. The studio&rsquo;s
+                first public offering &mdash; built slowly, finished properly, and available now.
+              </p>
+              <div class="hp-roadmap-item__projects">
+                <span class="hp-roadmap-tag hp-roadmap-tag--live">WeddingCamBox</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hp-roadmap-item hp-fade hp-d1">
+            <div class="hp-roadmap-item__node hp-roadmap-item__node--dev">
+              <span class="hp-roadmap-item__phase-num">II</span>
+            </div>
+            <div class="hp-roadmap-item__content">
+              <div class="hp-roadmap-item__phase-label">
+                Phase 2 &nbsp;<span class="hp-badge hp-badge--dev" style="font-size:0.68rem;padding:2px 10px;">In Development</span>
+              </div>
+              <h3 class="hp-roadmap-item__title" style="color:var(--hp-text-dim);">Experiences</h3>
+              <p class="hp-roadmap-item__desc">
+                Interactive, place-based experiences that reward curiosity. Puzzle routes, narrative installations,
+                and real-world games for venues, events, and public spaces.
+              </p>
+              <div class="hp-roadmap-item__projects">
+                <span class="hp-roadmap-tag">Puzzle Lanterns &mdash; prototype</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hp-roadmap-item hp-fade hp-d2">
+            <div class="hp-roadmap-item__node hp-roadmap-item__node--future">
+              <span class="hp-roadmap-item__phase-num" style="color:rgba(184,173,156,0.4)">III</span>
+            </div>
+            <div class="hp-roadmap-item__content">
+              <div class="hp-roadmap-item__phase-label" style="color:rgba(184,173,156,0.4)">
+                Phase 3 &nbsp;<span class="hp-badge hp-badge--future" style="font-size:0.68rem;padding:2px 10px;">Future Vision</span>
+              </div>
+              <h3 class="hp-roadmap-item__title" style="color:rgba(245,240,232,0.35);">Immersive Worlds</h3>
+              <p class="hp-roadmap-item__desc" style="color:rgba(184,173,156,0.45);">
+                Ambitious, long-form location storytelling. Designed for cities, heritage locations, castles,
+                and transport routes. The kind of work that takes years to do well &mdash; and is worth every one of them.
+              </p>
+              <div class="hp-roadmap-item__projects">
+                <span class="hp-roadmap-tag" style="opacity:0.4;">Concepts being explored</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Why The Lions Alliance ─────────────────────── -->
+    <section class="hp-why" id="why">
+      <div class="hp-container">
+        <div class="hp-section-header hp-fade">
+          <span class="hp-overline">Our approach</span>
+          <h2 style="font-size:clamp(2rem,4vw,3rem);font-weight:500;">Why The Lions Alliance</h2>
+          <p>We are not an agency. We are a studio &mdash; and that distinction shapes everything we build.</p>
+          <div class="hp-divider"></div>
+        </div>
+        <div class="hp-why__grid">
+          <div class="hp-why-card hp-fade">
+            <div class="hp-why-card__icon">✦</div>
+            <h4 class="hp-why-card__title">Story first</h4>
+            <p class="hp-why-card__desc">Every project begins with a narrative question: what is the experience telling? Craft, design, and technology all serve that answer.</p>
+          </div>
+          <div class="hp-why-card hp-fade hp-d1">
+            <div class="hp-why-card__icon">◈</div>
+            <h4 class="hp-why-card__title">Physical meets digital</h4>
+            <p class="hp-why-card__desc">We blend what people can hold, scan, read, and share. The best experiences don&rsquo;t live only on a screen or only in a room &mdash; they move between both.</p>
+          </div>
+          <div class="hp-why-card hp-fade hp-d2">
+            <div class="hp-why-card__icon">◎</div>
+            <h4 class="hp-why-card__title">Built with intention</h4>
+            <p class="hp-why-card__desc">We build fewer things, more carefully. Each offering is released when it&rsquo;s ready &mdash; not when the calendar demands it.</p>
+          </div>
+          <div class="hp-why-card hp-fade">
+            <div class="hp-why-card__icon">⟡</div>
+            <h4 class="hp-why-card__title">Made to be remembered</h4>
+            <p class="hp-why-card__desc">The measure of success is simple: did the experience stay with someone? That question drives every decision from concept to delivery.</p>
+          </div>
+          <div class="hp-why-card hp-fade hp-d1">
+            <div class="hp-why-card__icon">◇</div>
+            <h4 class="hp-why-card__title">From intimate to immense</h4>
+            <p class="hp-why-card__desc">The same thinking that shapes a wedding product can scale to a city-wide narrative. Our pillars differ in scale, not in standard.</p>
+          </div>
+          <div class="hp-why-card hp-fade hp-d2">
+            <div class="hp-why-card__icon">❋</div>
+            <h4 class="hp-why-card__title">Long-term partners</h4>
+            <p class="hp-why-card__desc">We are interested in lasting relationships with venues, organisations, and collaborators who believe that experience design is worth doing properly.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Contact ─────────────────────────────────────── -->
+    <section class="hp-contact" id="contact">
+      <div class="hp-contact__inner">
+        <span class="hp-contact__overline hp-fade">Get in touch</span>
+        <h2 class="hp-contact__title hp-fade hp-d1">Let&rsquo;s build something worth remembering</h2>
+        <p class="hp-contact__desc hp-fade hp-d2">
+          Whether you&rsquo;re planning a wedding, running a venue, managing a heritage site, or simply
+          curious about what we&rsquo;re building next &mdash; we&rsquo;d genuinely like to hear from you.
+        </p>
+        <div class="hp-contact__actions hp-fade hp-d2">
+          <a href="/wedding/" class="hp-btn hp-btn--gold">Explore WeddingCamBox</a>
+          <a href="mailto:hello@thelionsalliance.com" class="hp-btn hp-btn--ghost">Send us a message</a>
+        </div>
+        <a href="mailto:hello@thelionsalliance.com" class="hp-contact__email hp-fade hp-d3">
+          hello@thelionsalliance.com
+        </a>
+      </div>
+    </section>
+
+    <!-- ── Footer ─────────────────────────────────────── -->
+    <footer class="hp-footer">
+      <div class="hp-container">
+        <div>
+          <a href="/" class="hp-footer__logo">The Lions <span>Alliance</span></a>
+          <span class="hp-footer__tagline">A creative experience studio</span>
+        </div>
+        <ul class="hp-footer__nav">
+          <li><a href="/">Home</a></li>
+          <li><a href="/wedding/">WeddingCamBox</a></li>
+          <li><a href="#roadmap">Roadmap</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="hp-footer__copy">
+          &copy; {year} The Lions Alliance. All rights reserved.
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const nav = document.getElementById('hp-nav');
+      window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 40);
+      }, { passive: true });
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('hp-visible');
+            observer.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('.hp-fade').forEach(el => observer.observe(el));
+    </script>
+  </body>
+</html>
