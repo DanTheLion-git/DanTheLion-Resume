@@ -7,92 +7,82 @@ const year = new Date().getFullYear();
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Lions Alliance — A Creative Experience Studio</title>
+    <title>The Lions Alliance &mdash; A Creative Experience Studio</title>
     <meta name="description" content="The Lions Alliance creates immersive, story-driven experiences that people remember. From intimate wedding moments to large-scale interactive worlds." />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
-  <body class="hp-page">
+  <body class="tla-page">
 
     <!-- ── Navigation ─────────────────────────────────── -->
-    <nav class="hp-nav" id="hp-nav">
-      <div class="hp-nav__inner">
-        <a href="/" class="hp-nav__logo">The Lions <span>Alliance</span></a>
-        <ul class="hp-nav__links">
+    <nav class="tla-nav" id="tla-nav">
+      <div class="tla-nav__inner">
+        <a href="/" class="tla-nav__logo">The Lions <span>Alliance</span></a>
+        <ul class="tla-nav__links">
           <li><a href="#studio">Studio</a></li>
           <li><a href="#pillars">Our Work</a></li>
           <li><a href="#roadmap">Roadmap</a></li>
-          <li><a href="/puzzlelanterns/">Puzzle Lanterns</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
-        <a href="/wedding/" class="hp-nav__cta">WeddingCamBox</a>
+        <a href="/wedding/" class="tla-nav__cta">WeddingCamBox</a>
+        <button class="tla-nav__hamburger" id="tla-hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <div class="tla-nav__mobile" id="tla-mobile-menu">
+        <a href="#studio">Studio</a>
+        <a href="#pillars">Our Work</a>
+        <a href="#roadmap">Roadmap</a>
+        <a href="#contact">Contact</a>
+        <a href="/wedding/">WeddingCamBox</a>
       </div>
     </nav>
 
     <!-- ── Hero ───────────────────────────────────────── -->
-    <section class="hp-hero" id="home">
-      <div class="hp-hero-grain" aria-hidden="true"></div>
-      <div class="hp-hero__content hp-container">
-        <div class="hp-hero__eyebrow">The Lions Alliance</div>
-        <h1 class="hp-hero__title">
-          We craft experiences<br>
-          <em>worth remembering.</em>
-        </h1>
-        <p class="hp-hero__subtitle">
-          A creative studio building story-driven moments, interactive experiences, and immersive worlds.
-          Phase one is live. The rest is being built with care.
-        </p>
-        <div class="hp-hero__actions">
-          <a href="/wedding/" class="hp-btn hp-btn--gold">
-            Explore WeddingCamBox
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-          <a href="#pillars" class="hp-btn hp-btn--ghost">View our roadmap</a>
+    <section class="tla-hero" id="hero">
+      <div class="tla-container">
+        <div class="tla-fade">
+          <p class="tla-hero__eyebrow">A Creative Experience Studio</p>
         </div>
+        <h1 class="tla-hero__title tla-fade tla-d1">We craft experiences<br /><em>worth remembering.</em></h1>
+        <p class="tla-hero__subtitle tla-fade tla-d2">From intimate wedding moments to interactive puzzle routes &mdash; we design story-driven experiences that stay with people long after they leave.</p>
+        <div class="tla-hero__actions tla-fade tla-d3">
+          <a href="/wedding/" class="tla-btn tla-btn--primary">Explore WeddingCamBox</a>
+          <a href="#roadmap" class="tla-btn tla-btn--outline">See our roadmap</a>
+        </div>
+        <div class="tla-hero__media tla-fade tla-d3">Showreel coming soon</div>
       </div>
-      <a href="#studio" class="hp-hero__scroll" aria-label="Scroll to content">
-        <div class="hp-hero__scroll-line"></div>
-        <span>Scroll</span>
-      </a>
     </section>
 
     <!-- ── Studio Statement ───────────────────────────── -->
-    <section class="hp-studio" id="studio">
-      <div class="hp-studio__inner">
-        <div class="hp-fade">
-          <span class="hp-studio__label">About the studio</span>
-          <h2 class="hp-studio__heading">
-            Building around<br>three pillars
-          </h2>
-          <p class="hp-studio__text">
-            The Lions Alliance is a creative experience studio in deliberate development. We believe
-            the most memorable experiences share three qualities: they are personal, interactive,
-            and beautifully crafted.
-          </p>
-          <p class="hp-studio__text">
-            Our work is structured across three pillars &mdash; each at a different stage.
-            Phase one is live today. The next two are being built with the same care and conviction.
-          </p>
-        </div>
-        <div class="hp-phase-list hp-fade hp-d1">
-          <div class="hp-phase-item hp-phase-item--active">
-            <div class="hp-phase-item__num">01</div>
-            <div>
-              <div class="hp-phase-item__label">Live now</div>
-              <div class="hp-phase-item__name">Moments</div>
-            </div>
+    <section class="tla-studio" id="studio">
+      <div class="tla-container">
+        <div class="tla-studio__grid">
+          <div class="tla-studio__text tla-fade">
+            <span class="tla-overline">About the studio</span>
+            <h2>Three pillars, one vision</h2>
+            <p>The Lions Alliance is a creative experience studio. We believe the most memorable experiences share three qualities: they are personal, interactive, and beautifully crafted. Rather than doing everything, we focus on three connected pillars &mdash; each at a different stage of development.</p>
           </div>
-          <div class="hp-phase-item">
-            <div class="hp-phase-item__num">02</div>
-            <div>
-              <div class="hp-phase-item__label">In development</div>
-              <div class="hp-phase-item__name">Experiences</div>
+          <div class="tla-studio__phases tla-fade tla-d2">
+            <div class="tla-phase-item">
+              <span class="tla-phase-item__num">01</span>
+              <div>
+                <p class="tla-phase-item__label">Live now</p>
+                <p class="tla-phase-item__name">Moments</p>
+              </div>
             </div>
-          </div>
-          <div class="hp-phase-item">
-            <div class="hp-phase-item__num">03</div>
-            <div>
-              <div class="hp-phase-item__label">Future vision</div>
-              <div class="hp-phase-item__name">Immersive Worlds</div>
+            <div class="tla-phase-item">
+              <span class="tla-phase-item__num">02</span>
+              <div>
+                <p class="tla-phase-item__label">In development</p>
+                <p class="tla-phase-item__name">Experiences</p>
+              </div>
+            </div>
+            <div class="tla-phase-item">
+              <span class="tla-phase-item__num">03</span>
+              <div>
+                <p class="tla-phase-item__label">Future vision</p>
+                <p class="tla-phase-item__name">Immersive Worlds</p>
+              </div>
             </div>
           </div>
         </div>
@@ -100,289 +90,238 @@ const year = new Date().getFullYear();
     </section>
 
     <!-- ── Three Pillars ──────────────────────────────── -->
-    <section class="hp-pillars" id="pillars">
-      <div class="hp-container">
-        <div class="hp-section-header hp-fade">
-          <span class="hp-overline">Three pillars</span>
-          <h2 style="font-size:clamp(2rem,4vw,3rem);font-weight:500;">What we&rsquo;re building</h2>
-          <p>Three connected pillars, each grounded in storytelling. One available now, two growing deliberately.</p>
-          <div class="hp-divider"></div>
+    <section class="tla-pillars" id="pillars">
+      <div class="tla-container">
+        <div class="tla-section-header tla-fade">
+          <span class="tla-overline">What we&rsquo;re building</span>
+          <h2>Three pillars of experience</h2>
+          <div class="tla-divider"></div>
         </div>
-        <div class="hp-pillars__grid">
-
-          <!-- Moments -->
-          <div class="hp-pillar-card hp-pillar-card--live hp-fade">
-            <div class="hp-pillar-card__badge">
-              <span class="hp-badge hp-badge--live">Available Now</span>
+        <div class="tla-pillars__grid">
+          <!-- Pillar 1 -->
+          <div class="tla-pillar-card tla-fade tla-d1">
+            <div class="tla-pillar-card__head">
+              <span class="tla-pillar-card__num">01</span>
+              <span class="tla-badge tla-badge--live">Available Now</span>
             </div>
-            <div class="hp-pillar-card__number">01</div>
-            <h3 class="hp-pillar-card__title">Moments</h3>
-            <div class="hp-pillar-card__tagline">Intimate &middot; Meaningful &middot; Shareable</div>
-            <p class="hp-pillar-card__desc">
-              Focused on the small-scale experiences that matter most &mdash; the kind that become stories
-              people tell for years. Moments lives at the intersection of craft, emotion, and memorable design.
-            </p>
-            <div class="hp-pillar-card__projects">
-              <div class="hp-project-mention">
-                <span class="hp-dot hp-dot--live"></span>WeddingCamBox &mdash; Live
-              </div>
-            </div>
-            <div class="hp-pillar-card__cta">
-              <a href="/wedding/" class="hp-btn hp-btn--primary hp-btn--sm">Visit WeddingCamBox</a>
-            </div>
+            <h3>Moments</h3>
+            <p class="tla-pillar-card__tagline">Intimate &middot; Meaningful &middot; Shareable</p>
+            <p class="tla-pillar-card__desc">The experiences that matter most &mdash; the kind that become stories people tell for years. Our first pillar focuses on personal, emotional, and beautifully crafted products.</p>
+            <p class="tla-pillar-card__project"><strong>WeddingCamBox</strong> &mdash; Live</p>
+            <a href="/wedding/" class="tla-btn tla-btn--primary tla-btn--sm">Visit WeddingCamBox</a>
           </div>
-
-          <!-- Experiences -->
-          <div class="hp-pillar-card hp-fade hp-d1">
-            <div class="hp-pillar-card__badge">
-              <span class="hp-badge hp-badge--dev">In Development</span>
+          <!-- Pillar 2 -->
+          <div class="tla-pillar-card tla-fade tla-d2">
+            <div class="tla-pillar-card__head">
+              <span class="tla-pillar-card__num">02</span>
+              <span class="tla-badge tla-badge--dev">In Development</span>
             </div>
-            <div class="hp-pillar-card__number">02</div>
-            <h3 class="hp-pillar-card__title">Experiences</h3>
-            <div class="hp-pillar-card__tagline">Interactive &middot; Playful &middot; Story-Driven</div>
-            <p class="hp-pillar-card__desc">
-              Puzzle routes, interactive installations, and narrative games designed for real places.
-              Built for the curious &mdash; people who want to explore and leave with a sense of discovery.
-            </p>
-            <div class="hp-pillar-card__projects">
-              <div class="hp-project-mention">
-                <span class="hp-dot hp-dot--dev"></span>Puzzle Lanterns &mdash; Prototype
-              </div>
-            </div>
-            <div class="hp-pillar-card__cta">
-              <a href="/puzzlelanterns/" class="hp-btn hp-btn--outline hp-btn--sm">See what&rsquo;s coming</a>
-            </div>
+            <h3>Experiences</h3>
+            <p class="tla-pillar-card__tagline">Interactive &middot; Playful &middot; Story-Driven</p>
+            <p class="tla-pillar-card__desc">Puzzle routes, interactive installations, and narrative games designed for real places. Built for the curious &mdash; people who want to explore and discover.</p>
+            <p class="tla-pillar-card__project"><strong>Puzzle Lanterns</strong> &mdash; Prototype</p>
+            <a href="/puzzlelanterns/" class="tla-btn tla-btn--outline tla-btn--sm">See what&rsquo;s coming</a>
           </div>
-
-          <!-- Immersive Worlds -->
-          <div class="hp-pillar-card hp-fade hp-d2">
-            <div class="hp-pillar-card__badge">
-              <span class="hp-badge hp-badge--future">Future Vision</span>
+          <!-- Pillar 3 -->
+          <div class="tla-pillar-card tla-fade tla-d3">
+            <div class="tla-pillar-card__head">
+              <span class="tla-pillar-card__num">03</span>
+              <span class="tla-badge tla-badge--future">Future Vision</span>
             </div>
-            <div class="hp-pillar-card__number">03</div>
-            <h3 class="hp-pillar-card__title">Immersive Worlds</h3>
-            <div class="hp-pillar-card__tagline">Layered &middot; Spatial &middot; Unforgettable</div>
-            <p class="hp-pillar-card__desc">
-              Large-scale, location-based storytelling for cities, castles, heritage sites, and historic routes.
-              Experiences that transform a place into a living narrative &mdash; and stay with visitors long after they leave.
-            </p>
-            <div class="hp-pillar-card__projects">
-              <div class="hp-project-mention">
-                <span class="hp-dot hp-dot--future"></span>Concepts in development
-              </div>
-            </div>
-            <div class="hp-pillar-card__cta">
-              <span class="hp-btn hp-btn--muted hp-btn--sm" aria-disabled="true">The long horizon</span>
-            </div>
+            <h3>Immersive Worlds</h3>
+            <p class="tla-pillar-card__tagline">Layered &middot; Spatial &middot; Unforgettable</p>
+            <p class="tla-pillar-card__desc">Large-scale, location-based storytelling for cities, heritage sites, and historic routes. Experiences that transform a place into a living narrative.</p>
+            <p class="tla-pillar-card__project">Concepts in development</p>
+            <span class="tla-btn tla-btn--outline tla-btn--sm" style="opacity:.45;pointer-events:none;">The long horizon</span>
           </div>
-
         </div>
       </div>
     </section>
 
     <!-- ── Featured Offering ──────────────────────────── -->
-    <section class="hp-featured" id="weddingcambox">
-      <div class="hp-featured__inner">
-        <div class="hp-featured__visual hp-fade">
-          <div class="hp-featured__visual-fill">
-            <span class="hp-featured__visual-mark">WCB</span>
+    <section class="tla-featured">
+      <div class="tla-container">
+        <div class="tla-featured__grid">
+          <div class="tla-featured__visual tla-fade">
+            <span class="tla-featured__visual-mark">WCB</span>
+            <span class="tla-badge tla-badge--live">Live Now</span>
           </div>
-          <div class="hp-featured__tag">
-            <span class="hp-badge hp-badge--live">Live Now</span>
-          </div>
-        </div>
-        <div class="hp-fade hp-d1">
-          <span class="hp-featured__overline">Moments &mdash; Phase 1</span>
-          <h2 class="hp-featured__title">WeddingCamBox</h2>
-          <p class="hp-featured__desc">
-            Our first live offering under the Moments pillar. WeddingCamBox gives couples and guests
-            a meaningful, personal, and shareable way to capture their wedding day &mdash; thoughtfully designed
-            around the couple&rsquo;s story, not a template.
-          </p>
-          <div class="hp-feature-points">
-            <div class="hp-feature-point">Designed around the couple&rsquo;s story, not a template</div>
-            <div class="hp-feature-point">Simple for guests of any age to use on the day</div>
-            <div class="hp-feature-point">Produces something genuinely worth keeping</div>
-            <div class="hp-feature-point">Available now &mdash; no waitlist</div>
-          </div>
-          <div class="hp-featured__actions">
-            <a href="/wedding/" class="hp-btn hp-btn--primary">Explore WeddingCamBox</a>
-            <a href="#contact" class="hp-btn hp-btn--outline">Get in touch</a>
+          <div class="tla-featured__content tla-fade tla-d2">
+            <span class="tla-overline">Moments &mdash; Phase 1</span>
+            <h2>WeddingCamBox</h2>
+            <p>Our first live offering. WeddingCamBox gives couples and guests a meaningful, personal way to capture their wedding day &mdash; 10 pocket cameras, beautifully simple.</p>
+            <ul class="tla-featured__points">
+              <li>Designed around the couple&rsquo;s story</li>
+              <li>Simple for any guest</li>
+              <li>Produces something worth keeping</li>
+              <li>Available now</li>
+            </ul>
+            <div class="tla-featured__actions">
+              <a href="/wedding/" class="tla-btn tla-btn--primary tla-btn--sm">Explore WeddingCamBox</a>
+              <a href="#contact" class="tla-btn tla-btn--outline tla-btn--sm">Get in touch</a>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ── Roadmap ─────────────────────────────────────── -->
-    <section class="hp-roadmap" id="roadmap">
-      <div class="hp-container">
-        <div class="hp-section-header hp-fade">
-          <span class="hp-overline">Studio roadmap</span>
-          <h2 style="font-size:clamp(2rem,4vw,3rem);font-weight:500;color:var(--hp-text-light);">Where we&rsquo;re headed</h2>
-          <p>Every phase is built with the same intention: create something that earns its place in someone&rsquo;s memory.</p>
-          <div class="hp-divider"></div>
+    <!-- ── Roadmap ────────────────────────────────────── -->
+    <section class="tla-roadmap" id="roadmap">
+      <div class="tla-container">
+        <div class="tla-section-header tla-fade">
+          <span class="tla-overline">Where we&rsquo;re headed</span>
+          <h2>Our roadmap</h2>
+          <div class="tla-divider"></div>
         </div>
-        <div class="hp-roadmap__track">
-
-          <div class="hp-roadmap-item hp-fade">
-            <div class="hp-roadmap-item__node hp-roadmap-item__node--live">
-              <span class="hp-roadmap-item__phase-num">I</span>
+        <div class="tla-timeline tla-fade tla-d1">
+          <!-- Phase I -->
+          <div class="tla-timeline__item tla-timeline__item--active">
+            <div class="tla-timeline__node"></div>
+            <div class="tla-timeline__head">
+              <h3>Phase I &mdash; Moments</h3>
+              <span class="tla-badge tla-badge--live">Live Now</span>
             </div>
-            <div class="hp-roadmap-item__content">
-              <div class="hp-roadmap-item__phase-label">
-                Phase 1 &nbsp;<span class="hp-badge hp-badge--live" style="font-size:0.68rem;padding:2px 10px;">Live Now</span>
-              </div>
-              <h3 class="hp-roadmap-item__title">Moments</h3>
-              <p class="hp-roadmap-item__desc">
-                Intimate, personal, well-crafted experiences for individuals and small groups. The studio&rsquo;s
-                first public offering &mdash; built slowly, finished properly, and available now.
-              </p>
-              <div class="hp-roadmap-item__projects">
-                <span class="hp-roadmap-tag hp-roadmap-tag--live">WeddingCamBox</span>
-              </div>
+            <p class="tla-timeline__desc">Personal, emotional products that capture life&rsquo;s most meaningful occasions. WeddingCamBox is live and available.</p>
+          </div>
+          <!-- Phase II -->
+          <div class="tla-timeline__item tla-timeline__item--outlined">
+            <div class="tla-timeline__node"></div>
+            <div class="tla-timeline__head">
+              <h3>Phase II &mdash; Experiences</h3>
+              <span class="tla-badge tla-badge--dev">In Development</span>
             </div>
+            <p class="tla-timeline__desc">Interactive puzzle routes, installations, and narrative games designed for real-world exploration. Puzzle Lanterns is in prototype.</p>
           </div>
-
-          <div class="hp-roadmap-item hp-fade hp-d1">
-            <div class="hp-roadmap-item__node hp-roadmap-item__node--dev">
-              <span class="hp-roadmap-item__phase-num">II</span>
+          <!-- Phase III -->
+          <div class="tla-timeline__item tla-timeline__item--dashed">
+            <div class="tla-timeline__node"></div>
+            <div class="tla-timeline__head">
+              <h3>Phase III &mdash; Immersive Worlds</h3>
+              <span class="tla-badge tla-badge--future">Future Vision</span>
             </div>
-            <div class="hp-roadmap-item__content">
-              <div class="hp-roadmap-item__phase-label">
-                Phase 2 &nbsp;<span class="hp-badge hp-badge--dev" style="font-size:0.68rem;padding:2px 10px;">In Development</span>
-              </div>
-              <h3 class="hp-roadmap-item__title">Experiences</h3>
-              <p class="hp-roadmap-item__desc">
-                Interactive, place-based experiences that reward curiosity. Puzzle routes, narrative installations,
-                and real-world games for venues, events, and public spaces.
-              </p>
-              <div class="hp-roadmap-item__projects">
-                <span class="hp-roadmap-tag"><a href="/puzzlelanterns/" style="color:inherit;text-decoration:none;">Puzzle Lanterns &mdash; prototype</a></span>
-              </div>
-            </div>
-          </div>
-
-          <div class="hp-roadmap-item hp-fade hp-d2">
-            <div class="hp-roadmap-item__node hp-roadmap-item__node--future">
-              <span class="hp-roadmap-item__phase-num">III</span>
-            </div>
-            <div class="hp-roadmap-item__content">
-              <div class="hp-roadmap-item__phase-label" style="opacity:0.55;">
-                Phase 3 &nbsp;<span class="hp-badge hp-badge--future" style="font-size:0.68rem;padding:2px 10px;">Future Vision</span>
-              </div>
-              <h3 class="hp-roadmap-item__title" style="opacity:0.45;">Immersive Worlds</h3>
-              <p class="hp-roadmap-item__desc" style="opacity:0.55;">
-                Ambitious, long-form location storytelling. Designed for cities, heritage locations, castles,
-                and transport routes. The kind of work that takes years to do well &mdash; and is worth every one of them.
-              </p>
-              <div class="hp-roadmap-item__projects">
-                <span class="hp-roadmap-tag" style="opacity:0.5;">Concepts being explored</span>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ── Why The Lions Alliance ─────────────────────── -->
-    <section class="hp-why" id="why">
-      <div class="hp-container">
-        <div class="hp-section-header hp-fade">
-          <span class="hp-overline">Our approach</span>
-          <h2 style="font-size:clamp(2rem,4vw,3rem);font-weight:500;">Why The Lions Alliance</h2>
-          <p>We are not an agency. We are a studio &mdash; and that distinction shapes everything we build.</p>
-          <div class="hp-divider"></div>
-        </div>
-        <div class="hp-why__grid">
-          <div class="hp-why-card hp-fade">
-            <div class="hp-why-card__icon">✦</div>
-            <h4 class="hp-why-card__title">Story first</h4>
-            <p class="hp-why-card__desc">Every project begins with a narrative question: what is the experience telling? Craft, design, and technology all serve that answer.</p>
-          </div>
-          <div class="hp-why-card hp-fade hp-d1">
-            <div class="hp-why-card__icon">◈</div>
-            <h4 class="hp-why-card__title">Physical meets digital</h4>
-            <p class="hp-why-card__desc">We blend what people can hold, scan, read, and share. The best experiences don&rsquo;t live only on a screen or only in a room &mdash; they move between both.</p>
-          </div>
-          <div class="hp-why-card hp-fade hp-d2">
-            <div class="hp-why-card__icon">◎</div>
-            <h4 class="hp-why-card__title">Built with intention</h4>
-            <p class="hp-why-card__desc">We build fewer things, more carefully. Each offering is released when it&rsquo;s ready &mdash; not when the calendar demands it.</p>
-          </div>
-          <div class="hp-why-card hp-fade">
-            <div class="hp-why-card__icon">⟡</div>
-            <h4 class="hp-why-card__title">Made to be remembered</h4>
-            <p class="hp-why-card__desc">The measure of success is simple: did the experience stay with someone? That question drives every decision from concept to delivery.</p>
-          </div>
-          <div class="hp-why-card hp-fade hp-d1">
-            <div class="hp-why-card__icon">◇</div>
-            <h4 class="hp-why-card__title">From intimate to immense</h4>
-            <p class="hp-why-card__desc">The same thinking that shapes a wedding product can scale to a city-wide narrative. Our pillars differ in scale, not in standard.</p>
-          </div>
-          <div class="hp-why-card hp-fade hp-d2">
-            <div class="hp-why-card__icon">❋</div>
-            <h4 class="hp-why-card__title">Long-term partners</h4>
-            <p class="hp-why-card__desc">We are interested in lasting relationships with venues, organisations, and collaborators who believe that experience design is worth doing properly.</p>
+            <p class="tla-timeline__desc">Large-scale, location-based storytelling for cities and heritage sites. Transforming places into living narratives.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ── Contact ─────────────────────────────────────── -->
-    <section class="hp-contact" id="contact">
-      <div class="hp-contact__inner">
-        <span class="hp-contact__overline hp-fade">Get in touch</span>
-        <h2 class="hp-contact__title hp-fade hp-d1">Let&rsquo;s build something worth remembering</h2>
-        <p class="hp-contact__desc hp-fade hp-d2">
-          Whether you&rsquo;re planning a wedding, running a venue, managing a heritage site, or simply
-          curious about what we&rsquo;re building next &mdash; we&rsquo;d genuinely like to hear from you.
-        </p>
-        <div class="hp-contact__actions hp-fade hp-d2">
-          <a href="/wedding/" class="hp-btn hp-btn--gold">Explore WeddingCamBox</a>
-          <a href="mailto:hello@thelionsalliance.com" class="hp-btn hp-btn--ghost">Send us a message</a>
+    <!-- ── Values ─────────────────────────────────────── -->
+    <section class="tla-values">
+      <div class="tla-container">
+        <div class="tla-section-header tla-fade">
+          <span class="tla-overline">Our approach</span>
+          <h2>Why The Lions Alliance</h2>
+          <div class="tla-divider"></div>
         </div>
-        <a href="mailto:hello@thelionsalliance.com" class="hp-contact__email hp-fade hp-d3">
-          hello@thelionsalliance.com
-        </a>
+        <div class="tla-values__grid">
+          <div class="tla-value-card tla-fade tla-d1">
+            <h3>Story first</h3>
+            <p>Every project begins with a narrative question. What story are we helping someone tell?</p>
+          </div>
+          <div class="tla-value-card tla-fade tla-d2">
+            <h3>Physical meets digital</h3>
+            <p>We blend what people can hold, scan, and share &mdash; bridging the tactile and the technological.</p>
+          </div>
+          <div class="tla-value-card tla-fade tla-d3">
+            <h3>Built with intention</h3>
+            <p>We build fewer things, more carefully. Every detail is considered, every decision deliberate.</p>
+          </div>
+          <div class="tla-value-card tla-fade tla-d1">
+            <h3>Made to be remembered</h3>
+            <p>Our measure of success is simple: did the experience stay with someone?</p>
+          </div>
+          <div class="tla-value-card tla-fade tla-d2">
+            <h3>From intimate to immense</h3>
+            <p>The same thinking scales from a wedding product to a city-wide narrative experience.</p>
+          </div>
+          <div class="tla-value-card tla-fade tla-d3">
+            <h3>Long-term partners</h3>
+            <p>We build lasting relationships with venues and organisations, not one-off transactions.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Contact ────────────────────────────────────── -->
+    <section class="tla-contact" id="contact">
+      <div class="tla-container">
+        <span class="tla-overline tla-fade">Get in touch</span>
+        <h2 class="tla-fade tla-d1">Let&rsquo;s build something<br />worth remembering</h2>
+        <p class="tla-fade tla-d2">Whether you&rsquo;re planning a wedding, curious about our puzzle routes, or want to explore a partnership &mdash; we&rsquo;d love to hear from you.</p>
+        <div class="tla-contact__actions tla-fade tla-d3">
+          <a href="/wedding/" class="tla-btn tla-btn--gold">Explore WeddingCamBox</a>
+          <a href="mailto:hello@thelionsalliance.com" class="tla-btn tla-btn--ghost">Send us a message</a>
+        </div>
+        <p class="tla-contact__email tla-fade tla-d3"><a href="mailto:hello@thelionsalliance.com">hello@thelionsalliance.com</a></p>
       </div>
     </section>
 
     <!-- ── Footer ─────────────────────────────────────── -->
-    <footer class="hp-footer">
-      <div class="hp-container">
-        <div>
-          <a href="/" class="hp-footer__logo">The Lions <span>Alliance</span></a>
-          <span class="hp-footer__tagline">A creative experience studio</span>
+    <footer class="tla-footer">
+      <div class="tla-container">
+        <div class="tla-footer__inner">
+          <div class="tla-footer__brand">
+            <span class="tla-footer__logo">The Lions <span>Alliance</span></span>
+            <span class="tla-footer__tagline">A Creative Experience Studio</span>
+          </div>
+          <nav class="tla-footer__links">
+            <a href="#studio">Studio</a>
+            <a href="#pillars">Our Work</a>
+            <a href="#roadmap">Roadmap</a>
+            <a href="#contact">Contact</a>
+            <a href="/wedding/">WeddingCamBox</a>
+          </nav>
         </div>
-        <ul class="hp-footer__nav">
-          <li><a href="/">Home</a></li>
-          <li><a href="/wedding/">WeddingCamBox</a></li>
-          <li><a href="/puzzlelanterns/">Puzzle Lanterns</a></li>
-          <li><a href="#roadmap">Roadmap</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-        <div class="hp-footer__copy">
-          &copy; {year} The Lions Alliance. All rights reserved.
-        </div>
+        <p class="tla-footer__copy">&copy; {year} The Lions Alliance. All rights reserved.</p>
       </div>
     </footer>
 
+    <!-- ── Scripts ─────────────────────────────────────── -->
     <script>
-      const nav = document.getElementById('hp-nav');
+      // Scroll-aware nav
+      const nav = document.getElementById('tla-nav');
       window.addEventListener('scroll', () => {
         nav.classList.toggle('scrolled', window.scrollY > 40);
       }, { passive: true });
 
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            e.target.classList.add('hp-visible');
-            observer.unobserve(e.target);
+      // Hamburger toggle
+      const hamburger = document.getElementById('tla-hamburger');
+      const mobileMenu = document.getElementById('tla-mobile-menu');
+      hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        mobileMenu.classList.toggle('open');
+      });
+
+      // Close mobile menu on link click
+      mobileMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          hamburger.classList.remove('active');
+          mobileMenu.classList.remove('open');
+        });
+      });
+
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', (e) => {
+          const target = document.querySelector(anchor.getAttribute('href'));
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+
+      // IntersectionObserver for fade-in
+      const faders = document.querySelectorAll('.tla-fade');
+      const fadeObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('tla-visible');
+            fadeObserver.unobserve(entry.target);
           }
         });
       }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-      document.querySelectorAll('.hp-fade').forEach(el => observer.observe(el));
+      faders.forEach(el => fadeObserver.observe(el));
     </script>
   </body>
 </html>

@@ -8,89 +8,85 @@ const year = new Date().getFullYear();
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Puzzle Lanterns — The Lions Alliance</title>
-    <meta name="description" content="Puzzle Lanterns is an interactive experience concept in development by The Lions Alliance — built around story, exploration, and physical clues." />
+    <title>Puzzle Lanterns &mdash; The Lions Alliance</title>
+    <meta name="description" content="Puzzle Lanterns is an interactive experience concept in development by The Lions Alliance &mdash; built around story, exploration, and physical clues." />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
-  <body class="hp-page">
+  <body class="tla-page">
 
     <!-- ── Navigation ─────────────────────────────────── -->
-    <nav class="hp-nav" id="hp-nav">
-      <div class="hp-nav__inner">
-        <a href="/" class="hp-nav__logo">The Lions <span>Alliance</span></a>
-        <ul class="hp-nav__links">
+    <nav class="tla-nav" id="tla-nav">
+      <div class="tla-nav__inner tla-container">
+        <a href="/" class="tla-nav__logo">The Lions <span>Alliance</span></a>
+        <ul class="tla-nav__links">
           <li><a href="#overview">Overview</a></li>
+          <li><a href="#how-it-works">How It Works</a></li>
           <li><a href="#applications">Applications</a></li>
           <li><a href="#development">Development</a></li>
-          <li><a href="/wedding/">WeddingCamBox</a></li>
           <li><a href="#collaborate">Collaborate</a></li>
         </ul>
-        <a href="/" class="hp-nav__cta">← Back to Studio</a>
+        <a href="/" class="tla-nav__cta">&larr; Back to Studio</a>
+        <button class="tla-nav__hamburger" id="hamburger" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <div class="tla-nav__mobile" id="mobile-menu">
+        <a href="#overview">Overview</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#applications">Applications</a>
+        <a href="#development">Development</a>
+        <a href="#collaborate">Collaborate</a>
+        <a href="/">&larr; Back to Studio</a>
       </div>
     </nav>
 
     <!-- ── Hero ───────────────────────────────────────── -->
     <section class="pl-hero" id="home">
-      <div class="hp-hero-grain" aria-hidden="true"></div>
-      <div class="pl-hero__glow" aria-hidden="true"></div>
-      <div class="pl-hero__content hp-container">
-        <div class="pl-hero__context">
-          <a href="/" class="pl-hero__context-link">The Lions Alliance</a>
-          <span class="pl-hero__context-sep">/</span>
-          <span>Experiences Pillar</span>
+      <div class="tla-container pl-hero__inner">
+        <div class="pl-hero__text tla-fade">
+          <div class="pl-hero__breadcrumb">
+            <a href="/">The Lions Alliance</a>
+            <span class="pl-hero__breadcrumb-sep">/</span>
+            <span>Experiences Pillar</span>
+          </div>
+          <div class="pl-hero__badges">
+            <span class="tla-badge tla-badge--dev">In Development</span>
+            <span class="tla-badge tla-badge--future">Phase 2</span>
+          </div>
+          <h1 class="pl-hero__title">Puzzle <em>Lanterns</em></h1>
+          <p class="pl-hero__subtitle">
+            An interactive experience concept built around story, exploration, and physical clues. Part of The Lions Alliance&rsquo;s Experiences pillar.
+          </p>
+          <div class="pl-hero__ctas">
+            <a href="#collaborate" class="tla-btn tla-btn--sage">Follow the project</a>
+            <a href="/" class="tla-btn tla-btn--outline">&larr; The Lions Alliance</a>
+          </div>
         </div>
-        <div class="pl-hero__badges">
-          <span class="hp-badge hp-badge--dev">In Development</span>
-          <span class="hp-badge hp-badge--future">Phase 2</span>
-        </div>
-        <h1 class="pl-hero__title">
-          Puzzle
-          <em>Lanterns</em>
-        </h1>
-        <p class="pl-hero__subtitle">
-          An interactive experience concept built around story, exploration, and physical clues.
-          Part of The Lions Alliance&rsquo;s Experiences pillar &mdash; currently being shaped and prototyped.
-        </p>
-        <div class="pl-hero__actions">
-          <a href="#development" class="hp-btn hp-btn--gold">
-            Follow the project
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-          <a href="/" class="hp-btn hp-btn--ghost">&larr; The Lions Alliance</a>
+        <div class="pl-hero__visual tla-fade tla-d1">
+          <div class="pl-hero__placeholder">
+            <span class="pl-hero__placeholder-icon">&#9670;</span>
+          </div>
+          <span class="pl-hero__placeholder-caption">Concept visual &mdash; in development</span>
         </div>
       </div>
-      <a href="#overview" class="hp-hero__scroll" aria-label="Scroll to content">
-        <div class="hp-hero__scroll-line"></div>
-        <span>Discover</span>
-      </a>
     </section>
 
-    <!-- ── Project Overview ───────────────────────────── -->
+    <!-- ── The Concept ────────────────────────────────── -->
     <section class="pl-overview" id="overview">
-      <div class="pl-overview__inner">
-
-        <div class="hp-fade">
-          <span class="pl-overview__label">The concept</span>
-          <h2 class="pl-overview__heading">
-            Story-driven exploration through physical interaction
-          </h2>
-          <p class="pl-overview__text">
-            Puzzle Lanterns is an experience concept built around a simple idea: what if the
-            environment itself tells the story? Rather than a screen or a guide, participants
-            navigate through a world of physical lanterns, hidden clues, and responsive objects
-            that reveal a narrative step by step.
+      <div class="tla-container pl-overview__inner">
+        <div class="pl-overview__text tla-fade">
+          <span class="tla-overline">The concept</span>
+          <h2 class="tla-section-header">Story-driven exploration through physical interaction</h2>
+          <p>
+            Puzzle Lanterns is an experience concept built around a simple idea: what if the environment itself tells the story? Rather than a screen or a guide, participants navigate through a world of physical lanterns, hidden clues, and responsive objects that reveal a narrative step by step.
           </p>
-          <p class="pl-overview__text">
-            The concept is modular by design. The same interaction framework can power an
-            intimate outdoor puzzle walk, a museum-style installation, or a venue-based
-            storytelling experience. The format adapts; the atmosphere stays consistent.
+          <p>
+            The concept is modular by design. The same interaction framework can power an intimate outdoor puzzle walk, a museum-style installation, or a venue-based storytelling experience.
           </p>
-          <p class="pl-overview__text">
-            Puzzle Lanterns is currently in active development as part of The Lions Alliance&rsquo;s
-            Experiences pillar. We are refining the interaction model, building the first prototype
-            routes, and exploring the formats this concept can grow into.
+          <p>
+            Puzzle Lanterns is currently in active development. We are refining the interaction model, building the first prototype routes, and exploring the formats this concept can grow into.
           </p>
-          <div class="pl-overview__tag-list">
+          <div class="pl-tags">
             <span class="pl-tag">Physical interaction</span>
             <span class="pl-tag">Story progression</span>
             <span class="pl-tag">Group exploration</span>
@@ -98,399 +94,259 @@ const year = new Date().getFullYear();
             <span class="pl-tag">Location-agnostic</span>
           </div>
         </div>
+        <div class="pl-overview__visual tla-fade tla-d1">
+          <div class="pl-overview__img">&#9670;</div>
+        </div>
+      </div>
+    </section>
 
-        <div class="hp-fade hp-d1">
-          <div class="pl-overview__visual">
-            <div class="pl-overview__visual-fill">
-              <div class="pl-overview__visual-mark">&#9670;</div>
-            </div>
-            <div class="pl-overview__visual-caption">Concept visual &mdash; in development</div>
-            <div class="hp-featured__tag">
-              <span class="hp-badge hp-badge--dev">Prototype</span>
-            </div>
+    <div class="tla-divider"></div>
+
+    <!-- ── How It Works ───────────────────────────────── -->
+    <section class="pl-steps-section" id="how-it-works">
+      <div class="tla-container">
+        <div class="tla-fade" style="text-align:center;">
+          <span class="tla-overline">How it works</span>
+          <h2 class="tla-section-header">The interaction model is designed to feel intuitive from the first step.</h2>
+        </div>
+        <div class="pl-steps">
+          <div class="pl-step tla-fade">
+            <div class="pl-step__number">I</div>
+            <div class="pl-step__title">Find the first clue</div>
+            <div class="pl-step__desc">A marker or location signals the beginning.</div>
+          </div>
+          <div class="pl-step tla-fade tla-d1">
+            <div class="pl-step__number">II</div>
+            <div class="pl-step__title">Interact with the lantern</div>
+            <div class="pl-step__desc">Each lantern holds a piece of the narrative.</div>
+          </div>
+          <div class="pl-step tla-fade tla-d2">
+            <div class="pl-step__number">III</div>
+            <div class="pl-step__title">Uncover the next step</div>
+            <div class="pl-step__desc">Each interaction reveals what comes next.</div>
+          </div>
+          <div class="pl-step tla-fade tla-d3">
+            <div class="pl-step__number">IV</div>
+            <div class="pl-step__title">Follow the story forward</div>
+            <div class="pl-step__desc">The experience builds naturally to a final revelation.</div>
           </div>
         </div>
-
       </div>
     </section>
 
     <!-- ── Future Applications ────────────────────────── -->
-    <section class="pl-applications pl-section-dark" id="applications">
-      <div class="hp-container">
-        <div class="hp-section-header hp-fade">
-          <span class="hp-overline">Future applications</span>
-          <h2 style="font-size:clamp(2rem,4vw,3rem);font-weight:500;color:var(--hp-text-light);">What it could become</h2>
-          <p>The Puzzle Lanterns format is designed to be flexible. These are three of the directions we are currently exploring &mdash; none final, all intentional.</p>
-          <div class="hp-divider"></div>
+    <section class="pl-applications" id="applications">
+      <div class="tla-container">
+        <div class="tla-fade" style="text-align:center;">
+          <span class="tla-overline">What it could become</span>
+          <h2 class="tla-section-header">Three directions we are exploring.</h2>
         </div>
         <div class="pl-concept-grid">
-
-          <div class="pl-concept-card hp-fade">
-            <div class="pl-concept-card__badge">
-              <span class="hp-badge hp-badge--future">Future Application</span>
-            </div>
-            <span class="pl-concept-card__icon">&#9661;</span>
-            <h3 class="pl-concept-card__title">Puzzle Routes</h3>
-            <p class="pl-concept-card__desc">
-              Location-based puzzle walks through outdoor spaces, villages, parks, or heritage
-              routes. Participants move through the environment following a sequence of lanterns
-              and clues, uncovering a story tied to the place they are exploring.
-              Designed for individuals, couples, or groups who want an adventure that feels
-              earned, not handed to them.
-            </p>
+          <div class="pl-concept-card tla-fade">
+            <span class="pl-concept-card__icon">&#127939;</span>
+            <div class="pl-concept-card__title">Puzzle Routes</div>
+            <div class="pl-concept-card__desc">Outdoor puzzle walks through villages, parks, and heritage routes &mdash; self-guided adventures that blend storytelling with real-world exploration.</div>
           </div>
-
-          <div class="pl-concept-card hp-fade hp-d1">
-            <div class="pl-concept-card__badge">
-              <span class="hp-badge hp-badge--future">Future Application</span>
-            </div>
-            <span class="pl-concept-card__icon">&#9670;</span>
-            <h3 class="pl-concept-card__title">Interactive Installations</h3>
-            <p class="pl-concept-card__desc">
-              Fixed installations for museums, heritage venues, campsites, and event spaces.
-              The lanterns become permanent or seasonal narrative objects embedded within the
-              environment. Visitors interact at their own pace, uncovering layered stories
-              through the space itself &mdash; no staff required, no rigid schedule.
-            </p>
+          <div class="pl-concept-card tla-fade tla-d1">
+            <span class="pl-concept-card__icon">&#127979;</span>
+            <div class="pl-concept-card__title">Interactive Installations</div>
+            <div class="pl-concept-card__desc">For museums, heritage venues, campsites, and events &mdash; physical installations where visitors discover stories through objects and spaces.</div>
           </div>
-
-          <div class="pl-concept-card hp-fade hp-d2">
-            <div class="pl-concept-card__badge">
-              <span class="hp-badge hp-badge--future">Future Application</span>
-            </div>
-            <span class="pl-concept-card__icon">&#9651;</span>
-            <h3 class="pl-concept-card__title">Story-Driven Adventures</h3>
-            <p class="pl-concept-card__desc">
-              Deeper, more narrative experiences where the puzzle structure serves a longer arc &mdash;
-              a mystery to solve, a world to explore, a history to uncover. Built for themed
-              venues, historical locations, or immersive events where the story takes centre stage
-              and the environment becomes a living part of the telling.
-            </p>
+          <div class="pl-concept-card tla-fade tla-d2">
+            <span class="pl-concept-card__icon">&#128214;</span>
+            <div class="pl-concept-card__title">Story-Driven Adventures</div>
+            <div class="pl-concept-card__desc">Deeper narrative experiences with mystery, world-building, and history woven into the journey from start to finish.</div>
           </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ── How It Works ───────────────────────────────── -->
-    <section class="pl-how" id="how-it-works">
-      <div class="hp-container">
-        <div class="hp-section-header hp-fade">
-          <span class="hp-overline">The experience</span>
-          <h2 style="font-size:clamp(2rem,4vw,3rem);font-weight:500;">How it works</h2>
-          <p>The interaction model is designed to feel intuitive from the first step. No manual. No instructions. Just the story and the path it reveals.</p>
-          <div class="hp-divider"></div>
-        </div>
-        <div class="pl-steps">
-
-          <div class="pl-step hp-fade">
-            <div class="pl-step__num">
-              <span class="pl-step__num-inner">I</span>
-            </div>
-            <h4 class="pl-step__title">Find the first clue</h4>
-            <p class="pl-step__desc">
-              A marker, an object, or a specific location signals the beginning. The story
-              starts without announcement &mdash; you simply know you are in it.
-            </p>
-          </div>
-
-          <div class="pl-step hp-fade hp-d1">
-            <div class="pl-step__num">
-              <span class="pl-step__num-inner">II</span>
-            </div>
-            <h4 class="pl-step__title">Interact with the lantern</h4>
-            <p class="pl-step__desc">
-              Each lantern holds a piece of the narrative. Handle it. Examine it.
-              Respond to it. The lantern communicates when you engage with it.
-            </p>
-          </div>
-
-          <div class="pl-step hp-fade hp-d2">
-            <div class="pl-step__num">
-              <span class="pl-step__num-inner">III</span>
-            </div>
-            <h4 class="pl-step__title">Uncover the next step</h4>
-            <p class="pl-step__desc">
-              Each interaction reveals what comes next &mdash; a direction, a clue,
-              a story beat. The path is not shown all at once. It is discovered.
-            </p>
-          </div>
-
-          <div class="pl-step hp-fade hp-d3">
-            <div class="pl-step__num">
-              <span class="pl-step__num-inner">IV</span>
-            </div>
-            <h4 class="pl-step__title">Follow the story forward</h4>
-            <p class="pl-step__desc">
-              The experience builds naturally &mdash; from a first clue to a final
-              revelation. What people remember is not the puzzle. It is the journey.
-            </p>
-          </div>
-
         </div>
       </div>
     </section>
 
     <!-- ── Development Status ─────────────────────────── -->
-    <section class="pl-development pl-section-dark" id="development">
-      <div class="hp-container">
-        <div class="hp-section-header hp-fade">
-          <span class="hp-overline">Project status</span>
-          <h2 style="font-size:clamp(2rem,4vw,3rem);font-weight:500;color:var(--hp-text-light);">Development in progress</h2>
-          <p>Puzzle Lanterns is being built in phases. Each phase is completed before the next begins &mdash; unhurried, deliberate, and built to last.</p>
-          <div class="hp-divider"></div>
+    <section class="pl-development" id="development">
+      <div class="tla-container">
+        <div class="tla-fade" style="text-align:center;">
+          <span class="tla-overline">Progress</span>
+          <h2 class="tla-section-header">Development in progress</h2>
         </div>
-        <div class="pl-phases">
-
-          <div class="pl-phase-card pl-phase-card--done hp-fade">
-            <div class="pl-phase-card__status">
-              <span class="hp-badge hp-badge--live">Complete</span>
-            </div>
-            <div class="pl-phase-card__num">01</div>
-            <h4 class="pl-phase-card__title">Concept &amp; Worldbuilding</h4>
-            <p class="pl-phase-card__desc">
-              The foundational narrative framework and interaction philosophy have been established.
-              The concept is defined. The experience identity is set.
-            </p>
+        <div class="pl-phase-grid">
+          <div class="pl-phase-card pl-phase-card--done tla-fade">
+            <div class="pl-phase-card__number">01</div>
+            <div class="pl-phase-card__title">Concept &amp; Worldbuilding</div>
+            <span class="pl-phase-card__badge">Complete</span>
           </div>
-
-          <div class="pl-phase-card pl-phase-card--active hp-fade hp-d1">
-            <div class="pl-phase-card__status">
-              <span class="hp-badge hp-badge--dev">In Progress</span>
-            </div>
-            <div class="pl-phase-card__num">02</div>
-            <h4 class="pl-phase-card__title">Interaction Design &amp; Prototyping</h4>
-            <p class="pl-phase-card__desc">
-              Shaping the physical and digital interaction layer. How do lanterns communicate?
-              What triggers the next story beat? We are building and testing the mechanics.
-            </p>
+          <div class="pl-phase-card pl-phase-card--active tla-fade tla-d1">
+            <div class="pl-phase-card__number">02</div>
+            <div class="pl-phase-card__title">Interaction Design &amp; Prototyping</div>
+            <span class="pl-phase-card__badge">In Progress</span>
           </div>
-
-          <div class="pl-phase-card pl-phase-card--upcoming hp-fade hp-d2">
-            <div class="pl-phase-card__status">
-              <span class="hp-badge hp-badge--future">Upcoming</span>
-            </div>
-            <div class="pl-phase-card__num">03</div>
-            <h4 class="pl-phase-card__title">Playtesting &amp; Route Design</h4>
-            <p class="pl-phase-card__desc">
-              Testing the experience in real environments with real participants.
-              Refining pacing, clarity, and atmosphere before we invite partners in.
-            </p>
+          <div class="pl-phase-card pl-phase-card--upcoming tla-fade tla-d2">
+            <div class="pl-phase-card__number">03</div>
+            <div class="pl-phase-card__title">Playtesting &amp; Route Design</div>
+            <span class="pl-phase-card__badge">Upcoming</span>
           </div>
-
-          <div class="pl-phase-card pl-phase-card--future hp-fade hp-d3">
-            <div class="pl-phase-card__status">
-              <span class="hp-badge hp-badge--future">Future</span>
-            </div>
-            <div class="pl-phase-card__num">04</div>
-            <h4 class="pl-phase-card__title">Live Experiences</h4>
-            <p class="pl-phase-card__desc">
-              The first full Puzzle Lanterns route or installation, open to venues,
-              partners, and the public. Built properly, released when it is ready.
-            </p>
+          <div class="pl-phase-card pl-phase-card--future tla-fade tla-d3">
+            <div class="pl-phase-card__number">04</div>
+            <div class="pl-phase-card__title">Live Experiences</div>
+            <span class="pl-phase-card__badge">Future</span>
           </div>
-
         </div>
       </div>
     </section>
 
-    <!-- ── Why We're Building It ──────────────────────── -->
-    <section class="pl-philosophy" id="philosophy">
-      <div class="hp-container">
-        <div class="hp-section-header hp-fade">
-          <span class="hp-overline">Our thinking</span>
-          <h2 style="font-size:clamp(2rem,4vw,3rem);font-weight:500;">Why we are building this</h2>
-          <p>Puzzle Lanterns is not a technology project. It is a design conviction &mdash; that shared experiences are richer when they are tactile, atmospheric, and built around a story worth following.</p>
-          <div class="hp-divider"></div>
+    <!-- ── Our Thinking ───────────────────────────────── -->
+    <section class="pl-philosophy">
+      <div class="tla-container">
+        <div class="tla-fade" style="text-align:center;">
+          <span class="tla-overline">Our thinking</span>
+          <h2 class="tla-section-header">Why we are building this</h2>
         </div>
         <div class="pl-philosophy__grid">
-
-          <div class="pl-philosophy-card hp-fade">
-            <span class="pl-philosophy-card__icon">&#9670;</span>
-            <h4 class="pl-philosophy-card__title">Tactile over purely digital</h4>
-            <p class="pl-philosophy-card__desc">
-              Screens are efficient but forgettable. The experiences that stay with us are the ones
-              we held in our hands, walked through, and felt. Puzzle Lanterns puts the interaction
-              back in the physical world, using technology to serve the story rather than replace it.
-            </p>
+          <div class="pl-philosophy__card tla-fade">
+            <span class="pl-philosophy__card-icon">&#9995;</span>
+            <div class="pl-philosophy__card-title">Tactile over purely digital</div>
+            <div class="pl-philosophy__card-desc">Real physical interaction creates moments that screens cannot replicate &mdash; touch, weight, space, and surprise become part of the story.</div>
           </div>
-
-          <div class="pl-philosophy-card hp-fade hp-d1">
-            <span class="pl-philosophy-card__icon">&#9651;</span>
-            <h4 class="pl-philosophy-card__title">Shared adventure by design</h4>
-            <p class="pl-philosophy-card__desc">
-              The best experiences are ones people do together and talk about afterward.
-              Puzzle Lanterns is built for groups &mdash; couples, families, friends &mdash;
-              creating a shared narrative that belongs to the people who experienced it together.
-            </p>
+          <div class="pl-philosophy__card tla-fade tla-d1">
+            <span class="pl-philosophy__card-icon">&#129309;</span>
+            <div class="pl-philosophy__card-title">Shared adventure by design</div>
+            <div class="pl-philosophy__card-desc">Built for groups, families, and friends &mdash; the experience is designed to be discovered together, not alone.</div>
           </div>
-
-          <div class="pl-philosophy-card hp-fade">
-            <span class="pl-philosophy-card__icon">&#9661;</span>
-            <h4 class="pl-philosophy-card__title">Atmosphere as a design material</h4>
-            <p class="pl-philosophy-card__desc">
-              Light, space, timing, and texture are not decorative. They are structural.
-              The feeling of discovering a lantern in the right place at the right moment
-              is as important as the clue it carries. We design the atmosphere first.
-            </p>
+          <div class="pl-philosophy__card tla-fade tla-d2">
+            <span class="pl-philosophy__card-icon">&#127761;</span>
+            <div class="pl-philosophy__card-title">Atmosphere as a design material</div>
+            <div class="pl-philosophy__card-desc">Light, space, timing, and mood are deliberate tools &mdash; every element contributes to the feeling of the journey.</div>
           </div>
-
-          <div class="pl-philosophy-card hp-fade hp-d1">
-            <span class="pl-philosophy-card__icon">&#10022;</span>
-            <h4 class="pl-philosophy-card__title">Storytelling through place</h4>
-            <p class="pl-philosophy-card__desc">
-              The stories Puzzle Lanterns tells are shaped by where they happen.
-              A forest is different from a castle, which is different from a harbour.
-              The environment is not a backdrop &mdash; it is a co-author of the experience.
-            </p>
+          <div class="pl-philosophy__card tla-fade tla-d3">
+            <span class="pl-philosophy__card-icon">&#127759;</span>
+            <div class="pl-philosophy__card-title">Storytelling through place</div>
+            <div class="pl-philosophy__card-desc">The environment is a co-author. Location, landscape, and architecture shape the narrative as much as any script.</div>
           </div>
-
         </div>
       </div>
     </section>
 
-    <!-- ── Collaboration ──────────────────────────────── -->
-    <section class="pl-collaborate pl-section-dark" id="collaborate">
-      <div class="pl-collaborate__inner">
-
-        <div class="hp-fade">
-          <span class="pl-collaborate__label">Early interest</span>
-          <h2 class="pl-collaborate__heading">
-            Interested in<br>where this is going?
-          </h2>
-          <p class="pl-collaborate__text">
-            Puzzle Lanterns is not yet a fully available product. But if you run a venue, museum,
-            heritage site, campsite, or events business &mdash; and you can see a version of this
-            concept living in your space &mdash; we would like to hear from you early.
+    <!-- ── Collaboration CTA ──────────────────────────── -->
+    <section class="pl-collaborate" id="collaborate">
+      <div class="tla-container pl-collaborate__inner">
+        <div class="pl-collaborate__text tla-fade">
+          <span class="tla-overline">Early interest</span>
+          <h2 class="tla-section-header">Interested in where this is going?</h2>
+          <p>
+            Puzzle Lanterns is in active development and we&rsquo;re open to early conversations. Whether you run a venue, organise events, or simply see a fit &mdash; we&rsquo;d love to hear from you.
           </p>
-          <p class="pl-collaborate__text">
-            We are open to conversations about future pilots, partnership interest, and
-            organisations who want to be involved before the first routes are built.
+          <p>
+            We&rsquo;re looking for pilot locations, creative partners, and people who believe physical experiences still have the power to surprise and connect.
           </p>
-          <div class="pl-collaborate__actions">
-            <a href="mailto:hello@thelionsalliance.com" class="hp-btn hp-btn--gold">Get in touch</a>
-            <a href="/" class="hp-btn hp-btn--ghost">Explore the studio &rarr;</a>
+          <div class="pl-collaborate__ctas">
+            <a href="mailto:hello@thelionsalliance.com" class="tla-btn tla-btn--gold">Get in touch</a>
+            <a href="/" class="tla-btn tla-btn--outline">Explore the studio &rarr;</a>
           </div>
         </div>
-
-        <div class="hp-fade hp-d1">
-          <div class="pl-audience-list">
-            <div class="pl-audience-item">
-              <div class="pl-audience-item__dot"></div>
-              <span class="pl-audience-item__text"><strong style="color:var(--pl-text-warm-head);font-weight:500;">Museums &amp; heritage venues</strong> — locations where stories already exist and need better ways to be told</span>
-            </div>
-            <div class="pl-audience-item">
-              <div class="pl-audience-item__dot"></div>
-              <span class="pl-audience-item__text"><strong style="color:var(--pl-text-warm-head);font-weight:500;">Campsites &amp; outdoor locations</strong> — natural environments where exploration routes add lasting value</span>
-            </div>
-            <div class="pl-audience-item">
-              <div class="pl-audience-item__dot"></div>
-              <span class="pl-audience-item__text"><strong style="color:var(--pl-text-warm-head);font-weight:500;">Events &amp; experience venues</strong> — one-time or ongoing installations for events with a narrative dimension</span>
-            </div>
-            <div class="pl-audience-item">
-              <div class="pl-audience-item__dot"></div>
-              <span class="pl-audience-item__text"><strong style="color:var(--pl-text-warm-head);font-weight:500;">Tourism organisations</strong> — destination-based experiences that make a place more memorable and revisitable</span>
-            </div>
-            <div class="pl-audience-item">
-              <div class="pl-audience-item__dot"></div>
-              <span class="pl-audience-item__text"><strong style="color:var(--pl-text-warm-head);font-weight:500;">Early collaborators</strong> — people who want to help shape what Puzzle Lanterns becomes</span>
-            </div>
-          </div>
+        <div class="pl-collaborate__audiences tla-fade tla-d1">
+          <ul class="pl-audience-list">
+            <li class="pl-audience-item"><span class="pl-audience-dot"></span>Museums &amp; heritage venues</li>
+            <li class="pl-audience-item"><span class="pl-audience-dot"></span>Campsites &amp; outdoor locations</li>
+            <li class="pl-audience-item"><span class="pl-audience-dot"></span>Events &amp; experience venues</li>
+            <li class="pl-audience-item"><span class="pl-audience-dot"></span>Tourism organisations</li>
+            <li class="pl-audience-item"><span class="pl-audience-dot"></span>Early collaborators</li>
+          </ul>
         </div>
-
       </div>
     </section>
 
     <!-- ── FAQ ────────────────────────────────────────── -->
-    <section class="pl-faq" id="faq">
-      <div class="hp-container">
-        <div class="hp-section-header hp-fade">
-          <span class="hp-overline">Questions</span>
-          <h2 style="font-size:clamp(2rem,4vw,3rem);font-weight:500;">Common questions</h2>
-          <p>Honest answers about where the project stands and where it is headed.</p>
-          <div class="hp-divider"></div>
+    <section class="pl-faq">
+      <div class="tla-container">
+        <div class="tla-fade" style="text-align:center;">
+          <span class="tla-overline">FAQ</span>
+          <h2 class="tla-section-header">Common questions</h2>
         </div>
         <div class="pl-faq__list">
-
-          <div class="pl-faq__item hp-fade">
-            <p class="pl-faq__q">Is Puzzle Lanterns available yet?</p>
-            <p class="pl-faq__a">
-              Not yet. Puzzle Lanterns is an active concept in development. We are currently working on
-              the interaction design, prototyping the mechanics, and laying the groundwork for the
-              first real routes and installations. When it is ready for partners and the public,
-              we will announce it. We would rather release something finished than something rushed.
-            </p>
+          <div class="pl-faq__item tla-fade">
+            <div class="pl-faq__question">Is Puzzle Lanterns available yet?</div>
+            <div class="pl-faq__answer">Not yet. Puzzle Lanterns is in active development &mdash; we are currently refining the interaction model and building the first prototype routes. Follow along or get in touch if you&rsquo;d like to be part of the journey.</div>
           </div>
-
-          <div class="pl-faq__item hp-fade hp-d1">
-            <p class="pl-faq__q">What kind of experience does it become?</p>
-            <p class="pl-faq__a">
-              Puzzle Lanterns is designed to be adaptable. The core interaction model stays consistent,
-              but the format can evolve to fit different contexts &mdash; an outdoor puzzle trail,
-              a museum installation, a venue-based event experience, or a standalone immersive adventure.
-              We are deliberately keeping the architecture flexible so the concept can grow with the right partners.
-            </p>
+          <div class="pl-faq__item tla-fade tla-d1">
+            <div class="pl-faq__question">What kind of experience does it become?</div>
+            <div class="pl-faq__answer">The format is adaptable. It could be a self-guided outdoor puzzle walk, a museum installation, or a venue-based storytelling experience. The interaction framework is designed to work across different contexts and scales.</div>
           </div>
-
-          <div class="pl-faq__item hp-fade">
-            <p class="pl-faq__q">Can I collaborate or stay informed about the project?</p>
-            <p class="pl-faq__a">
-              Yes. If you are a venue, museum, event organisation, or experience-focused business
-              with an interest in where Puzzle Lanterns is going, we would genuinely like to hear from you.
-              Early conversations are welcome. Use the contact section above or reach us directly at
-              <a href="mailto:hello@thelionsalliance.com" style="color:var(--hp-gold);text-decoration:none;">hello@thelionsalliance.com</a>.
-            </p>
+          <div class="pl-faq__item tla-fade tla-d2">
+            <div class="pl-faq__question">Can I collaborate?</div>
+            <div class="pl-faq__answer">Yes &mdash; early conversations are welcome. We&rsquo;re especially interested in hearing from venues, event organisers, tourism bodies, and creative partners who see potential in physical storytelling experiences.</div>
           </div>
-
-          <div class="pl-faq__item hp-fade hp-d1">
-            <p class="pl-faq__q">Is this for events, venues, or public installations?</p>
-            <p class="pl-faq__a">
-              Potentially all three. The concept is designed to be modular and context-aware.
-              Our goal is to build an experience format that venues and organisations can partner with
-              &mdash; not a product that exists in isolation. Whether it becomes a seasonal event,
-              a permanent fixture, or a commissioned route depends on the partner and the place.
-            </p>
+          <div class="pl-faq__item tla-fade tla-d3">
+            <div class="pl-faq__question">Is this for events, venues, or public installations?</div>
+            <div class="pl-faq__answer">Potentially all three. The modular design means Puzzle Lanterns can be adapted for a wide range of settings &mdash; from intimate campsite walks to large-scale public installations. The right format depends on the context.</div>
           </div>
-
         </div>
       </div>
     </section>
 
     <!-- ── Footer ─────────────────────────────────────── -->
-    <footer class="hp-footer">
-      <div class="hp-container">
-        <div>
-          <a href="/" class="hp-footer__logo">The Lions <span>Alliance</span></a>
-          <span class="hp-footer__tagline">A creative experience studio</span>
+    <footer class="tla-footer">
+      <div class="tla-container tla-footer__inner">
+        <div class="tla-footer__brand">
+          <div class="tla-footer__logo">The Lions Alliance</div>
+          <p class="tla-footer__tagline">Creative studio for meaningful projects.</p>
         </div>
-        <ul class="hp-footer__nav">
-          <li><a href="/">Home</a></li>
-          <li><a href="/wedding/">WeddingCamBox</a></li>
-          <li><a href="/puzzlelanterns/">Puzzle Lanterns</a></li>
-          <li><a href="/#contact">Contact</a></li>
-        </ul>
-        <div class="hp-footer__copy">
-          &copy; {year} The Lions Alliance. All rights reserved.
+        <div class="tla-footer__links">
+          <a href="/">Studio</a>
+          <a href="#overview">Overview</a>
+          <a href="#applications">Applications</a>
+          <a href="#collaborate">Collaborate</a>
         </div>
+      </div>
+      <div class="tla-container tla-footer__bottom">
+        <span>&copy; {year} The Lions Alliance. All rights reserved.</span>
       </div>
     </footer>
 
+    <!-- ── Scripts ─────────────────────────────────────── -->
     <script>
-      const nav = document.getElementById('hp-nav');
-      window.addEventListener('scroll', () => {
-        nav.classList.toggle('scrolled', window.scrollY > 40);
-      }, { passive: true });
-
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            e.target.classList.add('hp-visible');
-            observer.unobserve(e.target);
-          }
+      // Scroll-aware nav
+      const nav = document.getElementById('tla-nav');
+      if (nav) {
+        window.addEventListener('scroll', () => {
+          nav.classList.toggle('scrolled', window.scrollY > 40);
         });
-      }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-      document.querySelectorAll('.hp-fade').forEach(el => observer.observe(el));
+      }
+
+      // IntersectionObserver for fade-in
+      const faders = document.querySelectorAll('.tla-fade');
+      if (faders.length && 'IntersectionObserver' in window) {
+        const obs = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) {
+                e.target.classList.add('tla-visible');
+                obs.unobserve(e.target);
+              }
+            });
+          },
+          { threshold: 0.15 }
+        );
+        faders.forEach((el) => obs.observe(el));
+      } else {
+        faders.forEach((el) => el.classList.add('tla-visible'));
+      }
+
+      // Hamburger toggle
+      const hamburger = document.getElementById('hamburger');
+      const mobileMenu = document.getElementById('mobile-menu');
+      if (hamburger && mobileMenu) {
+        hamburger.addEventListener('click', () => {
+          const open = mobileMenu.classList.toggle('open');
+          hamburger.classList.toggle('open', open);
+          hamburger.setAttribute('aria-expanded', String(open));
+        });
+        mobileMenu.querySelectorAll('a').forEach((a) => {
+          a.addEventListener('click', () => {
+            mobileMenu.classList.remove('open');
+            hamburger.classList.remove('open');
+            hamburger.setAttribute('aria-expanded', 'false');
+          });
+        });
+      }
     </script>
   </body>
 </html>
-

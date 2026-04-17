@@ -3,7 +3,7 @@
    STUDIO TOPBAR (cross-site navigation)
    ========================================================= */
 .studio-bar {
-  background: #192617;
+  background: #2C2826;
   padding: 0 1.5rem;
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
@@ -23,18 +23,18 @@
   font-family: 'Playfair Display', serif;
   font-size: 0.8rem;
   font-weight: 400;
-  color: rgba(225, 240, 220, 0.75);
+  color: rgba(240, 237, 232, 0.75);
   text-decoration: none;
   letter-spacing: 0.06em;
   white-space: nowrap;
   transition: color .2s;
 }
-.studio-bar__brand:hover { color: #D4A853; }
+.studio-bar__brand:hover { color: #C9A76C; }
 .studio-bar__brand-dot {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #C4913A;
+  background: #B08D57;
   opacity: 0.7;
   flex-shrink: 0;
 }
@@ -48,15 +48,35 @@
   font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.06em;
-  color: rgba(200, 225, 195, 0.6);
+  color: rgba(240, 237, 232, 0.55);
   text-decoration: none;
   transition: color .2s;
 }
-.studio-bar__links a:hover { color: #D4A853; }
+.studio-bar__links a:hover { color: #C9A76C; }
 @media (max-width: 600px) {
   .studio-bar__links { display: none; }
   .studio-bar__brand { font-size: 0.75rem; }
-}/* =========================================================
+}
+
+/* ── Studio footer additions ── */
+.footer__studio {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--clr-muted);
+  margin-top: 8px;
+  justify-content: center;
+}
+.footer__studio-link {
+  font-family: 'Playfair Display', serif;
+  color: var(--clr-charcoal);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color .2s;
+}
+.footer__studio-link:hover { color: var(--clr-rose); }
+/* =========================================================
    RESET & BASE
    ========================================================= */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }

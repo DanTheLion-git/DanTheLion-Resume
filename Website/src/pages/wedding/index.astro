@@ -1,6 +1,7 @@
 ---
 // WeddingCamBox landing page
 // Static assets live in public/wedding/ — Astro copies them verbatim.
+const year = new Date().getFullYear();
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -157,6 +158,21 @@
   <script is:inline src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body>
+
+  <!-- STUDIO TOP-BAR -->
+  <div class="studio-bar">
+    <div class="studio-bar__inner">
+      <a href="/" class="studio-bar__brand">
+        <span class="studio-bar__brand-dot"></span>
+        The Lions Alliance
+      </a>
+      <ul class="studio-bar__links">
+        <li><a href="/">Studio</a></li>
+        <li><a href="/puzzlelanterns/">Puzzle Lanterns</a></li>
+        <li><a href="/#contact">Contact</a></li>
+      </ul>
+    </div>
+  </div>
 
   <!-- NAV -->
   <nav class="nav" id="nav">
@@ -504,7 +520,11 @@
     <div class="container">
       <p class="footer__logo">WeddingCamBox</p>
       <p class="footer__tagline" data-i18n="footerTagline">Making wedding memories accessible for everyone.</p>
-      <p class="footer__copy"    data-i18n="footerCopy">&copy; 2025 WeddingCamBox. All rights reserved.</p>
+      <div class="footer__studio">
+        <span data-i18n="footerStudioLabel">A product by</span>
+        <a href="/" class="footer__studio-link">The Lions Alliance</a>
+      </div>
+      <p class="footer__copy" data-i18n="footerCopy">&copy; {year} The Lions Alliance. All rights reserved.</p>
     </div>
   </footer>
 
