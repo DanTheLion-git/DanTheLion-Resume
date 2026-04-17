@@ -4,6 +4,15 @@
    Page-specific classes prefixed: pl-
    ═══════════════════════════════════════════════════════ */
 
+/* Warm cream-yellow text tokens for dark sections */
+:root {
+  --pl-text-warm:       #E8DDB0;   /* primary body text on dark bg */
+  --pl-text-warm-dim:   #C8BA88;   /* secondary / muted text on dark bg */
+  --pl-text-warm-head:  #F0EAC8;   /* heading-level light text on dark bg */
+  --pl-dark-bg:         rgba(255, 255, 255, 0.04);
+  --pl-dark-border:     rgba(255, 255, 255, 0.10);
+}
+
 /* ══════════ HERO ══════════════════════════════════════ */
 .pl-hero {
   min-height: 100vh;
@@ -107,7 +116,7 @@
 
 .pl-hero__subtitle {
   font-size: clamp(1rem, 1.5vw, 1.15rem);
-  color: var(--hp-text-dim);
+  color: var(--pl-text-warm);
   max-width: 520px;
   line-height: 1.75;
   margin-bottom: 64px;
@@ -273,12 +282,12 @@
   font-family: 'Cormorant Garamond', serif;
   font-size: 1.7rem;
   font-weight: 500;
-  color: var(--hp-text-light);
+  color: var(--pl-text-warm-head);
   margin-bottom: 16px;
   line-height: 1.15;
 }
 .pl-concept-card__desc {
-  color: var(--hp-text-dim);
+  color: var(--pl-text-warm);
   line-height: 1.75;
   font-size: 0.925rem;
   flex: 1;
@@ -435,23 +444,23 @@
   font-family: 'Cormorant Garamond', serif;
   font-size: 1.3rem;
   font-weight: 500;
-  color: var(--hp-text-light);
+  color: var(--pl-text-warm-head);
   margin-bottom: 12px;
   line-height: 1.2;
 }
 .pl-phase-card--upcoming .pl-phase-card__title,
 .pl-phase-card--future .pl-phase-card__title {
-  color: var(--hp-text-dim);
+  color: var(--pl-text-warm-dim);
 }
 
 .pl-phase-card__desc {
   font-size: 0.85rem;
-  color: var(--hp-text-dim);
+  color: var(--pl-text-warm);
   line-height: 1.75;
   flex: 1;
 }
 .pl-phase-card--future .pl-phase-card__desc {
-  opacity: 0.65;
+  color: var(--pl-text-warm-dim);
 }
 
 /* ══════════ PHILOSOPHY (WHY WE BUILD IT) ══════════════ */
@@ -531,11 +540,11 @@
   font-size: clamp(2rem, 3.5vw, 2.8rem);
   font-weight: 500;
   line-height: 1.1;
-  color: var(--hp-text-light);
+  color: var(--pl-text-warm-head);
   margin-bottom: 24px;
 }
 .pl-collaborate__text {
-  color: var(--hp-text-dim);
+  color: var(--pl-text-warm);
   line-height: 1.8;
   font-size: 1rem;
 }
@@ -579,7 +588,7 @@
 }
 .pl-audience-item__text {
   font-size: 0.9rem;
-  color: var(--hp-text-dim);
+  color: var(--pl-text-warm);
   line-height: 1.5;
 }
 
@@ -626,8 +635,8 @@
 
 /* ── Overrides for dark-section section headers ───────── */
 .pl-section-dark .hp-section-header .hp-overline { color: var(--hp-gold); }
-.pl-section-dark .hp-section-header h2 { color: var(--hp-text-light); }
-.pl-section-dark .hp-section-header p  { color: var(--hp-text-dim); }
+.pl-section-dark .hp-section-header h2 { color: var(--pl-text-warm-head); }
+.pl-section-dark .hp-section-header p  { color: var(--pl-text-warm); }
 .pl-section-dark .hp-divider {
   background: linear-gradient(90deg, var(--hp-gold-dim), var(--hp-gold));
 }

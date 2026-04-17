@@ -1,4 +1,62 @@
+
 /* =========================================================
+   STUDIO TOPBAR (cross-site navigation)
+   ========================================================= */
+.studio-bar {
+  background: #192617;
+  padding: 0 1.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.studio-bar__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  gap: 1rem;
+}
+.studio-bar__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Playfair Display', serif;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: rgba(225, 240, 220, 0.75);
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  transition: color .2s;
+}
+.studio-bar__brand:hover { color: #D4A853; }
+.studio-bar__brand-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #C4913A;
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+.studio-bar__links {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.studio-bar__links a {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: rgba(200, 225, 195, 0.6);
+  text-decoration: none;
+  transition: color .2s;
+}
+.studio-bar__links a:hover { color: #D4A853; }
+@media (max-width: 600px) {
+  .studio-bar__links { display: none; }
+  .studio-bar__brand { font-size: 0.75rem; }
+}/* =========================================================
    RESET & BASE
    ========================================================= */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -768,3 +826,4 @@ h1, h2, h3 { font-family: var(--ff-serif); line-height: 1.2; }
   .faq-question { padding: 1rem 1.1rem; font-size: .9rem; }
   .faq-answer   { padding: 0 1.1rem .9rem; }
 }
+

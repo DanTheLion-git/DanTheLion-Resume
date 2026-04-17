@@ -7,12 +7,13 @@
 
 /* ── Color Tokens ─────────────────────────────────────── */
 :root {
-  --hp-ivory:         #FAF8F4;
-  --hp-stone:         #F0EAE1;
+  /* Sage / forest-green palette */
+  --hp-ivory:         #F0F5EC;
+  --hp-stone:         #E4EDD8;
   --hp-white:         #FFFFFF;
-  --hp-charcoal:      #18160F;
-  --hp-charcoal-mid:  #211E15;
-  --hp-charcoal-soft: #2C2820;
+  --hp-charcoal:      #192617;
+  --hp-charcoal-mid:  #1F2E1E;
+  --hp-charcoal-soft: #293D27;
 
   --hp-gold:          #C4913A;
   --hp-gold-light:    #D4A853;
@@ -20,26 +21,26 @@
   --hp-gold-subtle:   rgba(196, 145, 58, 0.12);
   --hp-gold-glow:     rgba(196, 145, 58, 0.25);
 
-  --hp-text:          #1A1714;
-  --hp-text-body:     #3D3830;
-  --hp-text-muted:    #7A7268;
-  --hp-text-light:    #F5F0E8;
-  --hp-text-dim:      #B8AD9C;
+  --hp-text:          #162213;
+  --hp-text-body:     #384534;
+  --hp-text-muted:    #5E7555;
+  --hp-text-light:    #EDF2EB;
+  --hp-text-dim:      #B0C8A8;
 
-  --hp-border:        #E8E0D6;
-  --hp-border-mid:    #D4C9BA;
-  --hp-border-dark:   #3A3428;
+  --hp-border:        #D0DEC8;
+  --hp-border-mid:    #B8CCB0;
+  --hp-border-dark:   #344E30;
   --hp-border-gold:   rgba(196, 145, 58, 0.35);
 
   --hp-badge-live-bg:    rgba(196, 145, 58, 0.14);
   --hp-badge-live-bd:    rgba(196, 145, 58, 0.40);
-  --hp-badge-live-text:  #9B7230;
-  --hp-badge-dev-bg:     rgba(94, 104, 118, 0.10);
-  --hp-badge-dev-bd:     rgba(94, 104, 118, 0.30);
-  --hp-badge-dev-text:   #5E6876;
-  --hp-badge-fut-bg:     rgba(138, 120, 98, 0.10);
-  --hp-badge-fut-bd:     rgba(138, 120, 98, 0.25);
-  --hp-badge-fut-text:   #8A7862;
+  --hp-badge-live-text:  #7A5820;
+  --hp-badge-dev-bg:     rgba(60, 100, 55, 0.10);
+  --hp-badge-dev-bd:     rgba(60, 100, 55, 0.30);
+  --hp-badge-dev-text:   #3A6435;
+  --hp-badge-fut-bg:     rgba(90, 110, 85, 0.10);
+  --hp-badge-fut-bd:     rgba(90, 110, 85, 0.25);
+  --hp-badge-fut-text:   #5A6E55;
 
   --hp-radius-sm:  6px;
   --hp-radius-md:  12px;
@@ -94,7 +95,7 @@
   transition: background var(--hp-ease-slow), box-shadow var(--hp-ease-slow);
 }
 .hp-nav.scrolled {
-  background: rgba(250, 248, 244, 0.94);
+  background: rgba(240, 245, 236, 0.96);
   backdrop-filter: blur(16px);
   box-shadow: 0 1px 0 var(--hp-border);
 }
@@ -302,8 +303,8 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 70% 40%, rgba(196, 145, 58, 0.08) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 80% at 20% 70%, rgba(196, 145, 58, 0.05) 0%, transparent 50%);
+    radial-gradient(ellipse 80% 60% at 70% 40%, rgba(196, 145, 58, 0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 20% 70%, rgba(80, 140, 60, 0.06) 0%, transparent 50%);
 }
 .hp-hero::after {
   content: '';
@@ -612,9 +613,9 @@
   width: 100%;
   height: 100%;
   background:
-    radial-gradient(ellipse 70% 60% at 40% 35%, rgba(196, 145, 58, 0.22) 0%, transparent 55%),
-    radial-gradient(ellipse 50% 70% at 75% 70%, rgba(196, 145, 58, 0.10) 0%, transparent 50%),
-    linear-gradient(160deg, #211E15 0%, #0e0c08 100%);
+    radial-gradient(ellipse 70% 60% at 40% 35%, rgba(196, 145, 58, 0.20) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 70% at 75% 70%, rgba(80, 140, 60, 0.08) 0%, transparent 50%),
+    linear-gradient(160deg, #1F2E1E 0%, #0e150d 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -678,12 +679,12 @@
 
 /* ══════════ ROADMAP ═══════════════════════════════════ */
 .hp-roadmap {
-  background: var(--hp-charcoal);
+  background: var(--hp-stone);
   padding: 128px 40px;
 }
 .hp-roadmap .hp-section-header .hp-overline { color: var(--hp-gold); }
-.hp-roadmap .hp-section-header h2 { color: var(--hp-text-light); }
-.hp-roadmap .hp-section-header p { color: var(--hp-text-dim); }
+.hp-roadmap .hp-section-header h2 { color: var(--hp-text); }
+.hp-roadmap .hp-section-header p { color: var(--hp-text-muted); }
 .hp-roadmap .hp-divider {
   background: linear-gradient(90deg, var(--hp-gold-dim), var(--hp-gold));
 }
@@ -704,8 +705,8 @@
   background: linear-gradient(
     to bottom,
     var(--hp-gold) 0%,
-    var(--hp-border-dark) 33%,
-    var(--hp-border-dark) 100%
+    var(--hp-border-mid) 33%,
+    var(--hp-border) 100%
   );
 }
 .hp-roadmap-item {
@@ -714,7 +715,7 @@
   gap: 32px;
   align-items: start;
   padding: 48px 0;
-  border-bottom: 1px solid var(--hp-border-dark);
+  border-bottom: 1px solid var(--hp-border);
 }
 .hp-roadmap-item:last-child { border-bottom: none; }
 .hp-roadmap-item__node {
@@ -734,18 +735,19 @@
   box-shadow: 0 0 20px var(--hp-gold-glow);
 }
 .hp-roadmap-item__node--dev {
-  background: rgba(255, 255, 255, 0.04);
-  border: 2px solid var(--hp-border-dark);
+  background: var(--hp-white);
+  border: 2px solid var(--hp-border-mid);
 }
 .hp-roadmap-item__node--future {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px dashed var(--hp-border-dark);
+  background: var(--hp-white);
+  border: 1px dashed var(--hp-border-mid);
+  opacity: 0.6;
 }
 .hp-roadmap-item__phase-num {
   font-family: 'Cormorant Garamond', serif;
   font-size: 1.4rem;
   font-weight: 500;
-  color: var(--hp-text-dim);
+  color: var(--hp-text-muted);
   line-height: 1;
 }
 .hp-roadmap-item__node--live .hp-roadmap-item__phase-num { color: var(--hp-gold); }
@@ -755,7 +757,7 @@
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--hp-text-dim);
+  color: var(--hp-text-muted);
   margin-bottom: 8px;
   display: flex;
   align-items: center;
@@ -765,12 +767,12 @@
   font-family: 'Cormorant Garamond', serif;
   font-size: clamp(1.8rem, 3vw, 2.4rem);
   font-weight: 500;
-  color: var(--hp-text-light);
+  color: var(--hp-text);
   line-height: 1.1;
   margin-bottom: 16px;
 }
 .hp-roadmap-item__desc {
-  color: var(--hp-text-dim);
+  color: var(--hp-text-muted);
   font-size: 0.95rem;
   line-height: 1.75;
   max-width: 560px;
@@ -786,13 +788,13 @@
   border-radius: 999px;
   font-size: 0.78rem;
   font-weight: 500;
-  border: 1px solid var(--hp-border-dark);
-  color: var(--hp-text-dim);
-  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--hp-border-mid);
+  color: var(--hp-text-muted);
+  background: var(--hp-white);
 }
 .hp-roadmap-tag--live {
   border-color: var(--hp-border-gold);
-  color: var(--hp-gold-light);
+  color: var(--hp-gold-dim);
   background: var(--hp-gold-subtle);
 }
 
@@ -846,7 +848,7 @@
 
 /* ══════════ CONTACT ═══════════════════════════════════ */
 .hp-contact {
-  background: var(--hp-charcoal-mid);
+  background: var(--hp-charcoal);
   padding: 128px 40px;
   text-align: center;
 }
@@ -869,7 +871,8 @@
   margin-bottom: 24px;
 }
 .hp-contact__desc {
-  color: var(--hp-text-dim);
+  color: var(--hp-text-light);
+  opacity: 0.75;
   font-size: 1.05rem;
   line-height: 1.75;
   margin-bottom: 48px;
