@@ -133,6 +133,57 @@ import '../../../styles/games.css';
     .playlist-tile-count { font-size: 0.7rem; color: var(--g-muted); margin-top: 0.15rem; }
     .pl-private { opacity: 0.5; cursor: default; }
     .pl-private:hover { border-color: var(--g-border); transform: none; }
+
+    /* ── Review section styles ──────────────────────────────────────────── */
+    .review-group {
+      background: var(--g-surface);
+      border: 1px solid var(--g-border);
+      border-radius: var(--g-radius-sm);
+      padding: 0.75rem;
+      display: flex; flex-direction: column; gap: 0.5rem;
+    }
+    .review-group.duplicate { border-left: 3px solid #e67e22; }
+    .review-group.remaster  { border-left: 3px solid #3498db; }
+
+    .review-group-header {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.82rem; font-weight: 700;
+    }
+    .review-badge {
+      font-size: 0.65rem; font-weight: 700; padding: 0.15em 0.45em;
+      border-radius: 3px; text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .review-badge.dup  { background: #fdebd0; color: #a0522d; }
+    .review-badge.rem  { background: #d6eaf8; color: #21618c; }
+
+    .review-option {
+      display: flex; align-items: center; gap: 0.6rem;
+      padding: 0.5rem 0.6rem;
+      border-radius: var(--g-radius-sm);
+      background: var(--g-bg);
+      border: 1px solid var(--g-border);
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .review-option:hover { border-color: var(--g-accent); }
+    .review-option.chosen { border-color: var(--g-green); background: rgba(46,204,113,0.06); }
+
+    .review-option input[type="radio"] {
+      accent-color: var(--g-green); flex-shrink: 0;
+    }
+    .review-option-info { flex: 1; min-width: 0; }
+    .review-option-name { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .review-option-meta { font-size: 0.72rem; color: var(--g-muted); }
+    .review-option-year {
+      font-size: 0.85rem; font-weight: 700; flex-shrink: 0;
+      color: var(--g-accent2);
+    }
+
+    .review-summary {
+      display: flex; gap: 0.75rem; flex-wrap: wrap;
+      font-size: 0.82rem; color: var(--g-muted);
+    }
+    .review-summary span { display: flex; align-items: center; gap: 0.3rem; }
   </style>
 </head>
 
@@ -253,7 +304,36 @@ import '../../../styles/games.css';
         </button>
       </div>
 
-    </div><!-- /screen-admin -->
+    </div>
+
+    <!-- Review section (shown when duplicates or remasters are detected) -->
+    <div id="review-section" class="hidden" style="width:100%;display:flex;flex-direction:column;gap:1rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;">
+        <div>
+          <button id="btn-back-to-tracks" class="g-btn secondary small" style="width:auto;margin-bottom:0.4rem;">&#8592; Back to Track List</button>
+          <div class="g-label" style="font-size:0.9rem;color:var(--g-text);font-weight:700;">Review &amp; Resolve</div>
+          <div id="review-meta" class="g-label"></div>
+        </div>
+      </div>
+
+      <div id="review-summary" class="review-summary"></div>
+
+      <div class="g-alert info" style="font-size:0.82rem;">
+        ℹ️ Resolve the issues below, then click <strong>Confirm &amp; Print</strong>.
+        Duplicates: pick which version to keep. Remasters: choose which year to use.
+      </div>
+
+      <div id="review-list" style="display:flex;flex-direction:column;gap:0.75rem;max-height:55vh;overflow-y:auto;padding-right:0.25rem;"></div>
+
+      <div style="display:flex;flex-direction:column;gap:0.5rem;">
+        <div id="review-count" class="g-label" style="text-align:center;"></div>
+        <button id="btn-confirm-print" class="g-btn primary" style="font-size:1rem;">
+          ✅ Confirm &amp; Print ↗
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /screen-admin -->
 
 
   <!-- ══ SCRIPTS ══════════════════════════════════════════════════════════ -->
@@ -408,6 +488,266 @@ import '../../../styles/games.css';
 
     function escHtml(s: string): string {
       return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // ── Remaster / duplicate detection ─────────────────────────────────────
+    const REMASTER_RX = /[\s\-–—]+(\(?\s*)?(Remaster(ed)?|Anniversary|Deluxe|Expanded|Special)\s*(Edition|Version|Mix)?\s*\d{0,4}\s*\)?/gi;
+    const REMASTER_TEST = /Remaster(ed)?|Anniversary\s*Edition|Deluxe\s*(Edition|Version)?|Expanded|Special\s*Edition/i;
+    const FEAT_RX     = /\s*(\(feat\.?|ft\.?|featuring)\s+[^)]*\)?/gi;
+
+    function normalizeName(name: string): string {
+      return name
+        .replace(REMASTER_RX, '')
+        .replace(FEAT_RX, '')
+        .replace(/\s*\(.*?(Mono|Stereo|Live|Acoustic|Radio\s*Edit|Single\s*Version).*?\)/gi, '')
+        .trim()
+        .toLowerCase();
+    }
+
+    function normalizeArtist(artist: string): string {
+      return artist.split(',').map(a => a.trim().toLowerCase()).sort().join(', ');
+    }
+
+    function makeKey(name: string, artist: string): string {
+      return `${normalizeName(name)}|||${normalizeArtist(artist)}`;
+    }
+
+    function isRemaster(name: string): boolean {
+      return REMASTER_TEST.test(name);
+    }
+
+    interface DuplicateGroup {
+      key: string;
+      tracks: Track[];
+    }
+
+    interface RemasterIssue {
+      track: Track;
+      cleanName: string;
+      originalYear: number | null;
+      originalArtist: string | null;
+      searchDone: boolean;
+    }
+
+    function findDuplicates(tracks: Track[]): DuplicateGroup[] {
+      const groups = new Map<string, Track[]>();
+      for (const t of tracks) {
+        const key = makeKey(t.name, t.artist);
+        const group = groups.get(key) ?? [];
+        group.push(t);
+        groups.set(key, group);
+      }
+      return Array.from(groups.values())
+        .filter(g => g.length > 1)
+        .map(tracks => ({ key: makeKey(tracks[0].name, tracks[0].artist), tracks }));
+    }
+
+    function findRemasters(tracks: Track[]): RemasterIssue[] {
+      return tracks
+        .filter(t => isRemaster(t.name))
+        .map(t => ({
+          track: t,
+          cleanName: t.name.replace(REMASTER_RX, '').trim(),
+          originalYear: null,
+          originalArtist: null,
+          searchDone: false,
+        }));
+    }
+
+    async function searchOriginalYear(issue: RemasterIssue, token: string): Promise<void> {
+      const artist = issue.track.artist.split(',')[0].trim();
+      const q = `track:${issue.cleanName} artist:${artist}`;
+      try {
+        const res = await fetch(
+          `https://api.spotify.com/v1/search?q=${encodeURIComponent(q)}&type=track&limit=20`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        if (!res.ok) { issue.searchDone = true; return; }
+        const data = await res.json();
+        const items = (data.tracks?.items ?? []) as Array<{
+          name: string;
+          artists: Array<{ name: string }>;
+          album: { release_date: string };
+        }>;
+
+        // Find the earliest release that matches the normalized name
+        let earliest: { year: number; artist: string } | null = null;
+        const targetName = normalizeName(issue.cleanName);
+        for (const item of items) {
+          if (normalizeName(item.name) !== targetName) continue;
+          const yr = new Date(item.album.release_date).getFullYear();
+          if (!Number.isFinite(yr)) continue;
+          if (!earliest || yr < earliest.year) {
+            earliest = { year: yr, artist: item.artists.map(a => a.name).join(', ') };
+          }
+        }
+        if (earliest && earliest.year < issue.track.year) {
+          issue.originalYear = earliest.year;
+          issue.originalArtist = earliest.artist;
+        }
+      } catch { /* search failed, leave as-is */ }
+      issue.searchDone = true;
+    }
+
+    // ── Review state ──────────────────────────────────────────────────────
+    // For duplicates: which track ID to keep per group
+    let dupChoices  = new Map<string, string>(); // group key → chosen track id
+    // For remasters: whether to use original year
+    let remChoices  = new Map<string, 'original' | 'remaster'>(); // track id → choice
+
+    function renderReview(dupes: DuplicateGroup[], remasters: RemasterIssue[], selected: Track[]) {
+      const list = $('review-list');
+      list.innerHTML = '';
+
+      // Summary
+      const summaryEl = $('review-summary');
+      summaryEl.innerHTML = '';
+      if (dupes.length > 0) {
+        const s = document.createElement('span');
+        s.innerHTML = `<span class="review-badge dup">DUP</span> ${dupes.length} duplicate group${dupes.length > 1 ? 's' : ''}`;
+        summaryEl.appendChild(s);
+      }
+      if (remasters.length > 0) {
+        const s = document.createElement('span');
+        s.innerHTML = `<span class="review-badge rem">REM</span> ${remasters.length} remastered track${remasters.length > 1 ? 's' : ''}`;
+        summaryEl.appendChild(s);
+      }
+
+      $('review-meta').textContent = `${selected.length} tracks selected — ${dupes.length + remasters.length} issue${(dupes.length + remasters.length) !== 1 ? 's' : ''} to review`;
+
+      // Render duplicate groups
+      for (const group of dupes) {
+        const div = document.createElement('div');
+        div.className = 'review-group duplicate';
+
+        const header = document.createElement('div');
+        header.className = 'review-group-header';
+        header.innerHTML = `<span class="review-badge dup">DUPLICATE</span> "${escHtml(group.tracks[0].name)}" appears ${group.tracks.length} times — pick one to keep:`;
+        div.appendChild(header);
+
+        // Default: keep first
+        if (!dupChoices.has(group.key)) dupChoices.set(group.key, group.tracks[0].id);
+
+        for (const t of group.tracks) {
+          const opt = document.createElement('label');
+          const chosen = dupChoices.get(group.key) === t.id;
+          opt.className = 'review-option' + (chosen ? ' chosen' : '');
+          opt.innerHTML = `
+            <input type="radio" name="dup-${escHtml(group.key)}" value="${escHtml(t.id)}" ${chosen ? 'checked' : ''} />
+            <div class="review-option-info">
+              <div class="review-option-name">${escHtml(t.name)}</div>
+              <div class="review-option-meta">${escHtml(t.artist)} · ID: ${escHtml(t.id.slice(0,8))}…</div>
+            </div>
+            <div class="review-option-year">${t.year || '—'}</div>`;
+
+          opt.querySelector('input')!.addEventListener('change', () => {
+            dupChoices.set(group.key, t.id);
+            // Update visuals
+            div.querySelectorAll('.review-option').forEach(el => el.classList.remove('chosen'));
+            opt.classList.add('chosen');
+            updateReviewCount(dupes, remasters, selected);
+          });
+          div.appendChild(opt);
+        }
+        list.appendChild(div);
+      }
+
+      // Render remaster issues
+      for (const rem of remasters) {
+        const div = document.createElement('div');
+        div.className = 'review-group remaster';
+
+        const header = document.createElement('div');
+        header.className = 'review-group-header';
+        const yearDiff = rem.originalYear
+          ? ` (original: ${rem.originalYear}, remaster: ${rem.track.year})`
+          : ' (no earlier release found)';
+        header.innerHTML = `<span class="review-badge rem">REMASTER</span> "${escHtml(rem.cleanName)}"${yearDiff}`;
+        div.appendChild(header);
+
+        if (rem.originalYear && rem.originalYear !== rem.track.year) {
+          if (!remChoices.has(rem.track.id)) remChoices.set(rem.track.id, 'original');
+
+          const optOrig = document.createElement('label');
+          const origChosen = remChoices.get(rem.track.id) === 'original';
+          optOrig.className = 'review-option' + (origChosen ? ' chosen' : '');
+          optOrig.innerHTML = `
+            <input type="radio" name="rem-${escHtml(rem.track.id)}" value="original" ${origChosen ? 'checked' : ''} />
+            <div class="review-option-info">
+              <div class="review-option-name">Use original release year</div>
+              <div class="review-option-meta">${escHtml(rem.originalArtist ?? rem.track.artist)}</div>
+            </div>
+            <div class="review-option-year">${rem.originalYear}</div>`;
+
+          const optRem = document.createElement('label');
+          const remChosen = remChoices.get(rem.track.id) === 'remaster';
+          optRem.className = 'review-option' + (remChosen ? ' chosen' : '');
+          optRem.innerHTML = `
+            <input type="radio" name="rem-${escHtml(rem.track.id)}" value="remaster" ${remChosen ? 'checked' : ''} />
+            <div class="review-option-info">
+              <div class="review-option-name">Keep remaster year</div>
+              <div class="review-option-meta">${escHtml(rem.track.name)}</div>
+            </div>
+            <div class="review-option-year">${rem.track.year}</div>`;
+
+          const updateChoice = () => {
+            const val = (div.querySelector('input[type=radio]:checked') as HTMLInputElement)?.value as 'original' | 'remaster';
+            remChoices.set(rem.track.id, val);
+            div.querySelectorAll('.review-option').forEach(el => el.classList.remove('chosen'));
+            (val === 'original' ? optOrig : optRem).classList.add('chosen');
+          };
+          optOrig.querySelector('input')!.addEventListener('change', updateChoice);
+          optRem.querySelector('input')!.addEventListener('change', updateChoice);
+
+          div.appendChild(optOrig);
+          div.appendChild(optRem);
+        } else {
+          const note = document.createElement('div');
+          note.style.cssText = 'font-size:0.82rem;color:var(--g-muted);padding:0.3rem 0;';
+          note.textContent = rem.originalYear
+            ? `Original and remaster have the same year (${rem.track.year}) — no action needed.`
+            : `Could not find an earlier release. Will use ${rem.track.year}.`;
+          div.appendChild(note);
+        }
+
+        list.appendChild(div);
+      }
+
+      updateReviewCount(dupes, remasters, selected);
+    }
+
+    function updateReviewCount(dupes: DuplicateGroup[], _remasters: RemasterIssue[], selected: Track[]) {
+      // Count how many tracks will be removed as duplicates
+      const removedIds = new Set<string>();
+      for (const group of dupes) {
+        const keepId = dupChoices.get(group.key);
+        for (const t of group.tracks) {
+          if (t.id !== keepId) removedIds.add(t.id);
+        }
+      }
+      const finalCount = selected.filter(t => !removedIds.has(t.id)).length;
+      $('review-count').textContent = `${finalCount} tracks after resolving (${removedIds.size} duplicate${removedIds.size !== 1 ? 's' : ''} removed)`;
+    }
+
+    function applyReviewChoices(selected: Track[], dupes: DuplicateGroup[], remasters: RemasterIssue[]): Track[] {
+      // Remove duplicate losers
+      const removedIds = new Set<string>();
+      for (const group of dupes) {
+        const keepId = dupChoices.get(group.key);
+        for (const t of group.tracks) {
+          if (t.id !== keepId) removedIds.add(t.id);
+        }
+      }
+      let result = selected.filter(t => !removedIds.has(t.id));
+
+      // Apply remaster year overrides
+      for (const rem of remasters) {
+        if (remChoices.get(rem.track.id) === 'original' && rem.originalYear) {
+          const track = result.find(t => t.id === rem.track.id);
+          if (track) track.year = rem.originalYear;
+        }
+      }
+      return result;
     }
 
     // ── CSV Import (Exportify) ─────────────────────────────────────────────
@@ -618,11 +958,16 @@ import '../../../styles/games.css';
       updateSelectionCount();
     });
 
-    // ── Generate print sheet — split into sets of 60 ─────────────────────
+    // ── Generate print sheet — with review step ───────────────────────────
     const SET_SIZE = 60;
     const MAX_TRACKS = 600;
 
-    $('btn-generate').addEventListener('click', () => {
+    // Stash for the review → print flow
+    let reviewDupes: DuplicateGroup[] = [];
+    let reviewRemasters: RemasterIssue[] = [];
+    let reviewSelected: Track[] = [];
+
+    $('btn-generate').addEventListener('click', async () => {
       let selected = allTracks.filter(t => selectedIds.has(t.id));
       if (selected.length === 0) {
         alert('Please select at least one track.');
@@ -634,24 +979,71 @@ import '../../../styles/games.css';
         selected = selected.slice(0, MAX_TRACKS);
       }
 
-      // Split into sets of SET_SIZE
-      const sets: typeof selected[] = [];
-      for (let i = 0; i < selected.length; i += SET_SIZE) {
-        sets.push(selected.slice(i, i + SET_SIZE));
+      // Detect duplicates and remasters
+      const dupes = findDuplicates(selected);
+      const remasters = findRemasters(selected);
+
+      // Look up original years for remasters (needs Spotify API)
+      if (remasters.length > 0) {
+        $('selection-count').textContent = `Checking ${remasters.length} remastered track${remasters.length !== 1 ? 's' : ''} for original releases…`;
+        const token = await getValidToken();
+        if (token) {
+          for (const rem of remasters) {
+            await searchOriginalYear(rem, token);
+          }
+        }
+        // Filter out remasters where no year conflict was found
       }
 
-      // Serialise each set
+      // If issues found, show the review screen
+      const actionableRemasters = remasters.filter(r => r.originalYear && r.originalYear !== r.track.year);
+      if (dupes.length > 0 || actionableRemasters.length > 0) {
+        reviewDupes = dupes;
+        reviewRemasters = remasters;
+        reviewSelected = selected;
+        dupChoices  = new Map();
+        remChoices  = new Map();
+        renderReview(dupes, actionableRemasters, selected);
+        hide('track-section');
+        show('review-section');
+        return;
+      }
+
+      // No issues — go straight to print
+      openPrintPage(selected);
+    });
+
+    function openPrintPage(tracks: Track[]) {
+      const sets: Track[][] = [];
+      for (let i = 0; i < tracks.length; i += SET_SIZE) {
+        sets.push(tracks.slice(i, i + SET_SIZE));
+      }
+
       const serialisedSets = sets.map(set =>
         set.map(t => ({ id: t.id, uri: t.uri, name: t.name, artist: t.artist, year: t.year }))
       );
       localStorage.setItem('swf_print_sets', JSON.stringify(serialisedSets));
-
-      // Open the print page — it will show set navigation if multiple sets
       window.open('/games/songs-with-friends/print/?set=0', '_blank');
+    }
+
+    // ── Confirm & print from review ───────────────────────────────────────
+    $('btn-confirm-print').addEventListener('click', () => {
+      const actionableRemasters = reviewRemasters.filter(r => r.originalYear && r.originalYear !== r.track.year);
+      const finalTracks = applyReviewChoices(reviewSelected, reviewDupes, actionableRemasters);
+      if (finalTracks.length === 0) {
+        alert('No tracks remaining after resolving duplicates.');
+        return;
+      }
+      openPrintPage(finalTracks);
+    });
+
+    $('btn-back-to-tracks').addEventListener('click', () => {
+      hide('review-section');
+      show('track-section');
     });
 
     $('btn-back-to-playlists').addEventListener('click', () => {
-      hide('track-section', 'preview-section');
+      hide('track-section', 'preview-section', 'review-section');
       show('playlist-section');
     });
 
