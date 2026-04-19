@@ -1,6 +1,11 @@
 // ============================================================
 // CONFIG
 // ============================================================
+const CLOUDINARY_CONFIG = {
+  cloudName:    'ds6l7rprf',
+  uploadPreset: 'WeddingCamBox_Upload',
+};
+
 let USERS = {
   'admin':          { password: 'Hondje01',    name: 'Admin',            isAdmin: true },
   'bob-linda':      { password: 'bobwed25',    name: 'Bob & Linda',      wedding: '15 March 2025' },
@@ -454,22 +459,56 @@ document.getElementById('uploadFileInput').addEventListener('change', function (
   document.getElementById('uploadConfirmBtn').disabled = pendingFiles.length === 0;
 });
 
-document.getElementById('uploadConfirmBtn').addEventListener('click', () => {
+document.getElementById('uploadConfirmBtn').addEventListener('click', async () => {
   if (!pendingFiles.length) return;
-  const existing = JSON.parse(localStorage.getItem(`wcb_${uploadTargetUser}_photos`) || '[]');
-  const newPhotos = pendingFiles.map((file, i) => ({
-    id:       'up_' + Date.now() + '_' + i,
-    title:    file.name.replace(/\.[^.]+$/, ''),
-    datetime: new Date().toISOString(),
-    camera:   'Uploaded',
-    url:      URL.createObjectURL(file),
-    thumb:    URL.createObjectURL(file),
-  }));
-  localStorage.setItem(`wcb_${uploadTargetUser}_photos`, JSON.stringify([...existing, ...newPhotos]));
+  const btn = document.getElementById('uploadConfirmBtn');
+  const statusEl = document.getElementById('uploadStatus');
+  btn.disabled = true;
+  btn.innerHTML = '<i data-lucide="loader"></i> Uploading…';
+  lucide.createIcons({ nodes: [btn] });
+
+  const uploaded = [];
+  let failures = 0;
+  for (let i = 0; i < pendingFiles.length; i++) {
+    statusEl.textContent = `Uploading ${i + 1} of ${pendingFiles.length}…`;
+    const file = pendingFiles[i];
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('upload_preset', CLOUDINARY_CONFIG.uploadPreset);
+    fd.append('folder', `weddingcambox/${uploadTargetUser}`);
+    try {
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloudName}/image/upload`, {
+        method: 'POST', body: fd,
+      });
+      if (!res.ok) throw new Error('Upload failed');
+      const data = await res.json();
+      const thumbUrl = data.secure_url.replace('/upload/', '/upload/w_500,q_75/');
+      uploaded.push({
+        id:       'up_' + Date.now() + '_' + i,
+        title:    file.name.replace(/\.[^.]+$/, ''),
+        datetime: new Date().toISOString(),
+        camera:   'Uploaded',
+        url:      data.secure_url,
+        thumb:    thumbUrl,
+      });
+    } catch (err) {
+      console.error('Upload failed for', file.name, err);
+      failures++;
+    }
+  }
+
+  if (uploaded.length > 0) {
+    const existing = JSON.parse(localStorage.getItem(`wcb_${uploadTargetUser}_photos`) || '[]');
+    localStorage.setItem(`wcb_${uploadTargetUser}_photos`, JSON.stringify([...existing, ...uploaded]));
+  }
+
   document.getElementById('uploadModal').style.display = 'none';
   pendingFiles = [];
   renderDashboard();
-  showToast(`${newPhotos.length} photo${newPhotos.length !== 1 ? 's' : ''} added to ${CUSTOMERS[uploadTargetUser].name}'s gallery (this session only — backend needed for permanent storage).`, 'success');
+  const msg = failures > 0
+    ? `${uploaded.length} photo${uploaded.length !== 1 ? 's' : ''} uploaded to Cloudinary. ${failures} failed.`
+    : `${uploaded.length} photo${uploaded.length !== 1 ? 's' : ''} uploaded to Cloudinary and added to ${CUSTOMERS[uploadTargetUser].name}'s gallery.`;
+  showToast(msg, failures > 0 ? 'warning' : 'success');
 });
 
 // ============================================================

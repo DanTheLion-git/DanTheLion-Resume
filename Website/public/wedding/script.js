@@ -312,28 +312,46 @@ form.addEventListener('submit', (e) => {
   submitBtn.disabled    = true;
   submitBtn.textContent = currentLang === 'nl' ? 'Versturen\u2026' : 'Sending\u2026';
 
-  // Save booking request to localStorage for the admin portal
-  const request = {
-    id:          'req_' + Date.now(),
-    name:        document.getElementById('name').value.trim(),
-    email:       document.getElementById('email').value.trim(),
-    date:        document.getElementById('date').value,
-    guests:      document.getElementById('guests').value || '',
-    package:     document.getElementById('package').value,
-    message:     document.getElementById('message').value.trim(),
-    submittedAt: new Date().toISOString(),
-    status:      'pending',
-  };
-  const existing = JSON.parse(localStorage.getItem('wcb_booking_requests') || '[]');
-  existing.push(request);
-  localStorage.setItem('wcb_booking_requests', JSON.stringify(existing));
+  // Send booking request via Formspree
+  const formData = new FormData(form);
+  fetch('https://formspree.io/f/mvzdqkap', {
+    method: 'POST',
+    body: formData,
+    headers: { 'Accept': 'application/json' },
+  })
+  .then(response => {
+    if (response.ok) {
+      // Also save to localStorage for the admin portal
+      const request = {
+        id:          'req_' + Date.now(),
+        name:        document.getElementById('name').value.trim(),
+        email:       document.getElementById('email').value.trim(),
+        date:        document.getElementById('date').value,
+        guests:      document.getElementById('guests').value || '',
+        package:     document.getElementById('package').value,
+        message:     document.getElementById('message').value.trim(),
+        submittedAt: new Date().toISOString(),
+        status:      'pending',
+      };
+      const existing = JSON.parse(localStorage.getItem('wcb_booking_requests') || '[]');
+      existing.push(request);
+      localStorage.setItem('wcb_booking_requests', JSON.stringify(existing));
 
-  setTimeout(() => {
-    form.reset();
-    submitBtn.style.display = 'none';
-    successMsg.classList.add('visible');
-    successMsg.textContent = TRANSLATIONS[currentLang].formSuccess;
-  }, 900);
+      form.reset();
+      submitBtn.style.display = 'none';
+      successMsg.classList.add('visible');
+      successMsg.textContent = TRANSLATIONS[currentLang].formSuccess;
+    } else {
+      throw new Error('Form submission failed');
+    }
+  })
+  .catch(() => {
+    submitBtn.disabled = false;
+    submitBtn.textContent = TRANSLATIONS[currentLang].submitBtn;
+    alert(currentLang === 'nl'
+      ? 'Er is iets misgegaan. Probeer het opnieuw of mail ons direct.'
+      : 'Something went wrong. Please try again or email us directly.');
+  });
 });
 
 form.querySelectorAll('input, textarea').forEach(input => {
