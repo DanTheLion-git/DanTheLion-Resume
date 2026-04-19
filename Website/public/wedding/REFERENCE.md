@@ -75,75 +75,21 @@ After the wedding and you have received the SD cards back:
 5. Drag and drop the photo files into the window, or click **browse files**
 6. Click **Add to gallery**
 
-> ⚠️ **Important limitation right now:** Photos uploaded this way are only visible during your current browser session — they will disappear when you close or refresh the page. This is a known limitation while the project doesn't have a proper backend yet. Until that is set up, the recommended workaround is to host the photos somewhere (e.g. Google Drive with public sharing, or any image hosting service) and manually update the photo URLs in `photoportal/portal.js`. See `INSTRUCTIONS.md → Replacing placeholder photos` for details.
+Photos are uploaded to **Cloudinary** (permanent cloud storage) and their URLs are saved in **Supabase**. They persist across devices and browser sessions — no more session-only uploads.
 
 ---
 
-## Step 4 — Setting up EmailJS (one-time setup)
+## Step 4 — Email delivery (already configured)
 
-Right now, when a couple clicks "Send gallery" in the portal, it opens their own email app instead of sending directly from the website. To make it send automatically from the site you need to set up a free EmailJS account. This is a one-time setup.
+EmailJS is configured and working. When a couple clicks "Send gallery" in the portal, emails are sent directly to all guests from the website — no need for a local email client.
 
-### 4a — Create your EmailJS account
+| Setting | Value |
+|---------|-------|
+| Service ID | `service_eoosuj2` |
+| Template ID | `template_don7795` |
+| Free tier | 200 emails/month |
 
-1. Go to [emailjs.com](https://www.emailjs.com) and sign up for a free account
-   - Free plan: 200 emails per month (enough for starting out)
-
-### 4b — Connect your email address
-
-1. In the EmailJS dashboard, go to **Email Services** → **Add New Service**
-2. Choose **Gmail** (or whichever email you want to send from)
-3. Follow the steps to connect it
-4. Once connected, you will see a **Service ID** — copy it (looks like `service_abc1234`)
-
-### 4c — Create an email template
-
-1. Go to **Email Templates** → **Create New Template**
-2. Set the **Subject** field to: `{{subject}}`
-3. In the **Body**, paste this and style it however you like:
-
-```
-{{message_html}}
-
----
-View the gallery: {{gallery_link}}
-```
-
-4. In **To Email** put: `{{to_email}}`
-5. In **Reply To** put your own email address
-6. Save the template — copy the **Template ID** (looks like `template_xyz7890`)
-
-### 4d — Get your Public Key
-
-1. In EmailJS, click your profile icon → **Account**
-2. Copy your **Public Key** (looks like `AbCdEfGh1234567`)
-
-### 4e — Add the keys to the portal
-
-Open the file `C:\Users\DanielvanLeeuwen\Documents\WeddingCamBox\photoportal\portal.js` in any text editor (Notepad is fine).
-
-Find these lines near the very top of the file:
-
-```js
-const EMAILJS_CONFIG = {
-  serviceId:  'YOUR_SERVICE_ID',
-  templateId: 'YOUR_TEMPLATE_ID',
-  publicKey:  'YOUR_PUBLIC_KEY',
-};
-```
-
-Replace the placeholder values with your real ones:
-
-```js
-const EMAILJS_CONFIG = {
-  serviceId:  'service_abc1234',
-  templateId: 'template_xyz7890',
-  publicKey:  'AbCdEfGh1234567',
-};
-```
-
-Save the file. Then ask Copilot to push the change to GitHub, or do it manually (see `INSTRUCTIONS.md → Deploying`).
-
-Once this is done, the yellow warning banner in the admin dashboard will disappear and emails will be sent directly from the portal.
+If you need to change the email template or service, go to [dashboard.emailjs.com](https://dashboard.emailjs.com).
 
 ---
 
@@ -161,53 +107,16 @@ Each guest will receive an email with the gallery link.
 
 ---
 
-## Receiving booking enquiries by email (optional setup)
-
-Right now when someone fills in the booking form, you only see it in the admin portal. You do not receive an email notification. To get an email in your inbox every time someone submits the form:
-
-1. Go to [formspree.io](https://formspree.io) and create a free account
-2. Create a new form — Formspree gives you a URL like `https://formspree.io/f/abcdefgh`
-3. Ask Copilot to connect the booking form to that Formspree URL
-
-From then on, every booking request will also be emailed directly to you.
-
----
-
 ## Adding or changing client credentials manually
 
-If you ever need to manually add a client or change a password without going through the booking request flow:
+If you need to manually add a client without going through the booking request flow, go to the Supabase dashboard:
 
-Open `photoportal/portal.js` and find the `USERS` object near the top:
+1. Open [Supabase Table Editor → wcb_clients](https://supabase.com/dashboard/project/zxiwsjjvigrxrgkxalet/editor)
+2. Click **Insert Row**
+3. Fill in: `id` (username), `password`, `name`, `wedding`, `wedding_date`, `package`
+4. Email the couple their username and password
 
-```js
-let USERS = {
-  'admin':     { password: 'Hondje01',    name: 'Admin', isAdmin: true },
-  'bob-linda': { password: 'bobwed25',    name: 'Bob & Linda', wedding: '15 March 2025' },
-  ...
-};
-```
-
-Add a new entry:
-
-```js
-'emma-james': {
-  password: 'yourChosenPassword',
-  name: 'Emma & James',
-  wedding: '5 July 2026',
-},
-```
-
-Also add an entry to `CUSTOMERS` (just below `USERS`):
-
-```js
-'emma-james': {
-  name: 'Emma & James',
-  weddingDate: '2026-07-05',
-  package: 'Standard',
-},
-```
-
-Then ask Copilot to push the update to GitHub.
+To change a password: find the client row, click on it, edit the `password` field.
 
 ---
 
@@ -215,11 +124,9 @@ Then ask Copilot to push the update to GitHub.
 
 The homepage shows your camera product photo 10 times. To update it:
 
-1. Save your new photo as `camera.png`
-2. Replace `C:\Users\DanielvanLeeuwen\Documents\WeddingCamBox\camera.png` with the new file
-3. Ask Copilot to push it — or do it manually
-
-Recommended size: 400×400 to 1280×1280 pixels, ideally with a transparent or white background.
+1. Save your new photo as `camera.png` (400×400 to 1280×1280 px, transparent or white bg)
+2. Replace `Website/public/wedding/camera.png`
+3. Commit and push — deploys automatically
 
 ---
 
@@ -227,11 +134,11 @@ Recommended size: 400×400 to 1280×1280 pixels, ideally with a transparent or w
 
 | Package | Price | What the client gets |
 |---------|-------|---------------------|
-| Basic | €89 | Raw photo files on SD card or download. No portal access. |
-| Standard | €119 | Online gallery portal, ability to curate photos, shareable guest link |
-| Premium | €149 | Everything in Standard + custom-branded portal + digital photobook _(not yet available)_ |
+| Basic | €89 | Raw photo files as a download link. No portal access. |
+| Standard | €119 | Online gallery portal, photo curation, shareable guest link |
+| Premium | €149 | Everything in Standard + custom branding + digital photobook _(coming soon)_ |
 
-Shipping (PostNL) is included in all packages — you send the camera box out and the couple sends it back.
+PostNL shipping (send & return) is an optional add-on at +€15.
 
 ---
 
@@ -239,18 +146,16 @@ Shipping (PostNL) is included in all packages — you send the camera box out an
 
 | What | Where |
 |------|-------|
-| Homepage | `https://thelionsalliance.com/wedding/` |
-| Photo portal | `https://thelionsalliance.com/wedding/photoportal/` |
-| GitHub repo | `https://github.com/DanTheLion-git/DanTheLion-Resume` |
-| EmailJS | `https://www.emailjs.com` |
-| Formspree | `https://formspree.io` |
+| Homepage | `thelionsalliance.com/wedding/` |
+| Photo portal | `thelionsalliance.com/wedding/photoportal/` |
+| GitHub repo | `github.com/DanTheLion-git/TheLionsAlliance` |
+| Supabase | `supabase.com/dashboard/project/zxiwsjjvigrxrgkxalet` |
+| Cloudinary | `console.cloudinary.com` |
+| EmailJS | `dashboard.emailjs.com` |
+| Formspree | `formspree.io/forms` |
 
 ---
 
-## Getting help from Copilot
+## Full tech stack documentation
 
-Open GitHub Copilot CLI and start with:
-
-> "I'm continuing work on WeddingCamBox — please read `copilot_handoff.md` in my project folder first."
-
-The handoff file at `C:\Users\DanielvanLeeuwen\Documents\WeddingCamBox\copilot_handoff.md` contains everything Copilot needs to pick up where we left off.
+See `STACK.md` for complete database schemas, architecture diagram, credentials, troubleshooting, and more.
