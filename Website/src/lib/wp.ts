@@ -8,10 +8,55 @@ export interface WPPost {
   title: { rendered: string };
   excerpt: { rendered: string };
   content: { rendered: string };
+  featured_image_url?: string;
+  tags?: number[];
+  _embedded?: {
+    "wp:featuredmedia"?: Array<{
+      source_url: string;
+      media_details?: {
+        sizes?: {
+          medium_large?: { source_url: string };
+          large?: { source_url: string };
+          full?: { source_url: string };
+        };
+      };
+    }>;
+    "wp:term"?: Array<Array<{ name: string }>>;
+  };
 }
 
-export async function getPosts(limit = 10): Promise<WPPost[]> {
-  const url = `${WP_BASE}/posts?per_page=${limit}&_fields=slug,title,excerpt,date,content,id`;
+function extractFeaturedImage(post: WPPost): string | undefined {
+  const media = post._embedded?.["wp:featuredmedia"]?.[0];
+  if (!media) return post.featured_image_url;
+  const sizes = media.media_details?.sizes;
+  return sizes?.large?.source_url
+    ?? sizes?.medium_large?.source_url
+    ?? sizes?.full?.source_url
+    ?? media.source_url;
+}
+
+function extractTags(post: WPPost): string[] {
+  const terms = post._embedded?.["wp:term"];
+  if (!terms) return [];
+  // wp:term[0] = categories, wp:term[1] = tags
+  return (terms[1] ?? []).map((t) => t.name);
+}
+
+export interface WPPostEnriched extends WPPost {
+  featuredImage?: string;
+  tagNames: string[];
+}
+
+function enrichPost(post: WPPost): WPPostEnriched {
+  return {
+    ...post,
+    featuredImage: extractFeaturedImage(post),
+    tagNames: extractTags(post),
+  };
+}
+
+export async function getPosts(limit = 10): Promise<WPPostEnriched[]> {
+  const url = `${WP_BASE}/posts?per_page=${limit}&_embed&_fields=slug,title,excerpt,date,content,id,featured_media,tags,_embedded,featured_image_url`;
   const res = await fetch(url);
 
   if (!res.ok) {
@@ -19,11 +64,12 @@ export async function getPosts(limit = 10): Promise<WPPost[]> {
     throw new Error("Failed to fetch posts from WordPress");
   }
 
-  return res.json();
+  const posts: WPPost[] = await res.json();
+  return posts.map(enrichPost);
 }
 
-export async function getPostBySlug(slug: string): Promise<WPPost | null> {
-  const url = `${WP_BASE}/posts?slug=${slug}&_fields=slug,title,excerpt,date,content,id`;
+export async function getPostBySlug(slug: string): Promise<WPPostEnriched | null> {
+  const url = `${WP_BASE}/posts?slug=${slug}&_embed&_fields=slug,title,excerpt,date,content,id,featured_media,tags,_embedded,featured_image_url`;
   const res = await fetch(url);
 
   if (!res.ok) {
@@ -32,5 +78,6 @@ export async function getPostBySlug(slug: string): Promise<WPPost | null> {
   }
 
   const data: WPPost[] = await res.json();
-  return data[0] ?? null;
+  if (!data[0]) return null;
+  return enrichPost(data[0]);
 }

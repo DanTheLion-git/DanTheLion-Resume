@@ -455,6 +455,7 @@ html.theme-light .btn-social {
 .post-content {
   max-width: 60ch;
   font-size: 0.95rem;
+  line-height: 1.7;
 }
 
 .post-content p {
@@ -466,16 +467,203 @@ html.theme-light .btn-social {
   text-decoration: underline;
 }
 
-.post-content h2,
+.post-content h2 {
+  font-size: 1.4rem;
+  margin-top: 2rem;
+  margin-bottom: 0.8rem;
+}
+
 .post-content h3 {
+  font-size: 1.15rem;
   margin-top: 1.7rem;
   margin-bottom: 0.8rem;
+}
+
+.post-content h4 {
+  font-size: 1.05rem;
+  margin-top: 1.4rem;
+  margin-bottom: 0.6rem;
 }
 
 .post-content ul,
 .post-content ol {
   margin-left: 1.2rem;
   margin-bottom: 1rem;
+}
+
+.post-content li {
+  margin-bottom: 0.35rem;
+}
+
+/* Code blocks — WordPress outputs <pre class="wp-block-code"><code> */
+.post-content pre {
+  background: #1e1e2e;
+  color: #cdd6f4;
+  border-radius: var(--radius);
+  padding: 1rem 1.2rem;
+  margin-bottom: 1.2rem;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  border: 1px solid var(--border);
+}
+
+.post-content pre code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
+  color: inherit;
+}
+
+/* Inline code */
+.post-content code {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 0.15em 0.35em;
+  font-size: 0.88em;
+  font-family: "Fira Code", "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+}
+
+/* Images inside post content */
+.post-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  margin: 0.5rem 0;
+  display: block;
+}
+
+/* WordPress figure blocks */
+.post-content figure {
+  margin: 1.2rem 0;
+}
+
+.post-content figure img {
+  width: 100%;
+}
+
+.post-content figcaption {
+  font-size: 0.8rem;
+  color: var(--fg-muted);
+  text-align: center;
+  margin-top: 0.4rem;
+  font-style: italic;
+}
+
+/* Blockquotes */
+.post-content blockquote {
+  border-left: 3px solid var(--accent-green-light);
+  margin: 1.2rem 0;
+  padding: 0.6rem 1rem;
+  color: var(--fg-muted);
+  background: var(--card-bg);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.post-content blockquote p {
+  margin-bottom: 0.4rem;
+}
+
+/* Tables */
+.post-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.2rem;
+  font-size: 0.88rem;
+}
+
+.post-content th,
+.post-content td {
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.7rem;
+  text-align: left;
+}
+
+.post-content th {
+  background: var(--card-bg);
+  font-weight: 600;
+}
+
+/* Horizontal rules */
+.post-content hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 1.5rem 0;
+}
+
+/* Featured image hero on post detail */
+.post-hero {
+  margin-bottom: 1.5rem;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.post-hero img {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Tags on post detail */
+.post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.post-tag {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.72rem;
+  color: var(--fg-muted);
+}
+
+/* Blog article wrapper */
+.blog-article {
+  max-width: 60ch;
+}
+
+/* Blog card with featured image */
+.post-card-link {
+  display: flex;
+  gap: 1rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.post-card-image {
+  flex-shrink: 0;
+  width: 120px;
+  height: 90px;
+  border-radius: calc(var(--radius) - 2px);
+  overflow: hidden;
+}
+
+.post-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.post-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 480px) {
+  .post-card-link {
+    flex-direction: column;
+  }
+  .post-card-image {
+    width: 100%;
+    height: 160px;
+  }
 }
 
 /* Contact block */

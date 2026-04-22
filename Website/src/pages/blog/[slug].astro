@@ -1,10 +1,10 @@
 ---
 import Layout from "../../layouts/ResumeLayout.astro";
-import { getPosts, type WPPost } from "../../lib/wp";
+import { getPosts, type WPPostEnriched } from "../../lib/wp";
 import { decodeHTML } from "../../lib/html";
 
 export async function getStaticPaths() {
-  const posts = await getPosts(20);
+  const posts = await getPosts(100);
 
   return posts.map((post) => ({
     params: { slug: post.slug },
@@ -12,11 +12,19 @@ export async function getStaticPaths() {
   }));
 }
 
-const { post } = Astro.props as { post: WPPost };
+const { post } = Astro.props as { post: WPPostEnriched };
 ---
 
 <Layout title={`${decodeHTML(post.title.rendered)} | The Lions Alliance`}>
-  <article>
+  <article class="blog-article">
+    <a href="/blog/" class="section-link" style="display:inline-block;margin-bottom:1rem;">← Back to Blog</a>
+
+    {post.featuredImage && (
+      <div class="post-hero">
+        <img src={post.featuredImage} alt={decodeHTML(post.title.rendered)} loading="eager" />
+      </div>
+    )}
+
     <h1 class="post-title-main">{decodeHTML(post.title.rendered)}</h1>
 
     <p class="post-meta">
@@ -29,6 +37,30 @@ const { post } = Astro.props as { post: WPPost };
       </time>
     </p>
 
+    {post.tagNames.length > 0 && (
+      <div class="post-tags">
+        {post.tagNames.map((tag) => (
+          <span class="post-tag">{tag}</span>
+        ))}
+      </div>
+    )}
+
     <div class="post-content" set:html={post.content.rendered} />
   </article>
+
+  <!-- Prism.js for syntax highlighting of code blocks -->
+  <Fragment slot="body-end">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css" />
+    <script is:inline src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script is:inline src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script is:inline>
+      // WordPress wraps code in <pre><code> — detect language from class or auto-highlight
+      document.querySelectorAll('.post-content pre code').forEach(function(el) {
+        if (!el.className.match(/language-/)) {
+          el.classList.add('language-none');
+        }
+        Prism.highlightElement(el);
+      });
+    </script>
+  </Fragment>
 </Layout>
